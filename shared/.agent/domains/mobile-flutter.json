@@ -1,0 +1,34 @@
+{
+  "domain": "mobile-flutter",
+  "version": "1.0",
+  "trigger": {
+    "file": "pubspec.yaml"
+  },
+  "primary_agent": "mobile-developer",
+  "skills": {
+    "p0": [
+      "flutter-patterns",
+      "mobile-design"
+    ],
+    "p1": [
+      "dart-best-practices"
+    ],
+    "p2": [
+      "testing-patterns"
+    ]
+  },
+  "skill_notes": {
+    "mobile-design": "Mevcut global skill \u2014 referans",
+    "testing-patterns": "Mevcut global skill \u2014 referans"
+  },
+  "workflows": [
+    "/deploy",
+    "/build-fix"
+  ],
+  "workflow_missing": [
+    "/flutter-build"
+  ],
+  "mcp_extra": [],
+  "rules_file": "rules/domains/mobile-flutter-rules.md",
+  "notes": "context7 Flutter dökümantasyonu kapsamlı. Serena Dart LSP destekliyor."
+}

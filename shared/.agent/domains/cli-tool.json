@@ -1,0 +1,44 @@
+{
+  "domain": "cli-tool",
+  "version": "1.0",
+  "trigger": {
+    "strategy": "any_match",
+    "checks": [
+      {
+        "file": "package.json",
+        "contains": "\"bin\""
+      },
+      {
+        "file": "pyproject.toml",
+        "contains": "[project.scripts]"
+      },
+      {
+        "file": "setup.py",
+        "contains": "entry_points"
+      }
+    ]
+  },
+  "primary_agent": "backend-specialist",
+  "skills": {
+    "p0": [
+      "bash-linux"
+    ],
+    "p1": [
+      "testing-patterns"
+    ]
+  },
+  "skill_notes": {
+    "bash-linux": "Mevcut global skill \u2014 CLI terminal pattern'leri burada",
+    "testing-patterns": "Mevcut global skill \u2014 referans"
+  },
+  "workflows": [
+    "/build-fix",
+    "/test"
+  ],
+  "workflow_missing": [
+    "/release"
+  ],
+  "mcp_extra": [],
+  "rules_file": "rules/domains/cli-tool-rules.md",
+  "skill_rationale": "Ayrı SKILL.md gerekmez \u2014 bash-linux (global) + context7 yeterli"
+}

@@ -1,0 +1,47 @@
+{
+  "domain": "godot-game",
+  "version": "1.0",
+  "trigger": {
+    "file": "project.godot"
+  },
+  "primary_agent": "game-developer",
+  "skills": {
+    "p0": [
+      "godot-gdscript-patterns",
+      "game-development"
+    ],
+    "p1": [
+      "game-development/2d-games",
+      "game-development/game-art"
+    ],
+    "p2": [
+      "game-development/web-games",
+      "game-development/mobile-games"
+    ]
+  },
+  "workflows": [
+    "/debug"
+  ],
+  "workflow_missing": [
+    "/scene",
+    "/export"
+  ],
+  "mcp_extra": [
+    "godot-mcp"
+  ],
+  "mcp_status": "LIVE_TESTED",
+  "mcp_test_date": "2026-03-08",
+  "mcp_notes": "stdio transport. Orijinal 14-tool (149-tool fork DEĞİL). Config'te path hardcode edilmeli veya GODOT_PATH env var olmalı.",
+  "mcp_config_when_ready": {
+    "godot": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "godot-mcp"
+      ],
+      "env": {
+        "GODOT_PATH": "<godot-executable-path>"
+      }
+    }
+  }
+}

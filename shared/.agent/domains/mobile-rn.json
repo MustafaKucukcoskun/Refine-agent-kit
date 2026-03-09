@@ -1,0 +1,36 @@
+{
+  "domain": "mobile-rn",
+  "version": "1.0",
+  "trigger": {
+    "file": "package.json",
+    "contains": "\"react-native\""
+  },
+  "primary_agent": "mobile-developer",
+  "skills": {
+    "p0": [
+      "react-native-best-practices",
+      "mobile-design"
+    ],
+    "p1": [
+      "expo-app-design",
+      "react-native-architecture"
+    ],
+    "p2": [
+      "testing-patterns"
+    ]
+  },
+  "skill_notes": {
+    "mobile-design": "Mevcut global skill \u2014 referans",
+    "testing-patterns": "Mevcut global skill \u2014 referans"
+  },
+  "workflows": [
+    "/deploy",
+    "/build-fix"
+  ],
+  "workflow_missing": [
+    "/eas-build"
+  ],
+  "mcp_extra": [],
+  "rules_file": "rules/domains/mobile-rn-rules.md",
+  "notes": "Global MCP yeterli: context7 + serena"
+}

@@ -1,0 +1,29 @@
+{
+  "domain": "chrome-extension",
+  "version": "1.0",
+  "trigger": {
+    "file": "manifest.json",
+    "contains": "content_scripts"
+  },
+  "primary_agent": "frontend-specialist",
+  "skills": {
+    "p0": [
+      "chrome-extension-patterns"
+    ],
+    "p1": [
+      "webapp-testing"
+    ]
+  },
+  "skill_notes": {
+    "webapp-testing": "Mevcut global skill \u2014 referans"
+  },
+  "workflows": [
+    "/build-fix",
+    "/security-review"
+  ],
+  "workflow_missing": [
+    "/publish"
+  ],
+  "mcp_extra": [],
+  "rules_file": "rules/domains/chrome-extension-rules.md"
+}

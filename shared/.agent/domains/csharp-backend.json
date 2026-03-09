@@ -1,0 +1,34 @@
+{
+  "domain": "csharp-backend",
+  "version": "1.0",
+  "trigger": {
+    "file_pattern": "*.csproj"
+  },
+  "primary_agent": "backend-specialist",
+  "supporting_agents": [
+    "database-architect"
+  ],
+  "skills": {
+    "p0": [
+      "microsoft-dotnet-core"
+    ],
+    "p1": [
+      "azure-identity",
+      "ef-core"
+    ],
+    "p2": [
+      "cosmosdb",
+      "xunit-patterns",
+      "linq-patterns"
+    ]
+  },
+  "workflows": [
+    "/deploy"
+  ],
+  "workflow_missing": [
+    "/scaffold"
+  ],
+  "mcp_extra": [],
+  "rules_file": "rules/domains/csharp-backend-rules.md",
+  "notes": "Serena LSP C# sembolik analiz için kritik — kurulunca değer katacak."
+}

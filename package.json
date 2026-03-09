@@ -1,0 +1,37 @@
+{
+  "name": "refine-agent-kit",
+  "version": "1.0.0",
+  "description": "AI Agent toolkit for Google Antigravity IDE. 21 agents, 53 skills, design persona system, anti-AI-slop protection.",
+  "main": "bin/cli.js",
+  "bin": {
+    "refine-kit": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "node bin/cli.js --help"
+  },
+  "keywords": [
+    "ai-agent",
+    "antigravity",
+    "gemini",
+    "google-antigravity",
+    "skills",
+    "workflows",
+    "design-system",
+    "anti-slop",
+    "mcp"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/user/refine-agent-kit.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "bin/",
+    "global/",
+    "shared/",
+    "domains/"
+  ]
+}

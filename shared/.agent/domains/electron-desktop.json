@@ -1,0 +1,44 @@
+{
+  "domain": "electron-desktop",
+  "version": "1.0",
+  "trigger": {
+    "strategy": "any_match",
+    "checks": [
+      {
+        "file": "package.json",
+        "contains": "\"electron\""
+      },
+      {
+        "file": "package.json",
+        "contains": "\"@tauri-apps/tauri\""
+      },
+      {
+        "file": "src-tauri/tauri.conf.json"
+      }
+    ]
+  },
+  "trigger_note": "Tauri projeleri de bu domain'e girer (Electron alternatifi)",
+  "primary_agent": "frontend-specialist",
+  "skills": {
+    "p0": [
+      "electron-patterns",
+      "nodejs-best-practices"
+    ],
+    "p1": [
+      "testing-patterns"
+    ]
+  },
+  "skill_notes": {
+    "nodejs-best-practices": "Mevcut global skill \u2014 referans",
+    "testing-patterns": "Mevcut global skill \u2014 referans"
+  },
+  "workflows": [
+    "/deploy",
+    "/build-fix"
+  ],
+  "workflow_missing": [
+    "/package"
+  ],
+  "mcp_extra": [],
+  "rules_file": "rules/domains/electron-desktop-rules.md"
+}

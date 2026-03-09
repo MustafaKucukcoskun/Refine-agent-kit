@@ -1,0 +1,39 @@
+{
+  "domain": "python-backend",
+  "version": "1.0",
+  "trigger": {
+    "file": "pyproject.toml",
+    "contains_any": [
+      "fastapi",
+      "django"
+    ]
+  },
+  "primary_agent": "backend-specialist",
+  "supporting_agents": [
+    "database-architect"
+  ],
+  "skills": {
+    "p0": [
+      "fastapi-pro",
+      "django-patterns",
+      "python-patterns"
+    ],
+    "p1": [
+      "postgres-patterns",
+      "database-migrations"
+    ],
+    "p2": [
+      "supabase-postgres-best-practices"
+    ]
+  },
+  "workflows": [
+    "/deploy",
+    "/python-review"
+  ],
+  "workflow_missing": [
+    "/migrate"
+  ],
+  "mcp_extra": [],
+  "rules_file": "rules/domains/python-backend-rules.md",
+  "notes": "Global MCP yeterli: context7 + serena LSP"
+}

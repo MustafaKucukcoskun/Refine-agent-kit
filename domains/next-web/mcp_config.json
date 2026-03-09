@@ -1,0 +1,21 @@
+{
+    "mcpServers": {
+        "shadcn": {
+            "command": "npx",
+            "args": ["shadcn@latest", "mcp"]
+        },
+        "magic-ui": {
+            "command": "npx",
+            "args": ["-y", "@21st-dev/magic@latest"],
+            "env": {
+                "TWENTY_FIRST_API_KEY": "$MAGIC_UI_API_KEY"
+            }
+        },
+        "figma": {
+            "serverUrl": "https://mcp.figma.com/mcp"
+        },
+        "supabase": {
+            "serverUrl": "https://mcp.supabase.com/mcp"
+        }
+    }
+}
