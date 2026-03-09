@@ -1,0 +1,90 @@
+{
+  "domain": "python-data",
+  "version": "1.0",
+  "trigger": {
+    "strategy": "any_match",
+    "checks": [
+      {
+        "file": "pyproject.toml",
+        "contains_any": [
+          "pandas",
+          "numpy",
+          "scikit-learn",
+          "sklearn",
+          "polars",
+          "dask"
+        ]
+      },
+      {
+        "file": "requirements.txt",
+        "contains_any": [
+          "pandas",
+          "numpy",
+          "scikit-learn",
+          "sklearn",
+          "polars",
+          "dask"
+        ]
+      },
+      {
+        "file": "environment.yml",
+        "contains_any": [
+          "pandas",
+          "numpy",
+          "scikit-learn",
+          "sklearn",
+          "polars",
+          "dask"
+        ]
+      },
+      {
+        "file": "Pipfile",
+        "contains_any": [
+          "pandas",
+          "numpy",
+          "scikit-learn"
+        ]
+      }
+    ]
+  },
+  "primary_agent": "backend-specialist",
+  "agent_note": "data-scientist agent P2'de oluşturulacak, şimdilik backend-specialist",
+  "supporting_agents": [
+    "database-architect"
+  ],
+  "skills": {
+    "p0": [
+      "data-engineer",
+      "python-patterns"
+    ],
+    "p1": [
+      "ml-pipeline-workflow",
+      "rag-implementation"
+    ],
+    "p2": [
+      "algorithmic-art"
+    ]
+  },
+  "workflows": [
+    "/deploy"
+  ],
+  "workflow_missing": [
+    "/eda",
+    "/train"
+  ],
+  "mcp_extra": [
+    "duckdb-mcp"
+  ],
+  "mcp_status": "LIVE_TESTED",
+  "mcp_test_date": "2026-03-08",
+  "mcp_notes": "duckdb-mcp: stdio, uvx. API key yok. Parquet/CSV sorgulama için.",
+  "mcp_config_when_ready": {
+    "duckdb": {
+      "command": "uvx",
+      "args": [
+        "duckdb-mcp"
+      ]
+    }
+  },
+  "rules_file": "rules/domains/python-data-rules.md"
+}

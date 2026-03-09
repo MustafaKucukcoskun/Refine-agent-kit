@@ -1,0 +1,46 @@
+{
+  "domain": "next-web",
+  "version": "1.0",
+  "trigger": {
+    "file": "package.json",
+    "contains": "\"next\""
+  },
+  "primary_agent": "frontend-specialist",
+  "supporting_agents": [
+    "seo-specialist",
+    "performance-optimizer"
+  ],
+  "skills": {
+    "p0": [
+      "nextjs-react-expert",
+      "nextjs-app-router-patterns",
+      "frontend-design",
+      "tailwind-patterns"
+    ],
+    "p1": [
+      "seo-fundamentals",
+      "web-design-guidelines",
+      "geo-fundamentals",
+      "webapp-testing"
+    ],
+    "p2": [
+      "nodejs-best-practices",
+      "algorithmic-art"
+    ]
+  },
+  "workflows": [
+    "/ui-ux-pro-max",
+    "/deploy",
+    "/preview"
+  ],
+  "workflow_missing": [
+    "/component"
+  ],
+  "mcp_extra": [
+    "21st-dev-magic",
+    "shadcn",
+    "magicui"
+  ],
+  "rules_file": "rules/domains/next-web-rules.md",
+  "notes": "frontend-specialist global'de kalır, bu domain'de PRIMARY olarak işaretlenir."
+}

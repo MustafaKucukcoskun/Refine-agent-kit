@@ -1,0 +1,30 @@
+{
+  "domain": "phaser-game",
+  "version": "1.0",
+  "trigger": {
+    "file": "package.json",
+    "contains": "\"phaser\""
+  },
+  "primary_agent": "game-developer",
+  "skills": {
+    "p0": [
+      "game-development"
+    ],
+    "p1": [
+      "algorithmic-art"
+    ]
+  },
+  "skill_notes": {
+    "game-development": "Mevcut global skill \u2014 referans"
+  },
+  "workflows": [
+    "/build-fix",
+    "/deploy"
+  ],
+  "workflow_missing": [
+    "/scene"
+  ],
+  "mcp_extra": [],
+  "rules_file": "rules/domains/phaser-game-rules.md",
+  "notes": "Phaser 3.x. context7 Phaser dökümantasyonu varsa ekstra skill değer katar."
+}
