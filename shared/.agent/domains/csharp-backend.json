@@ -13,13 +13,12 @@
       "microsoft-dotnet-core"
     ],
     "p1": [
-      "azure-identity",
-      "ef-core"
+      "api-patterns",
+      "database-design"
     ],
     "p2": [
-      "cosmosdb",
-      "xunit-patterns",
-      "linq-patterns"
+      "testing-patterns",
+      "clean-code"
     ]
   },
   "workflows": [

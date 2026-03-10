@@ -58,11 +58,11 @@
       "python-patterns"
     ],
     "p1": [
-      "ml-pipeline-workflow",
-      "rag-implementation"
+      "performance-profiling",
+      "testing-patterns"
     ],
     "p2": [
-      "algorithmic-art"
+      "clean-code"
     ]
   },
   "workflows": [
