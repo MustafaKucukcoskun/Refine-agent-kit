@@ -1,28 +1,45 @@
 {
   "name": "refine-agent-kit",
-  "version": "1.0.0",
-  "description": "AI Agent toolkit for Google Antigravity IDE. 21 agents, 53 skills, design persona system, anti-AI-slop protection.",
+  "version": "1.0.2",
+  "description": "AI Agent toolkit for Google Antigravity IDE. 21 agents, 64 skills, 13 domains, design persona system, anti-AI-slop protection.",
   "main": "bin/cli.js",
   "bin": {
     "refine-kit": "bin/cli.js"
   },
   "scripts": {
-    "test": "node bin/cli.js --help"
+    "test": "node bin/cli.js --help",
+    "prepack": "node -e \"require('./bin/cli.js')\" 2>/dev/null || true"
   },
   "keywords": [
     "ai-agent",
     "antigravity",
     "gemini",
     "google-antigravity",
+    "antigravity-ide",
+    "gemini-skills",
+    "agent-system",
     "skills",
     "workflows",
     "design-system",
     "anti-slop",
-    "mcp"
+    "mcp",
+    "nextjs",
+    "python",
+    "flutter",
+    "react-native",
+    "unity",
+    "godot",
+    "dotnet",
+    "electron"
   ],
+  "author": "MustafaKucukcoskun",
+  "homepage": "https://github.com/MustafaKucukcoskun/refine-agent-kit#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/user/refine-agent-kit.git"
+    "url": "git+https://github.com/MustafaKucukcoskun/refine-agent-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MustafaKucukcoskun/refine-agent-kit/issues"
   },
   "license": "MIT",
   "engines": {

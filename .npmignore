@@ -1,0 +1,20 @@
+# Development files
+DEVELOPMENT-ROADMAP.md
+.claude/
+.git/
+.gitignore
+.github/
+node_modules/
+
+# Internal research (not for distribution)
+**/research-report.md
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Test output
+/tmp/
+C:/temp/
