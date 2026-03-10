@@ -19,11 +19,12 @@
       "python-patterns"
     ],
     "p1": [
-      "postgres-patterns",
-      "database-migrations"
+      "database-design",
+      "api-patterns"
     ],
     "p2": [
-      "supabase-postgres-best-practices"
+      "testing-patterns",
+      "clean-code"
     ]
   },
   "workflows": [

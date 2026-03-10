@@ -13,7 +13,7 @@
     ],
     "p1": [
       "expo-app-design",
-      "react-native-architecture"
+      "clean-code"
     ],
     "p2": [
       "testing-patterns"

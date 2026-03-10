@@ -55,16 +55,31 @@ Open your project in Google Antigravity IDE. The agents activate automatically �
 
 Pick the domain that matches your project:
 
-| Domain | Best for | Primary Agent | Extra MCP Servers |
-|--------|----------|---------------|-------------------|
+| Domain | Best for | Primary Agent | Extra MCP |
+|--------|----------|---------------|-----------|
 | `next-web` | Next.js + React + Tailwind + shadcn | frontend-specialist | shadcn, magic-ui, figma, supabase |
 | `python-backend` | FastAPI + PostgreSQL + SQLAlchemy | backend-specialist | — |
-| `python-ml` | PyTorch + OpenCV + NumPy | backend-specialist + performance-optimizer | — |
+| `python-ml` | PyTorch + OpenCV + NumPy | backend-specialist | — |
+| `python-data` | Pandas + Polars + DuckDB + scikit-learn | backend-specialist | — |
+| `mobile-flutter` | Flutter 3.x + Dart 3 + Riverpod | mobile-developer | — |
+| `mobile-rn` | React Native + Expo + TypeScript | mobile-developer | — |
+| `electron-desktop` | Electron + Node.js desktop apps | frontend-specialist | — |
+| `chrome-extension` | Chrome Extension (Manifest V3) | frontend-specialist | — |
+| `cli-tool` | CLI tools (Node.js or Python) | backend-specialist | — |
+| `csharp-backend` | ASP.NET Core + EF Core + C# 13 | backend-specialist | — |
+| `godot-game` | Godot 4.x + GDScript + 2D/3D | game-developer | — |
+| `unity-game` | Unity 2023+ + C# + URP | game-developer | — |
+| `phaser-game` | Phaser 3.x + TypeScript + HTML5 | game-developer | — |
 
 **Not sure which to pick?**
 - Building a website or web app? → `next-web`
-- Building an API or server? → `python-backend`
-- Doing ML, image processing, or data science? → `python-ml`
+- Building an API or server? → `python-backend` or `csharp-backend`
+- Doing ML, image processing, or data science? → `python-ml` or `python-data`
+- Building a mobile app? → `mobile-flutter` or `mobile-rn`
+- Building a game? → `godot-game`, `unity-game`, or `phaser-game`
+- Building a desktop app? → `electron-desktop`
+- Building a browser extension? → `chrome-extension`
+- Building a CLI tool? → `cli-tool`
 
 ## Monorepo Setup (Multiple Technologies)
 

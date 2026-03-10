@@ -39,6 +39,66 @@ const DOMAINS = {
     mcpExtra: [],
     envKeys: [],
   },
+  "python-data": {
+    label: "Python Data Science",
+    description: "Pandas + Polars + DuckDB + scikit-learn + matplotlib",
+    mcpExtra: [],
+    envKeys: [],
+  },
+  "mobile-flutter": {
+    label: "Flutter Mobile App",
+    description: "Flutter 3.x + Dart 3 + Material Design 3 + Riverpod",
+    mcpExtra: [],
+    envKeys: [],
+  },
+  "mobile-rn": {
+    label: "React Native App",
+    description: "React Native 0.76+ + Expo + TypeScript + NativeWind",
+    mcpExtra: [],
+    envKeys: [],
+  },
+  "electron-desktop": {
+    label: "Electron Desktop App",
+    description: "Electron 30+ + Node.js + Chromium + IPC",
+    mcpExtra: [],
+    envKeys: [],
+  },
+  "chrome-extension": {
+    label: "Chrome Extension (Manifest V3)",
+    description: "Manifest V3 + Chrome APIs + Service Worker",
+    mcpExtra: [],
+    envKeys: [],
+  },
+  "cli-tool": {
+    label: "CLI Tool (Node.js/Python)",
+    description: "commander/yargs (Node) or Click/Typer (Python)",
+    mcpExtra: [],
+    envKeys: [],
+  },
+  "csharp-backend": {
+    label: "C# Backend (.NET)",
+    description: "ASP.NET Core + Entity Framework Core + C# 13",
+    mcpExtra: [],
+    envKeys: [],
+  },
+  "godot-game": {
+    label: "Godot Game",
+    description: "Godot 4.x + GDScript + 2D/3D Game Development",
+    mcpExtra: [],
+    envKeys: [],
+  },
+  "unity-game": {
+    label: "Unity Game",
+    description: "Unity 2023+ + C# + URP + 3D/2D Game Development",
+    mcpExtra: [],
+    envKeys: [],
+  },
+  "phaser-game": {
+    label: "Phaser Web Game",
+    description: "Phaser 3.x + TypeScript + HTML5 Canvas",
+    mcpExtra: [],
+    envKeys: [],
+  },
 };
 
 const COLORS = {
