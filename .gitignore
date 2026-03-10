@@ -1,27 +1,41 @@
 # Dependencies
 node_modules/
 
-# Environment
+# Environment & secrets
 .env
 .env.local
 .env.*.local
+.env.agent
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Editor
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # Python
 __pycache__/
 *.pyc
+*.pyo
+.venv/
+venv/
+
+# npm
+*.tgz
+npm-debug.log*
 
 # Cache
 .agent/.codebase_cache
 
 # Test output
 /tmp/
+C:/temp/
+
+# Internal research (not for public repo)
+research-report.md
