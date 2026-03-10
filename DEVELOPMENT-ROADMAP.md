@@ -631,13 +631,13 @@ onlarin kullanilmadigini gostermez. Agent'lar dogrudan referans eder.
 ## ONCELIK SIRASI OZET
 
 ```
-FAZA 1 (P0 — Hemen):
-  1.1 Kirik skill referanslarini domain config'lerden sil
-  1.2 python-ml.json domain config olustur
+FAZA 1 (P0 — Hemen): ✅ TAMAMLANDI (2026-03-10)
+  1.1 ✅ 13 kirik skill referansi duzeltildi (esdeger ile degistir veya sil)
+  1.2 ✅ python-ml.json domain config olusturuldu
 
-FAZA 2 (P1 — 1 Hafta):
-  2.1 9 yeni domain icin rules/GEMINI.md + subdir-markers olustur
-  2.2 CLI'a 9 yeni domain ekle
+FAZA 2 (P1 — 1 Hafta): ✅ TAMAMLANDI (2026-03-10)
+  2.1 ✅ 10 yeni domain (toplam 13) icin rules/GEMINI.md + subdir-markers olusturuldu
+  2.2 ✅ CLI'a 13 domain eklendi, README guncellendi
 
 FAZA 3 (P1 — 1 Hafta):
   3.1 GEMINI.md'leri @import ile modüler yap
