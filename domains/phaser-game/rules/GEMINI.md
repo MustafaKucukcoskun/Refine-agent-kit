@@ -5,17 +5,7 @@
 
 ---
 
-## CRITICAL: AGENT & SKILL PROTOCOL (ONCE OKU)
-
-**ZORUNLU:** Her implementasyondan ONCE ilgili agent dosyasini ve skill'lerini oku.
-
-### Skill Loading
-
-`Agent aktif → frontmatter "skills:" kontrol → SKILL.md oku → Ilgili section'lari oku`
-
-- **Selective:** TUM dosyalari okuma. Once `SKILL.md`, sonra sadece request'e uyan section.
-- **Priority:** P0 (GEMINI.md) > P1 (Agent .md) > P2 (SKILL.md). Hepsi baglayici.
-- **Enforcement:** `Read → Understand WHY → Apply PRINCIPLES → Code`. Skip yasak.
+@./base-protocol.md
 
 ---
 
@@ -27,21 +17,15 @@
 | **SIMPLE CODE** | "fix", "ekle", "degistir" (tek dosya) | Inline edit |
 | **COMPLEX CODE** | "build", "create", "implement" | `{task-slug}.md` + Agent |
 | **GAME DESIGN** | "scene", "physics", "sprite", "level" | `{task-slug}.md` + game-developer |
+| **SLASH CMD** | /create, /debug, /verify, /code-review | Command flow |
 
 ---
 
-## INTELLIGENT AGENT ROUTING (ADIM 2 — OTOMATIK)
+@./routing-protocol.md
 
-**HER request'ten once otomatik agent sec ve bildir.**
+---
 
-### ROUTING CHECKLIST (Her kod yanitindan once ZORUNLU)
-
-| # | Kontrol | Basarisiz → |
-|---|---------|-------------|
-| 1 | Dogru agent domain tespit edildi mi? | STOP. Analiz et. |
-| 2 | Agent .md dosyasi OKUNDU mu? | STOP. `.agent/agents/{agent}.md` ac ve oku. |
-| 3 | `Applying @[agent]...` yazildi mi? | STOP. Ekle. |
-| 4 | Agent frontmatter'daki skill'ler yuklendi mi? | STOP. `skills:` oku. |
+@./file-dependency.md
 
 ---
 
@@ -68,24 +52,48 @@
 - **Camera bounds:** Disindaki nesneleri `setActive(false)` yap
 - **TypeScript:** Tip guvenligi icin TypeScript tercih et
 
----
+@./gemini-modes.md
 
-## Final Checklist
+### Final Checklist
 
 Sira: **Performance → Physics → Rendering → Tests → Build**
 
 ---
 
-## QUICK REFERENCE
+## TIER 2: PHASER ARCHITECTURE KURALLARI
 
-**Agents (21):** orchestrator, project-planner, frontend-specialist, backend-specialist,
-mobile-developer, game-developer, security-specialist, security-auditor, penetration-tester,
-debugger, devops-engineer, database-architect, performance-optimizer, qa-automation-engineer,
-test-engineer, seo-specialist, code-archaeologist, documentation-writer, product-owner,
-product-manager, explorer-agent
+### Scene Management
+
+- Boot Scene: Asset preloading, progress bar
+- Menu Scene: Ana menu, ayarlar, credits
+- Game Scene: Ana oyun dongusu
+- UI Scene: Overlay olarak HUD, score, health bar
+
+### Game Loop
+
+- `update(time, delta)`: Frame-based logic, delta kullan
+- Event-driven: `this.events.emit()` / `this.events.on()` pattern
+- State machine: Oyun durumlari icin FSM pattern
+
+### Input Handling
+
+- Keyboard: `this.input.keyboard.createCursorKeys()` pattern
+- Touch/Mouse: Pointer events, drag & drop
+- Gamepad: `this.input.gamepad` destegi
+
+### Performance
+
+- Texture atlases: TexturePacker ile optimize
+- Object pooling: `this.add.group({ classType, maxSize })` pattern
+- Camera culling: Viewport disini render etme
+- WebGL: Canvas fallback yerine WebGL tercih et
+
+---
+
+@./agents-reference.md
 
 **Key Skills:** game-development, phaser-patterns, clean-code, testing-patterns
 
-**Workflows:** /create, /debug, /verify, /build-fix, /deploy
+**Workflows:** /create, /debug, /verify, /code-review, /scene
 
 ---

@@ -14,7 +14,7 @@ const os = require("os");
 
 // ── Constants ──────────────────────────────────────────────────────────────
 
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 const PACKAGE_ROOT = path.resolve(__dirname, "..");
 const HOME_DIR = os.homedir();
 const GEMINI_DIR = path.join(HOME_DIR, ".gemini");
@@ -379,6 +379,22 @@ async function cmdInit(args) {
   if (fs.existsSync(domainMcpSrc)) {
     fs.copyFileSync(domainMcpSrc, domainMcpDest);
     if (!quiet) console.log(c("green", "  ✔ ") + `Domain MCP servers: ${DOMAINS[domain].mcpExtra.join(", ")}`);
+  }
+
+  // Overlay domain-specific workflows (adds/replaces shared workflows)
+  const domainWorkflowsSrc = path.join(domainSrc, "workflows");
+  if (fs.existsSync(domainWorkflowsSrc)) {
+    const workflowsDest = path.join(agentDir, "workflows");
+    const wfCount = copyRecursive(domainWorkflowsSrc, workflowsDest);
+    if (!quiet && wfCount > 0) console.log(c("green", "  ✔ ") + `${wfCount} domain-specific workflow(s)`);
+  }
+
+  // Overlay domain-specific scripts (adds/replaces shared scripts)
+  const domainScriptsSrc = path.join(domainSrc, "scripts");
+  if (fs.existsSync(domainScriptsSrc)) {
+    const scriptsDest = path.join(agentDir, "scripts");
+    const scCount = copyRecursive(domainScriptsSrc, scriptsDest);
+    if (!quiet && scCount > 0) console.log(c("green", "  ✔ ") + `${scCount} domain-specific script(s)`);
   }
 
   // Copy shared .shared/ design system (only for domains that need it)

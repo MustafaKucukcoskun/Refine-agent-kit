@@ -9,15 +9,16 @@
 ## ICINDEKILER
 
 1. [Mevcut Durum Analizi](#1-mevcut-durum-analizi)
-2. [FAZA 1 — Kritik Duzeltmeler](#2-faza-1--kritik-duzeltmeler)
-3. [FAZA 2 — Yeni Domain'ler](#3-faza-2--yeni-domainler)
-4. [FAZA 3 — Moduler GEMINI.md (@import)](#4-faza-3--moduler-geminimd-import)
-5. [FAZA 4 — npm Yayinlama](#5-faza-4--npm-yayinlama)
-6. [FAZA 5 — Gemini CLI Destegi](#6-faza-5--gemini-cli-destegi)
-7. [FAZA 6 — Yeni MCP Server'lar](#7-faza-6--yeni-mcp-serverlar)
-8. [FAZA 7 — Rekabet Ozellikleri](#8-faza-7--rekabet-ozellikleri)
-9. [FAZA 8 — Uzun Vadeli Vizyon](#9-faza-8--uzun-vadeli-vizyon)
-10. [Dosya/Skill Analizi](#10-dosyaskill-analizi)
+2. [FAZA 1 — Kritik Duzeltmeler](#2-faza-1--kritik-duzeltmeler) ✅
+3. [FAZA 2 — Yeni Domain'ler](#3-faza-2--yeni-domainler) ✅
+4. [FAZA 3 — Domain-Spesifik Workflow & Script'ler](#4-faza-3--domain-spesifik-workflow--scriptler) ✅
+5. [FAZA 4 — Moduler GEMINI.md (@import)](#5-faza-4--moduler-geminimd-import) ✅
+6. [FAZA 5 — npm Yayinlama](#6-faza-5--npm-yayinlama)
+7. [FAZA 6 — Gemini CLI Destegi](#7-faza-6--gemini-cli-destegi)
+8. [FAZA 7 — Yeni MCP Server'lar](#8-faza-7--yeni-mcp-serverlar)
+9. [FAZA 8 — Rekabet Ozellikleri](#9-faza-8--rekabet-ozellikleri)
+10. [FAZA 9 — Uzun Vadeli Vizyon](#10-faza-9--uzun-vadeli-vizyon)
+11. [Dosya/Skill Analizi](#11-dosyaskill-analizi)
 
 ---
 
@@ -48,21 +49,33 @@ refine-agent-kit/
 |----------|------|----------|
 | Toplam skill dizini | 54 | `.agent/skills/` altinda |
 | Domain config'lerden referans edilen | 25 | `.agent/domains/*.json` icinde |
-| Kirik referans (skill yok) | 13 | Domain config'de var ama skill dizini yok |
+| Kirik referans (skill yok) | 0 | ✅ FAZA 1'de duzeltildi |
 | Yetim (domain ref yok) | 28 | Skill var ama hicbir domain config referans etmiyor |
 
 **Not:** "Yetim" skill'ler SORUN DEGIL. Bunlar evrensel skill'ler (`clean-code`,
 `api-patterns`, `database-design`, `architecture` vb.). Agent frontmatter'indan
 dogrudan referans ediliyorlar. Domain config'lerden referans edilmemeleri normal.
 
-### 1.3 Domain Uyumsuzlugu
+### 1.3 Domain Durumu
 
-**CLI'dan kurulabilen domain sayisi: 3** (next-web, python-backend, python-ml)
-**Domain config dosyasi sayisi: 12** (chrome-extension, cli-tool, csharp-backend,
-electron-desktop, godot-game, mobile-flutter, mobile-rn, next-web, phaser-game,
-python-backend, python-data, unity-game)
+**CLI'dan kurulabilen domain sayisi: 13** ✅ (FAZA 2'de tamamlandi)
+**Domain config dosyasi sayisi: 13** (python-ml.json FAZA 1'de eklendi)
 
-Bu 9 domain icin altyapi (config + rules) mevcut ama CLI'dan kurulamiyor.
+Tum domainler: next-web, python-backend, python-ml, python-data, mobile-flutter,
+mobile-rn, electron-desktop, chrome-extension, cli-tool, csharp-backend,
+godot-game, unity-game, phaser-game
+
+### 1.4 Workflow/Script Uyumsuzlugu
+
+**KRITIK SORUN:** Tum 17 workflow ve 6 script Next.js/web-spesifik ama TUM domainlere
+yukleniyor. Ornekler:
+- `/deploy` → `npx tsc --noEmit`, `npm audit` (Python/C#/Flutter'da calismaz)
+- `/preview` → port 3000, `curl http://localhost:3000` (oyun motorlarinda anlamsiz)
+- `/test` → sadece Jest/Vitest referansi (pytest, xunit, flutter_test yok)
+- `/build-fix` → `npm run build`, `npx tsc` (Godot/Unity icin gecersiz)
+- `verify.sh` → Next.js bundle analizi (diger domainlerde kullanisiz)
+
+Bu durum, web-disinda olan 10+ domain icin yanlis komutlar calistirma riski tasir.
 
 ### 1.4 Rakip Durumu
 
@@ -217,17 +230,173 @@ mkdir -p domains/{domain}/subdir-markers
 
 ---
 
-## 4. FAZA 3 — Moduler GEMINI.md (@import)
+## 4. FAZA 3 — Domain-Spesifik Workflow & Script'ler
+
+> **Oncelik:** P1 (Icerik dogrulugu — domain'ler calismadan diger fazalar anlamsiz)
+> **Tahmini is:** 4-6 saat
+
+### 4.1 Sorun
+
+Tum 17 workflow ve 6 script Next.js/web projesi icin yazilmis ama `shared/.agent/`
+icinde tum domainlere yukleniyor. Bu durum:
+- Python projesinde `npx tsc --noEmit` calistirmaya calisir
+- Flutter projesinde `npm run build` onerır
+- Godot projesinde `curl http://localhost:3000` yapar
+- C# projesinde `jest --coverage` calistirmaya calisir
+
+### 4.2 Etkilenen Dosyalar
+
+**17 Workflow (`.agent/workflows/`):**
+
+| Workflow | Mevcut (Next.js) | Sorun |
+|----------|-------------------|-------|
+| `/deploy` | `npx tsc`, `npm audit`, Vercel | Python: `pytest`, `pip audit`; C#: `dotnet publish`; Flutter: `flutter build` |
+| `/preview` | Port 3000, `curl localhost` | Flutter: emulator; Godot: editor play; Unity: play mode |
+| `/test` | Jest/Vitest | Python: pytest; C#: xunit/nunit; Flutter: flutter_test; Godot: GUT |
+| `/build-fix` | `npm run build`, `npx tsc` | Python: `mypy`, `ruff`; C#: `dotnet build`; Flutter: `flutter analyze` |
+| `/verify` | TypeScript + ESLint | Her domain farkli linter/checker |
+| `/create` | React component | Domain'e gore farkli sablonlar |
+| `/debug` | Chrome DevTools, React | Domain'e gore farkli araclar |
+| `/quick-fix` | npm/node spesifik | Domain'e gore degisir |
+| `/perf-check` | Lighthouse, Web Vitals | Domain'e gore farkli profiler |
+| `/code-review` | JS/TS odakli | Dile gore farkli kontroller |
+| `/security-scan` | npm audit | pip audit, dotnet audit, pub audit |
+| `/refactor` | React patterns | Domain'e gore farkli pattern'ler |
+| `/docs` | JSDoc/TSDoc | Python: docstring; C#: XML comments |
+| `/plan` | Genel | Nispeten domain-bagimsiz |
+| `/analyze` | Web metrics | Domain metrik'leri |
+| `/git-flow` | Genel | Nispeten domain-bagimsiz |
+| `/status` | npm/node kontrol | Domain'e gore farkli kontroller |
+
+**6 Script (`.agent/scripts/`):**
+
+| Script | Mevcut | Sorun |
+|--------|--------|-------|
+| `verify.sh` | Next.js build + bundle | Domain'e gore build sistemi farkli |
+| `checklist.sh` | npm audit, Lighthouse | Domain arac farki |
+| `session-start.sh` | npm/node durum kontrol | Domain'e gore farkli |
+| `quick-fix.sh` | npm spesifik | Domain'e gore farkli |
+| `perf-budget.sh` | Web metrikleri | Domain'e gore farkli |
+| `deploy-check.sh` | Vercel/web deploy | Domain deploy farki |
+
+### 4.3 Cozum Stratejisi
+
+**Yaklasim: Workflow Overlay (Domain-spesifik uzerine yazma)**
+
+Domain-spesifik workflow'lar `domains/{domain}/workflows/` altinda tutulur.
+CLI kurulumda once `shared/.agent/workflows/` kopyalanir, sonra domain-spesifik
+workflow'lar uzerine yazilir (override).
+
+```
+domains/
+├── next-web/
+│   └── workflows/           ← Next.js'e ozel (mevcut workflow'lar zaten dogru)
+├── python-backend/
+│   └── workflows/
+│       ├── deploy.md        ← pytest, pip audit, gunicorn/uvicorn
+│       ├── test.md          ← pytest, coverage, tox
+│       ├── build-fix.md     ← mypy, ruff, bandit
+│       ├── preview.md       ← uvicorn --reload, port 8000
+│       ├── verify.md        ← mypy + ruff + pytest
+│       └── security-scan.md ← pip audit, bandit, safety
+├── python-ml/
+│   └── workflows/
+│       ├── test.md          ← pytest, model validation
+│       └── ...
+├── mobile-flutter/
+│   └── workflows/
+│       ├── deploy.md        ← flutter build apk/ios, fastlane
+│       ├── test.md          ← flutter test, integration_test
+│       ├── build-fix.md     ← flutter analyze, dart fix
+│       ├── preview.md       ← flutter run, emulator
+│       └── ...
+├── csharp-backend/
+│   └── workflows/
+│       ├── deploy.md        ← dotnet publish, Azure/AWS
+│       ├── test.md          ← dotnet test, xunit
+│       ├── build-fix.md     ← dotnet build, analyzers
+│       └── ...
+├── godot-game/
+│   └── workflows/
+│       ├── test.md          ← GUT framework, scene testing
+│       ├── build-fix.md     ← godot --headless, export
+│       └── ...
+└── ...
+```
+
+**CLI degisikligi (`bin/cli.js`):**
+```javascript
+// Mevcut: shared → domain rules overlay
+// Yeni: shared → domain rules overlay → domain workflows overlay → domain scripts overlay
+
+const domainWorkflowsSrc = path.join(domainSrc, "workflows");
+const workflowsDest = path.join(agentDir, "workflows");
+if (fs.existsSync(domainWorkflowsSrc)) {
+  copyRecursive(domainWorkflowsSrc, workflowsDest); // uzerine yazar
+}
+
+const domainScriptsSrc = path.join(domainSrc, "scripts");
+const scriptsDest = path.join(agentDir, "scripts");
+if (fs.existsSync(domainScriptsSrc)) {
+  copyRecursive(domainScriptsSrc, scriptsDest); // uzerine yazar
+}
+```
+
+### 4.4 Domain Bazinda Workflow Oncelikleri
+
+Tum domainler icin en kritik 6 workflow (mutlaka domain-spesifik olmali):
+
+| # | Workflow | Neden Kritik |
+|---|----------|-------------|
+| 1 | `/test` | Yanlis test runner kullanmak hic test calistiramamak demek |
+| 2 | `/build-fix` | Yanlis build komutu hic derlememek demek |
+| 3 | `/deploy` | Yanlis deploy komutu uretim ortamini bozabilir |
+| 4 | `/preview` | Yanlis port/komut gelistirici deneyimini kirar |
+| 5 | `/verify` | Yanlis linter/checker kontrolleri atlatiyor |
+| 6 | `/security-scan` | Yanlis audit araci guvenlik acigi kacirmak demek |
+
+Geri kalan 11 workflow (plan, git-flow, analyze, docs, vb.) nispeten
+domain-bagimsiz ve sonra duzeltebilir.
+
+### 4.5 Script Donusumu
+
+6 script icin benzer overlay yaklasimi. Ancak script'ler `.sh` uzantili
+ve Windows uyumlulugu sorunu var. **Karar:** Script'leri Node.js'e donustur
+(`.js`) veya domain-bagimsiz hale getir.
+
+### 4.6 Adimlar
+
+1. **Analiz:** Her workflow dosyasini oku, Next.js-spesifik komutlari listele
+2. **Sablon olustur:** Her domain icin 6 kritik workflow yaz:
+   - python-backend: pytest, mypy, ruff, uvicorn, pip audit
+   - python-ml: pytest, mypy, jupyter, model validation
+   - python-data: pytest, jupyter, data pipeline testing
+   - mobile-flutter: flutter test, flutter analyze, flutter build, fastlane
+   - mobile-rn: jest (RN), eas build, metro bundler
+   - electron-desktop: jest + electron-builder + CSP
+   - chrome-extension: jest + web-ext + manifest validation
+   - cli-tool: jest/pytest + npm link/pip install -e
+   - csharp-backend: dotnet test, dotnet build, dotnet publish, NuGet audit
+   - godot-game: GUT, godot --headless, export presets
+   - unity-game: Unity Test Framework, Unity build pipeline
+   - phaser-game: vitest, vite build, texture atlas validation
+3. **CLI guncelle:** `bin/cli.js`'de workflow/script overlay ekle
+4. **Test:** Her domain icin kurulum yap, workflow dosyalarini kontrol et
+5. **next-web:** Mevcut workflow'lar zaten dogru, overlay gerekmez
+
+---
+
+## 5. FAZA 4 — Moduler GEMINI.md (@import)
 
 > **Oncelik:** P1 (Kisa-orta vadeli)
 > **Tahmini is:** 2-3 saat
 
-### 4.1 Sorun
+### 5.1 Sorun
 
 Mevcut GEMINI.md dosyalari 170+ satir monolitik dosyalar. Ayni icerik (agent protocol,
 routing checklist, request classifier) her domain'in GEMINI.md dosyasinda tekrarlaniyor.
 
-### 4.2 Cozum: @file.md Import Syntax
+### 5.2 Cozum: @file.md Import Syntax
 
 Gemini CLI ve Antigravity IDE `@dosya.md` syntax'ini destekliyor:
 
@@ -238,7 +407,7 @@ Gemini CLI ve Antigravity IDE `@dosya.md` syntax'ini destekliyor:
 @./rules/{domain}-specific.md
 ```
 
-### 4.3 Yeni Yapi
+### 5.3 Yeni Yapi
 
 ```
 .agent/rules/
@@ -279,7 +448,7 @@ Gemini CLI ve Antigravity IDE `@dosya.md` syntax'ini destekliyor:
 @./quick-reference.md
 ```
 
-### 4.4 Adimlar
+### 5.4 Adimlar
 
 1. Ortak bolümleri ayri .md dosyalarina cikar:
    - `base-protocol.md` (Agent & Skill Protocol)
@@ -291,7 +460,7 @@ Gemini CLI ve Antigravity IDE `@dosya.md` syntax'ini destekliyor:
    domain-spesifik GEMINI.md overlay olarak domain dizininden gelsin
 4. **Test:** Antigravity IDE'de import'larin dogru yuklendigini dogrula
 
-### 4.5 Dikkat Edilecekler
+### 5.5 Dikkat Edilecekler
 
 - Import derinligi max 5 seviye (Gemini limiti)
 - Sadece `.md` dosyalar import edilebilir
@@ -300,19 +469,19 @@ Gemini CLI ve Antigravity IDE `@dosya.md` syntax'ini destekliyor:
 
 ---
 
-## 5. FAZA 4 — npm Yayinlama
+## 6. FAZA 5 — npm Yayinlama
 
 > **Oncelik:** P2 (Orta vadeli)
 > **Tahmini is:** 1 saat
 
-### 5.1 Neden?
+### 6.1 Neden?
 
 Simdi: `npx github:MustafaKucukcoskun/Refine-agent-kit init --domain next-web`
 Hedef: `npx refine-kit init --domain next-web`
 
 npm'de yayinlamak kurulumu basitlestirir ve profesyonel gorunur.
 
-### 5.2 Adimlar
+### 6.2 Adimlar
 
 1. npm hesabi olustur (npmjs.com)
 2. `package.json` kontrol et:
@@ -347,7 +516,7 @@ npm'de yayinlamak kurulumu basitlestirir ve profesyonel gorunur.
              NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
    ```
 
-### 5.3 Scoped vs Unscoped
+### 6.3 Scoped vs Unscoped
 
 | Secenek | Komut | Avantaj |
 |---------|-------|---------|
@@ -358,12 +527,12 @@ npm'de yayinlamak kurulumu basitlestirir ve profesyonel gorunur.
 
 ---
 
-## 6. FAZA 5 — Gemini CLI Destegi
+## 7. FAZA 6 — Gemini CLI Destegi
 
 > **Oncelik:** P2 (Orta vadeli)
 > **Tahmini is:** 2 saat
 
-### 6.1 Sorun
+### 7.1 Sorun
 
 Antigravity IDE ve Gemini CLI farkli MCP config dosyalari kullaniyor:
 - **Antigravity:** `~/.gemini/antigravity/mcp_config.json`
@@ -373,7 +542,7 @@ Ayrica Gemini CLI'da MCP server format farki:
 - Antigravity: `serverUrl` (HTTP)
 - Gemini CLI: `httpUrl` (HTTP) veya `command`+`args` (stdio)
 
-### 6.2 Cozum
+### 7.2 Cozum
 
 CLI'a `--target` flag'i ekle:
 
@@ -385,7 +554,7 @@ npx refine-kit init --domain next-web
 npx refine-kit init --domain next-web --target gemini-cli
 ```
 
-### 6.3 Adimlar
+### 7.3 Adimlar
 
 1. `global/` altina `settings.json` sablon ekle (Gemini CLI formati)
 2. `bin/cli.js`'ye `--target` argumanini ekle
@@ -403,12 +572,12 @@ npx refine-kit init --domain next-web --target gemini-cli
 
 ---
 
-## 7. FAZA 6 — Yeni MCP Server'lar
+## 8. FAZA 7 — Yeni MCP Server'lar
 
 > **Oncelik:** P2 (Orta vadeli)
 > **Tahmini is:** 1 saat
 
-### 7.1 Global Config'e Eklenebilecek MCP'ler
+### 8.1 Global Config'e Eklenebilecek MCP'ler
 
 | Server | Ne Yapar | Kaynak |
 |--------|----------|--------|
@@ -416,7 +585,7 @@ npx refine-kit init --domain next-web --target gemini-cli
 | Memory | Kalici bilgi grafigi (entity + relationship) | `@modelcontextprotocol/server-memory` |
 | Firebase | Firebase/Firestore yonetimi | `firebase-tools mcp` |
 
-### 7.2 Adimlar
+### 8.2 Adimlar
 
 1. Her MCP server'in paket adini dogrula (npm/GitHub'dan)
 2. `global/mcp_config.json`'a ekle
@@ -424,7 +593,7 @@ npx refine-kit init --domain next-web --target gemini-cli
 4. README'deki API Keys tablosunu guncelle
 5. **Test:** Antigravity IDE'de her server'in calısıp calismadigini dogrula
 
-### 7.3 Domain-Spesifik MCP Eklemeleri
+### 8.3 Domain-Spesifik MCP Eklemeleri
 
 | Domain | MCP Server | Ne Yapar |
 |--------|-----------|----------|
@@ -434,12 +603,12 @@ npx refine-kit init --domain next-web --target gemini-cli
 
 ---
 
-## 8. FAZA 7 — Rekabet Ozellikleri
+## 9. FAZA 8 — Rekabet Ozellikleri
 
 > **Oncelik:** P3 (Uzun vadeli)
 > **Tahmini is:** Her biri 2-4 saat
 
-### 8.1 Cross-Platform Destek
+### 9.1 Cross-Platform Destek
 
 Antigravity-awesome-skills'in en buyuk avantaji cross-platform destegi.
 Biz de ekleyebiliriz:
@@ -455,7 +624,7 @@ npx refine-kit init --domain next-web --target claude-code
 3. Codex: `.codex/` dizinine benzer yapi
 4. Her hedef icin MCP config formatini donustur
 
-### 8.2 Bundle Sistemi
+### 9.2 Bundle Sistemi
 
 Rakip antigravity-awesome-skills bundle sistemi kullaniyor (frontend-pro, backend-pro vb.)
 Biz de ekleyebiliriz:
@@ -473,7 +642,7 @@ npx refine-kit install-bundle --bundle fullstack-pro
 | `fullstack-pro` | frontend-pro + backend-pro + database-design + deployment-procedures |
 | `mobile-pro` | mobile-design, flutter-patterns, react-native-best-practices |
 
-### 8.3 `list` ve `update` Komutlari
+### 9.3 `list` ve `update` Komutlari
 
 ```bash
 # Kurulu domain'leri listele
@@ -494,7 +663,7 @@ npx refine-kit update
 1. `list` komutu: Proje dizininde `.agent/` ve subdirectory GEMINI.md'leri tara
 2. `update` komutu: GitHub'dan son surum bilgisini cek, dosyalari guncelle
 
-### 8.4 AI Slop Score Audit
+### 9.4 AI Slop Score Audit
 
 ```bash
 npx refine-kit audit
@@ -516,33 +685,33 @@ npx refine-kit audit
 
 ---
 
-## 9. FAZA 8 — Uzun Vadeli Vizyon
+## 10. FAZA 9 — Uzun Vadeli Vizyon
 
 > **Oncelik:** P3-P4
 > **Bu maddeler daha cok fikir asamasinda**
 
-### 9.1 Design System Generator
+### 10.1 Design System Generator
 - Persona + referans siteden otomatik tasarim tokenleri uret
 - Tailwind config, CSS variables, component variants
 
-### 9.2 Agent Telemetri
+### 10.2 Agent Telemetri
 - Hangi agent ne kadar kullaniliyor
 - Hangi skill'ler en cok aktif ediliyor
 - Optimizasyon onerileri
 
-### 9.3 Takim Profilleri
+### 10.3 Takim Profilleri
 - Junior vs Senior developer icin farkli agent davranislari
 - Code review sikligi, hata aciklama detayi ayarlari
 
-### 9.4 Skill Marketplace
+### 10.4 Skill Marketplace
 - Kullanicilarin kendi skill'lerini paylasabildigi platform
 - `npx refine-kit install-skill community/my-awesome-skill`
 
 ---
 
-## 10. DOSYA/SKILL ANALIZI
+## 11. DOSYA/SKILL ANALIZI
 
-### 10.1 Kirik Skill Referanslari (Silinecek)
+### 11.1 Kirik Skill Referanslari (Silinecek)
 
 Bu skill'ler domain config JSON'larda referans edilyor ama fiziksel olarak mevcut degil:
 
@@ -577,7 +746,7 @@ python-data.json:
   - algorithmic-art (p2) → SIL
 ```
 
-### 10.2 "Yetim" Skill'ler (NORMAL — Silme)
+### 11.2 "Yetim" Skill'ler (NORMAL — Silme)
 
 Bu skill'ler hicbir domain config'den referans edilmiyor ama **agent frontmatter'larindan
 dogrudan kullaniliyor**. Bunlar evrensel skill'ler:
@@ -609,22 +778,23 @@ Evrensel (tum projeler):    Domain-spesifik (agent'lar kullanir):
 alanina gore semantik olarak otomatik aktive eder. Domain config'de olmamalari
 onlarin kullanilmadigini gostermez. Agent'lar dogrudan referans eder.
 
-### 10.3 12 Domain vs 3 CLI Domain Uyumsuzlugu
+### 11.3 Domain Durumu (Guncellenmis)
 
-| Domain Config | CLI'da Var? | Durum |
-|---------------|-------------|-------|
-| next-web | ✅ | Tam destek |
-| python-backend | ✅ | Tam destek |
-| python-data | ❌ (python-ml olarak var) | Config adi uyumsuz |
-| mobile-flutter | ❌ | FAZA 2'de eklenecek |
-| mobile-rn | ❌ | FAZA 2'de eklenecek |
-| electron-desktop | ❌ | FAZA 2'de eklenecek |
-| chrome-extension | ❌ | FAZA 2'de eklenecek |
-| cli-tool | ❌ | FAZA 2'de eklenecek |
-| csharp-backend | ❌ | FAZA 2'de eklenecek |
-| godot-game | ❌ | FAZA 2'de eklenecek |
-| unity-game | ❌ | FAZA 2'de eklenecek |
-| phaser-game | ❌ | FAZA 2'de eklenecek |
+| Domain | CLI | Rules | Subdir Marker | Workflows | Durum |
+|--------|-----|-------|---------------|-----------|-------|
+| next-web | ✅ | ✅ | ✅ | ✅ (mevcut) | Tam destek |
+| python-backend | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| python-ml | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| python-data | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| mobile-flutter | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| mobile-rn | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| electron-desktop | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| chrome-extension | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| cli-tool | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| csharp-backend | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| godot-game | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| unity-game | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
+| phaser-game | ✅ | ✅ | ✅ | ❌ Next.js | FAZA 3'te |
 
 ---
 
@@ -632,36 +802,50 @@ onlarin kullanilmadigini gostermez. Agent'lar dogrudan referans eder.
 
 ```
 FAZA 1 (P0 — Hemen): ✅ TAMAMLANDI (2026-03-10)
-  1.1 ✅ 13 kirik skill referansi duzeltildi (esdeger ile degistir veya sil)
+  1.1 ✅ 13 kirik skill referansi duzeltildi
   1.2 ✅ python-ml.json domain config olusturuldu
 
 FAZA 2 (P1 — 1 Hafta): ✅ TAMAMLANDI (2026-03-10)
   2.1 ✅ 10 yeni domain (toplam 13) icin rules/GEMINI.md + subdir-markers olusturuldu
   2.2 ✅ CLI'a 13 domain eklendi, README guncellendi
 
-FAZA 3 (P1 — 1 Hafta):
-  3.1 GEMINI.md'leri @import ile modüler yap
+FAZA 3 (P1 — Icerik Dogrulugu): ✅ TAMAMLANDI (2026-03-10)
+  3.1 ✅ 4 kritik shared workflow domain-aware yapildi (test, build-fix, deploy, preview)
+  3.2 ✅ 14 domain-spesifik workflow olusturuldu (eas-build, package, publish, release, scene, prefab, store-deploy, migrate, eda, train, export, scaffold, 2x scene)
+  3.3 ✅ CLI'a workflow/script overlay mekanizmasi eklendi
+  3.4 ✅ python-ml-rules.md olusturuldu (python-data-rules.md'den ayrildi)
+  3.5 ✅ Tum domain config'lerdeki workflow_missing alanlari temizlendi
 
-FAZA 4 (P2 — 2 Hafta):
-  4.1 npm'e yayinla
+FAZA 4 (P1 — Modulerlik): ✅ TAMAMLANDI (2026-03-10)
+  4.1 ✅ 5 shared base dosyasi olusturuldu (base-protocol, routing-protocol, file-dependency, gemini-modes, agents-reference)
+  4.2 ✅ 13 domain GEMINI.md dosyasi @import ile moduler yapiya donusturuldu
+  4.3 ✅ Ortalama %40 satir azaltimi (165→100 satir), tekrar eden icerik eliminate edildi
 
-FAZA 5 (P2 — 2 Hafta):
-  5.1 Gemini CLI destegi (--target gemini-cli)
+FAZA 5 (P2 — Dagitim): ✅ TAMAMLANDI (2026-03-10)
+  5.1 ✅ package.json npm publish icin hazir (author, homepage, bugs, keywords)
+  5.2 ✅ README.md guncellendi (npx refine-agent-kit, guncel istatistikler)
+  5.3 ✅ .npmignore olusturuldu (DEVELOPMENT-ROADMAP.md haric)
+  5.4 ✅ GitHub Actions CI/CD workflow olusturuldu (.github/workflows/publish.yml)
+  5.5 ✅ Paket dogrulandi: 641 KB packed, 304 dosya, 2 MB unpacked
+  5.6 ⏳ npm publish bekleniyor (npm login + npm publish)
 
-FAZA 6 (P2 — 1 Hafta):
-  6.1 Yeni MCP server'lar ekle
+FAZA 6 (P2 — Platform):
+  6.1 Gemini CLI destegi (--target gemini-cli)
 
-FAZA 7 (P3 — 1 Ay):
-  7.1 Cross-platform destek
-  7.2 Bundle sistemi
-  7.3 list + update komutlari
-  7.4 AI Slop audit komutu
+FAZA 7 (P2 — Araçlar):
+  7.1 Yeni MCP server'lar ekle
 
-FAZA 8 (P4 — Uzun vadeli):
-  8.1 Design System Generator
-  8.2 Telemetri
-  8.3 Takim profilleri
-  8.4 Skill marketplace
+FAZA 8 (P3 — Rekabet):
+  8.1 Cross-platform destek
+  8.2 Bundle sistemi
+  8.3 list + update komutlari
+  8.4 AI Slop audit komutu
+
+FAZA 9 (P4 — Uzun vadeli):
+  9.1 Design System Generator
+  9.2 Telemetri
+  9.3 Takim profilleri
+  9.4 Skill marketplace
 ```
 
 ---
