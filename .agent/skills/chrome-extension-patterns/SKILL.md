@@ -1,52 +1,52 @@
 # Chrome Extension Patterns Skill
 
-## 1. Manifest V3 Temelleri
+## 1. Manifest V3 Fundamentals
 
-- Yeni eklentiler her zaman `manifest.json` versiyonu `3` olmalıdır. V2 desteği tamamen kalkmıştır.
-- **Temel alanlar:** `name`, `version`, `manifest_version: 3`, `action` (popup için, eskiden browser_action'dı).
+- New extensions must always use `manifest.json` version `3`. V2 support has been completely removed.
+- **Required fields:** `name`, `version`, `manifest_version: 3`, `action` (for popup; formerly browser_action).
 
-## 2. Güvenlik İhlallerini Önleme
+## 2. Preventing Security Violations
 
-- **YASAKLAR:** Manifest V3'te `eval()` ve dışarıdan barındırılan (remote hosted) her türlü kodun (JS dosyaları, CDN'ler) çalıştırılması yasaktır. React veya başka bir framework kullanıyorsanız kodu build alıp (bundle) eklenti içine gömmelisiniz. CSP (Content Security Policy) buna izin vermez.
-- `permissions`: API erişimi için (ör. `storage`, `tabs`, `activeTab`).
-- `host_permissions`: Belirli domainlerde AJAX/Fetch isteği yapmak için `<all_urls>` yerine sadece ihtiyaç duyulanı (ör. `*://api.example.com/*`) girin.
+- **FORBIDDEN:** In Manifest V3, `eval()` and all remotely hosted code (JS files, CDNs) are forbidden. If using React or another framework, you must build (bundle) the code and embed it within the extension. CSP (Content Security Policy) does not allow this.
+- `permissions`: For API access (e.g., `storage`, `tabs`, `activeTab`).
+- `host_permissions`: For making AJAX/Fetch requests on specific domains. Instead of `<all_urls>`, specify only what is needed (e.g., `*://api.example.com/*`).
 
-## 3. Mimari Parçalar
+## 3. Architectural Components
 
-- **Background (Service Worker):** Arkada çalışan görünmez işçidir. V3 ile Service Worker olarak adlandırılır. Artık sürekli çalışmaz (persistent değildir). Olaylar (events) ile uyanır. Bu yüzden global değişkende state tutmayın, veriyi Chrome storage'da saklayın!
+- **Background (Service Worker):** The invisible worker running in the background. In V3, it is called a Service Worker. It no longer runs persistently. It wakes up on events. Therefore, do not store state in global variables — save data in Chrome storage!
   ```json
   "background": { "service_worker": "background.js" }
   ```
-- **Content Scripts:** Sadece web sayfalarının (DOM) içine enjekte edilen koddur. Chrome eklenti API'lerinin çoğuna (örneğin `chrome.tabs`) erişemez, erişebildiği nadir API'ler mesajlaşma (sendMessage) ve storage'dır.
+- **Content Scripts:** Code injected only into web page DOM. Cannot access most Chrome extension APIs (e.g., `chrome.tabs`); the few accessible APIs are messaging (sendMessage) and storage.
   ```json
   "content_scripts": [{ "matches": ["<all_urls>"], "js": ["content.js"] }]
   ```
-- **Popup:** `chrome.action.setPopup` ile açılan basit HTML penceresidir. Her açılıp kapandığında yaşam döngüsü baştan başlar.
+- **Popup:** A simple HTML window opened via `chrome.action.setPopup`. Its lifecycle restarts every time it is opened and closed.
 
-## 4. Mesajlaşma (Message Passing)
+## 4. Message Passing
 
-Content Script'in Service Worker'dan veya Popup'tan komut/veri alması işlemidir. Veya tam tersi.
+The process of a Content Script receiving commands/data from the Service Worker or Popup, or vice versa.
 
-- **Uzun süren senkronizasyon:** Mesaj dinleyicisinde (onMessage) asenkron bir `sendResponse` yapacaksanız dinleyici fonksiyondan `return true;` dönmelisiniz.
+- **Long-running synchronization:** If you will call `sendResponse` asynchronously in a message listener (onMessage), you must `return true;` from the listener function.
 
   ```javascript
-  // Background (Service Worker) -> Content Script'e veya Popup'tan Content Script'e konuşurken önce tab bulmalısınız
+  // Background (Service Worker) -> Content Script or Popup -> Content Script: first find the tab
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, (response) => { ... });
   });
 
-  // Content Script -> Background veya Popup'a Konuşurken:
+  // Content Script -> Background or Popup:
   chrome.runtime.sendMessage({greeting: "hello"}, (response) => { ... });
 
-  // İkisinde de Mesajı Dinlerken:
+  // Listening for messages in both:
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.greeting === "hello") {
       sendResponse({farewell: "goodbye"});
-      return true; // EĞER asenkron işlem varsa bu şart.
+      return true; // REQUIRED if there is an async operation.
     }
   });
   ```
 
-## 5. Veri Kaydetme (chrome.storage)
+## 5. Data Storage (chrome.storage)
 
-- Standard localStorage kullanmayın. `chrome.storage.local` veya `chrome.storage.sync` (Kullanıcının google hesabıyla sekronize olur, limiti çok düşüktür) kullanın. Promise tabanlıdır.
+- Do not use standard localStorage. Use `chrome.storage.local` or `chrome.storage.sync` (syncs with the user's Google account; has very low limits). It is Promise-based.

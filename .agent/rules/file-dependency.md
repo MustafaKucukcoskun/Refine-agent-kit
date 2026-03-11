@@ -1,11 +1,11 @@
 ## File Dependency Awareness
 
-Herhangi bir dosyayi degistirmeden once:
+Before modifying any file:
 
-1. `CODEBASE.md` kontrol et (yoksa `session_manager.py` ile uret)
-2. Bagimli dosyalari tespit et
-3. Etkilenen TUM dosyalari birlikte guncelle
+1. Check `CODEBASE.md` (if not found, generate with `session_manager.py`)
+2. Identify dependent files
+3. Update ALL affected files together
 
 ### System Map
 
-**ZORUNLU:** Session basinda `ARCHITECTURE.md` oku. Agent, Skill ve Script yapisini anla.
+**MANDATORY:** Read `ARCHITECTURE.md` at session start. Understand the Agent, Skill, and Script structure.

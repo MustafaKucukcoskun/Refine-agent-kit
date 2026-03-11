@@ -1,14 +1,18 @@
 {
   "name": "refine-agent-kit",
   "version": "1.0.2",
-  "description": "AI Agent toolkit for Google Antigravity IDE. 21 agents, 64 skills, 13 domains, design persona system, anti-AI-slop protection.",
+  "description": "AI Agent toolkit for Google Antigravity IDE. 21 agents, 65 skill modules across 54 skill packs, 13 domains, design persona system, anti-AI-slop protection.",
   "main": "bin/cli.js",
   "bin": {
+    "refine-agent-kit": "bin/cli.js",
     "refine-kit": "bin/cli.js"
   },
   "scripts": {
     "test": "node bin/cli.js --help",
-    "prepack": "node -e \"require('./bin/cli.js')\" 2>/dev/null || true"
+    "sync:inventory": "node tools/sync-inventory.js",
+    "sync:mirror": "node tools/sync-dev-mirror.js",
+    "sync:all": "node tools/sync-inventory.js && node tools/sync-dev-mirror.js",
+    "prepack": "npm run sync:all"
   },
   "keywords": [
     "ai-agent",
@@ -41,7 +45,7 @@
   "bugs": {
     "url": "https://github.com/MustafaKucukcoskun/refine-agent-kit/issues"
   },
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "engines": {
     "node": ">=18.0.0"
   },

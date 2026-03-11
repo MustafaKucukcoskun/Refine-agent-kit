@@ -1,32 +1,32 @@
-# Trail of Bits Security Prensibleri
+# Trail of Bits Security Principles
 
-Bu skill globaldir ve her domain'de uygulanmalıdır.
+This skill is global and should be applied in every domain.
 
-## 1. Input Validation (Girdi Doğrulama)
+## 1. Input Validation
 
-- Sistem dışından gelen (Kullanıcı, API Request, Dosya) tüm verilere varsayılan olarak "ZARARLI" muamelesi yapın.
-- Sanitization (temizleme) yerine Validation (doğrulama) yapın (ör. `is_integer`, Pydantic strict tipler).
-- Path traversal açıklarına karşı dosya yolları (`../../`) için her zaman path normalization (ör. `os.path.abspath`) ve prefix kontrolü yapın.
+- Treat all data coming from outside the system (User, API Request, File) as "MALICIOUS" by default.
+- Prefer Validation over Sanitization (e.g., `is_integer`, Pydantic strict types).
+- Always perform path normalization (e.g., `os.path.abspath`) and prefix checks for file paths (`../../`) to prevent path traversal vulnerabilities.
 
-## 2. Secrets Management (Gizli Bilgi Yönetimi)
+## 2. Secrets Management
 
-- Asla hardcode secret, token veya test amaçlı olsa bile API/DB connection string yazmayın.
-- `.env` kullanın, her zaman `EXPO_PUBLIC_` gibi güvenli sanılan ön eklerin tarayıcıya/mobile sızdığını varsayın (içlerine gerçek secret koymayın).
-- Kritik keylerin source control (Git) dışında kaldığından emin olun (örn: `.gitignore`).
+- Never hardcode secrets, tokens, or API/DB connection strings, even for testing purposes.
+- Use `.env`, and always assume that prefixes considered safe like `EXPO_PUBLIC_` leak to the browser/mobile (do not put real secrets in them).
+- Ensure critical keys remain outside source control (Git) (e.g., `.gitignore`).
 
-## 3. OWASP Top 10 ve Injection
+## 3. OWASP Top 10 and Injection
 
-- SQL veri çekim işlemlerinde her zaman Parameterized Query veya ORM kullanın. String birleştirme (`"SELECT * FROM users WHERE name = " + user_input`) **kesinlikle yasaktır.**
-- XSS koruması için HTML encode etmeden kullanıcı girdisi render etmeyin.
-- X-Frame-Options, CSP, HSTS gibi Security Header'ların API veya Frontend sunucusundan basıldığına emin olun.
+- Always use Parameterized Queries or ORM for SQL data retrieval. String concatenation (`"SELECT * FROM users WHERE name = " + user_input`) is **strictly forbidden.**
+- Do not render user input without HTML encoding for XSS protection.
+- Ensure Security Headers like X-Frame-Options, CSP, HSTS are served from the API or Frontend server.
 
-## 4. AuthZ (Yetkilendirme) ve AuthN (Kimlik Doğrulama)
+## 4. AuthZ (Authorization) and AuthN (Authentication)
 
-- `Authentication` sadece kullanıcının kim olduğunu anlatır, yetkisini belirlemez.
-- `Authorization` her endpoint'in başında bağımsız kontrol edilmelidir. (Sadece root rotada yetki kontrolü yapmak yeterli değildir, obje/row bazlı izinlere dikkat edilmelidir - Insecure Direct Object Reference (IDOR) riski).
-- JWT veya OAuth kullanıyorsanız Refresh token olmadan çok uzun yaşayan Access Token'lar yaratmayın.
+- `Authentication` only identifies who the user is; it does not determine their permissions.
+- `Authorization` must be independently checked at the beginning of every endpoint. (Checking permissions only at the root route is insufficient; pay attention to object/row-level permissions - Insecure Direct Object Reference (IDOR) risk).
+- If using JWT or OAuth, do not create very long-lived Access Tokens without a Refresh Token.
 
-## 5. Bağımlılık (Dependency) ve LogGüvenliği
+## 5. Dependency and Log Security
 
-- Üçüncü parti bağımlılıkları düzenli olarak güncelleyin (`npm audit`, `pip-audit`, snyk veya trivy gibi tool'ları projede düşünün).
-- Exception yakalarken ve Loglara yazarken kullanıcı PII'ı (Kişisel Veri), şifre, TC kimlik, Session ID veya bearer token değerlerini açık metin (plaintext) halinde basmayın.
+- Regularly update third-party dependencies (consider tools like `npm audit`, `pip-audit`, snyk, or trivy in your project).
+- When catching exceptions and writing to logs, never output user PII (Personal Identifiable Information), passwords, national IDs, Session IDs, or bearer token values in plaintext.

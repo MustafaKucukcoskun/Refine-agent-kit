@@ -19,6 +19,7 @@
     ]
   },
   "primary_agent": "backend-specialist",
+  "supporting_agents": [],
   "skills": {
     "p0": [
       "bash-linux"
@@ -28,8 +29,8 @@
     ]
   },
   "skill_notes": {
-    "bash-linux": "Mevcut global skill \u2014 CLI terminal pattern'leri burada",
-    "testing-patterns": "Mevcut global skill \u2014 referans"
+    "bash-linux": "Existing global skill \u2014 CLI terminal patterns here",
+    "testing-patterns": "Existing global skill \u2014 reference"
   },
   "workflows": [
     "/build-fix",
@@ -38,5 +39,5 @@
   ],
   "mcp_extra": [],
   "rules_file": "rules/domains/cli-tool-rules.md",
-  "skill_rationale": "Ayrı SKILL.md gerekmez \u2014 bash-linux (global) + context7 yeterli"
+  "skill_rationale": "Separate SKILL.md not needed \u2014 bash-linux (global) + context7 sufficient"
 }

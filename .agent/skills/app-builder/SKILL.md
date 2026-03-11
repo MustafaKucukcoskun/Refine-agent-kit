@@ -19,28 +19,30 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 | `agent-coordination.md` | Agent pipeline, execution order | Coordinating multi-agent work |
 | `scaffolding.md` | Directory structure, core files | Creating project structure |
 | `feature-building.md` | Feature analysis, error handling | Adding features to existing project |
-| `templates/SKILL.md` | **Project templates** | Scaffolding new project |
+| `blueprints/SKILL.md` | **Project blueprints** | Scaffolding new project |
 
 ---
 
-## 📦 Templates (13)
+## 📦 Blueprints (13)
 
-Quick-start scaffolding for new projects. **Read the matching template only!**
+These files are prompt-time reference blueprints, not executable starter repos.
+Read only the matching blueprint, then scaffold the project from that guidance.
 
-| Template | Tech Stack | When to Use |
-|----------|------------|-------------|
-| [nextjs-fullstack](templates/nextjs-fullstack/TEMPLATE.md) | Next.js + Prisma | Full-stack web app |
-| [nextjs-saas](templates/nextjs-saas/TEMPLATE.md) | Next.js + Stripe | SaaS product |
-| [nextjs-static](templates/nextjs-static/TEMPLATE.md) | Next.js + Framer | Landing page |
-| [nuxt-app](templates/nuxt-app/TEMPLATE.md) | Nuxt 3 + Pinia | Vue full-stack app |
-| [express-api](templates/express-api/TEMPLATE.md) | Express + JWT | REST API |
-| [python-fastapi](templates/python-fastapi/TEMPLATE.md) | FastAPI | Python API |
-| [react-native-app](templates/react-native-app/TEMPLATE.md) | Expo + Zustand | Mobile app |
-| [flutter-app](templates/flutter-app/TEMPLATE.md) | Flutter + Riverpod | Cross-platform mobile |
-| [electron-desktop](templates/electron-desktop/TEMPLATE.md) | Electron + React | Desktop app |
-| [chrome-extension](templates/chrome-extension/TEMPLATE.md) | Chrome MV3 | Browser extension |
-| [cli-tool](templates/cli-tool/TEMPLATE.md) | Node.js + Commander | CLI app |
-| [monorepo-turborepo](templates/monorepo-turborepo/TEMPLATE.md) | Turborepo + pnpm | Monorepo |
+| Blueprint | Tech Stack | When to Use |
+|-----------|------------|-------------|
+| [nextjs-fullstack](blueprints/nextjs-fullstack/BLUEPRINT.md) | Next.js + Prisma | Full-stack web app |
+| [nextjs-saas](blueprints/nextjs-saas/BLUEPRINT.md) | Next.js + Stripe | SaaS product |
+| [nextjs-static](blueprints/nextjs-static/BLUEPRINT.md) | Next.js + Framer | Landing page |
+| [nuxt-app](blueprints/nuxt-app/BLUEPRINT.md) | Nuxt 4 + Pinia | Vue full-stack app |
+| [express-api](blueprints/express-api/BLUEPRINT.md) | Express + JWT | REST API |
+| [python-fastapi](blueprints/python-fastapi/BLUEPRINT.md) | FastAPI | Python API |
+| [react-native-app](blueprints/react-native-app/BLUEPRINT.md) | Expo + Zustand | Mobile app |
+| [flutter-app](blueprints/flutter-app/BLUEPRINT.md) | Flutter + Riverpod | Cross-platform mobile |
+| [electron-desktop](blueprints/electron-desktop/BLUEPRINT.md) | Electron + React | Desktop app |
+| [chrome-extension](blueprints/chrome-extension/BLUEPRINT.md) | Chrome MV3 | Browser extension |
+| [cli-tool](blueprints/cli-tool/BLUEPRINT.md) | Node.js + Commander | CLI app |
+| [monorepo-turborepo](blueprints/monorepo-turborepo/BLUEPRINT.md) | Turborepo + pnpm | Monorepo |
+| [astro-static](blueprints/astro-static/BLUEPRINT.md) | Astro + MDX | Blog / Docs |
 
 ---
 

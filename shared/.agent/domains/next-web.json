@@ -40,5 +40,5 @@
     "magicui"
   ],
   "rules_file": "rules/domains/next-web-rules.md",
-  "notes": "frontend-specialist global'de kalır, bu domain'de PRIMARY olarak işaretlenir."
+  "notes": "frontend-specialist stays global, marked as PRIMARY in this domain."
 }

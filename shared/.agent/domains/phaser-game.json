@@ -6,6 +6,7 @@
     "contains": "\"phaser\""
   },
   "primary_agent": "game-developer",
+  "supporting_agents": [],
   "skills": {
     "p0": [
       "game-development"
@@ -15,7 +16,7 @@
     ]
   },
   "skill_notes": {
-    "game-development": "Mevcut global skill \u2014 referans"
+    "game-development": "Existing global skill \u2014 reference"
   },
   "workflows": [
     "/build-fix",
@@ -24,5 +25,5 @@
   ],
   "mcp_extra": [],
   "rules_file": "rules/domains/phaser-game-rules.md",
-  "notes": "Phaser 3.x. context7 Phaser dökümantasyonu varsa ekstra skill değer katar."
+  "notes": "Phaser 3.x. context7 Phaser documentation adds extra skill value if available."
 }

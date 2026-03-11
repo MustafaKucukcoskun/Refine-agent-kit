@@ -48,7 +48,7 @@
     ]
   },
   "primary_agent": "backend-specialist",
-  "agent_note": "data-scientist agent P2'de oluşturulacak, şimdilik backend-specialist",
+  "agent_note": "data-scientist agent to be created in P2, using backend-specialist for now",
   "supporting_agents": [
     "database-architect"
   ],
@@ -75,7 +75,7 @@
   ],
   "mcp_status": "LIVE_TESTED",
   "mcp_test_date": "2026-03-08",
-  "mcp_notes": "duckdb-mcp: stdio, uvx. API key yok. Parquet/CSV sorgulama için.",
+  "mcp_notes": "duckdb-mcp: stdio, uvx. No API key. For Parquet/CSV querying.",
   "mcp_config_when_ready": {
     "duckdb": {
       "command": "uvx",

@@ -1,33 +1,33 @@
 # Flutter Patterns Skill
 
-## 1. Mimariler ve State Yönetimi (Riverpod 2.x)
+## 1. Architecture and State Management (Riverpod 2.x)
 
-- Modern Flutter'da StateNotifier vb. yerine `@riverpod` annotation'ı, `Notifier` (senkron) ve `AsyncNotifier` (asenkron) sınıfları kullanın.
-- Widget'larda `ConsumerWidget` veya Hooks kullanıyorsanız `HookConsumerWidget` tercih edin.
-- **Provider Okuma Kriterleri:**
-  - İzlemek (build tetiklemek) için: `ref.watch(provider)` (sadece `build` metodu içinde).
-  - Çağırmak (event handler) için: `ref.read(provider.notifier).methodName()`.
-  - Dinlemek (snack bar vs göstermek) için: `ref.listen(provider, (prev, next) => ...)`.
+- In modern Flutter, use `@riverpod` annotation, `Notifier` (synchronous) and `AsyncNotifier` (asynchronous) classes instead of StateNotifier etc.
+- Prefer `ConsumerWidget` in widgets, or `HookConsumerWidget` if using Hooks.
+- **Provider Reading Criteria:**
+  - To watch (trigger rebuilds): `ref.watch(provider)` (only inside `build` method).
+  - To call (event handlers): `ref.read(provider.notifier).methodName()`.
+  - To listen (show snackbar etc.): `ref.listen(provider, (prev, next) => ...)`.
 
 ## 2. Navigation (GoRouter)
 
-- Klasik `Navigator.push` yerine declarative routing için `GoRouter` kullanın. Bu yaklaşım deep-linking'i otomatik çözer.
-- Nested routing ve bottom navigation bar için `ShellRoute` yapısını tercih edin.
-- Parametre geçişlerini `pathParameters` ve `extra` (sadece nesne taşıyacaksanız ve web URL'si umrunuzda değilse) ile yapın.
+- Use `GoRouter` for declarative routing instead of classic `Navigator.push`. This approach automatically handles deep-linking.
+- Prefer `ShellRoute` structure for nested routing and bottom navigation bar.
+- Pass parameters using `pathParameters` and `extra` (only for carrying objects when web URLs are not a concern).
 
-## 3. Dart 3.x Yenilikleri (Pattern Matching & Records)
+## 3. Dart 3.x Features (Pattern Matching & Records)
 
-- İki-üç değer döndürmek için gereksiz class'lar oluşturmayın, **Records** kullanın: `(int code, String msg) fetch() { return (200, "OK"); }`. Result'u okumak: `var (code, msg) = fetch();`
-- Geleneksel if-else bloklarını veya if cascade'lerini **Pattern Matching** ile değiştirin (`switch` expressions ve `case` conditions).
-- Sealed sınıflar ile union tipleri yaratın (Örn: Result<Success, Failure>). `switch` içinde tüm caselerin işlenmesini (exhaustiveness) zorunlu kılar.
+- Do not create unnecessary classes to return two or three values; use **Records**: `(int code, String msg) fetch() { return (200, "OK"); }`. Reading the result: `var (code, msg) = fetch();`
+- Replace traditional if-else blocks or if cascades with **Pattern Matching** (`switch` expressions and `case` conditions).
+- Create union types with sealed classes (e.g., Result<Success, Failure>). Enforces exhaustiveness in `switch` (all cases must be handled).
 
-## 4. Layout ve UI Prensipleri
+## 4. Layout and UI Principles
 
-- Sonsuz boyut hatasını (`hasBoundedHeight` exception) önlemek için listelerde/SingleChildScrollView içindeki column'larda `Expanded` veya `Flexible` kullanımına dikkat edin. Listeleri bir ScrollView içine gömerken `shrinkWrap: true` ve `physics: NeverScrollableScrollPhysics()` kullanmaktan kaçının -> performans felaketidir. Bunun yerine **Slivers** (`CustomScrollView`, `SliverList`) kullanın.
-- Tek sorumlu küçük widget'lara bölerken metod çıkartmaktan (methods returning Widget) ziyade yeni StatelessWidget sınıfları tanımlamayı tercih edin (Flutter element ağacını daha iyi optimize eder ve const constructor kullanımını sağlar).
-- Statik duran ve parametreleri değişmeyen widget'ları mutlaka `const` keyword ile çağırın.
+- To prevent infinite size errors (`hasBoundedHeight` exception), pay attention to `Expanded` or `Flexible` usage in columns inside lists/SingleChildScrollView. Avoid using `shrinkWrap: true` and `physics: NeverScrollableScrollPhysics()` when nesting lists in a ScrollView — this is a performance disaster. Use **Slivers** (`CustomScrollView`, `SliverList`) instead.
+- When splitting into single-responsibility small widgets, prefer defining new StatelessWidget classes over extracting methods (methods returning Widget). This allows Flutter to better optimize the element tree and enables const constructor usage.
+- Always call statically positioned widgets whose parameters do not change with the `const` keyword.
 
-## 5. Test
+## 5. Testing
 
-- UI Testleri için `flutter test` komutunu, widget'ları izole etmek için `WidgetTester` ve ekrana basma işlemleri için `tester.pumpWidget` ardından `tester.pumpAndSettle` (tüm animasyonların bitmesini beklemek) standart kullanımdır.
-- Mocking ihtiyacında (örn. Dio, SharedPreferences), null-safety ile mükemmel çalışan `mocktail` paketini standart `mockito` yerine tercih edin (code generation gerektirmez).
+- For UI testing, use `flutter test` with `WidgetTester` to isolate widgets, and `tester.pumpWidget` followed by `tester.pumpAndSettle` (waits for all animations to finish) for rendering.
+- For mocking needs (e.g., Dio, SharedPreferences), prefer the `mocktail` package over standard `mockito` as it works perfectly with null-safety (no code generation required).

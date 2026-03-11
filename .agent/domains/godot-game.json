@@ -5,6 +5,7 @@
     "file": "project.godot"
   },
   "primary_agent": "game-developer",
+  "supporting_agents": [],
   "skills": {
     "p0": [
       "godot-gdscript-patterns",
@@ -30,7 +31,7 @@
   ],
   "mcp_status": "LIVE_TESTED",
   "mcp_test_date": "2026-03-08",
-  "mcp_notes": "stdio transport. Orijinal 14-tool (149-tool fork DEĞİL). Config'te path hardcode edilmeli veya GODOT_PATH env var olmalı.",
+  "mcp_notes": "stdio transport. Original 14-tool version (NOT the 149-tool fork). Path must be hardcoded in config or GODOT_PATH env var must be set.",
   "mcp_config_when_ready": {
     "godot": {
       "command": "npx",

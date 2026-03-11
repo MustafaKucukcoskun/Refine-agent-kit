@@ -1,11 +1,11 @@
 # Domain: Next.js Full-Stack Web
 
-> Bu dizin Next.js / React / Tailwind projesi içerir.
-> Agent routing: Bu dizindeki dosyalar için aşağıdaki kurallar geçerlidir.
+> This directory contains a Next.js / React / Tailwind project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
-- **Primary:** `frontend-specialist` — UI/UX, React, Tailwind, design kararları
+- **Primary:** `frontend-specialist` — UI/UX, React, Tailwind, design decisions
 - **Supporting:** `seo-specialist`, `performance-optimizer`
 - **Backend:** `backend-specialist` — API routes, server actions
 - **Database:** `database-architect` — Prisma, Supabase schema
@@ -13,12 +13,12 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Önemli) | P2 (Destek) |
-|-------------|-------------|-------------|
-| nextjs-react-expert | seo-fundamentals | nodejs-best-practices |
-| nextjs-app-router-patterns | web-design-guidelines | |
-| frontend-design | webapp-testing | |
-| tailwind-patterns | geo-fundamentals | |
+| P0 (Critical)              | P1 (Important)        | P2 (Supporting)       |
+| -------------------------- | --------------------- | --------------------- |
+| nextjs-react-expert        | seo-fundamentals      | nodejs-best-practices |
+| nextjs-app-router-patterns | web-design-guidelines |                       |
+| frontend-design            | webapp-testing        |                       |
+| tailwind-patterns          | geo-fundamentals      |                       |
 
 ## Tech Stack
 
@@ -26,10 +26,10 @@
 - Styling: Tailwind CSS + shadcn/ui
 - State: React Server Components + minimal client state
 - Testing: Vitest (unit) + Playwright (E2E)
-- MCP: shadcn, magic-ui, figma, supabase
+- MCP: shadcn, 21st-dev-magic, figma, supabase
 
 ## Design Rules
 
-Design isteği geldiğinde → `.agent/agents/frontend-specialist.md` OKU.
-Persona sistemi: `.shared/design-system/personas.csv` kullan.
-Anti-pattern: `.shared/design-system/anti-patterns.csv` kontrol et.
+On design requests → READ `.agent/agents/frontend-specialist.md`.
+Persona system: use `.shared/design-system/personas.csv`.
+Anti-pattern: check `.shared/design-system/anti-patterns.csv`.

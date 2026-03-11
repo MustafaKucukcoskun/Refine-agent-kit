@@ -20,7 +20,8 @@
     ],
     "p1": [
       "database-design",
-      "api-patterns"
+      "api-patterns",
+      "async-python-patterns"
     ],
     "p2": [
       "testing-patterns",
@@ -34,5 +35,5 @@
   ],
   "mcp_extra": [],
   "rules_file": "rules/domains/python-backend-rules.md",
-  "notes": "Global MCP yeterli: context7 + serena LSP"
+  "notes": "Global MCP sufficient: context7 + serena LSP"
 }

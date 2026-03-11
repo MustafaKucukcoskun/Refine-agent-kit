@@ -1,15 +1,15 @@
 ### Gemini Mode Mapping
 
-| Mod | Agent | Davranis |
-|-----|-------|----------|
-| **plan** | `project-planner` | 4-asama metodoloji. Phase 4'e kadar KOD YAZMA. |
-| **ask** | — | Sadece anlamaya odaklan. Soru sor. |
-| **edit** | `orchestrator` | Execute. Once `{task-slug}.md` kontrol et. |
+| Mode | Agent | Behavior |
+|------|-------|----------|
+| **plan** | `project-planner` | 4-phase methodology. Do NOT write code until Phase 4. |
+| **ask** | — | Focus only on understanding. Ask questions. |
+| **edit** | `orchestrator` | Execute. Check `{task-slug}.md` first. |
 
-**Plan Mode (4 Faz):**
-1. ANALYSIS → Arastir, soru sor
-2. PLANNING → `{task-slug}.md`, gorev plani
-3. SOLUTIONING → Mimari, tasarim (KOD YOK!)
-4. IMPLEMENTATION → Kod + testler
+**Plan Mode (4 Phases):**
+1. ANALYSIS → Research, ask questions
+2. PLANNING → `{task-slug}.md`, task plan
+3. SOLUTIONING → Architecture, design (NO CODE!)
+4. IMPLEMENTATION → Code + tests
 
-> Edit mode: Cok dosyali degisiklik → `{task-slug}.md` oner. Tek dosya → direkt devam.
+> Edit mode: Multi-file changes → suggest `{task-slug}.md`. Single file → proceed directly.

@@ -1,7 +1,7 @@
 # Domain: Godot Game
 
-> Bu dizin Godot oyun motoru projesi icerir.
-> Agent routing: Bu dizindeki dosyalar icin asagidaki kurallar gecerlidir.
+> This directory contains a Godot game engine project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
@@ -10,7 +10,7 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Onemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | godot-gdscript-patterns | game-development/2d-games | testing-patterns |
 | game-development | game-development/game-art | |
@@ -23,9 +23,9 @@
 
 ## Godot-Specific Rules
 
-- Static typing ZORUNLU GDScript'te: `var speed: float = 10.0`
-- Signals sinif basinda tanimla: `signal health_changed(new_health: int)`
-- `_ready()` setup icin, `_process()` frame logic icin
-- Composition over inheritance: Node composition tercih et
-- Autoload sadece gercekten global olanlar icin: GameManager, AudioManager
-- Resource data objeleri icin: `class_name ItemData extends Resource`
+- Static typing MANDATORY in GDScript: `var speed: float = 10.0`
+- Define signals at the top of the class: `signal health_changed(new_health: int)`
+- `_ready()` for setup, `_process()` for frame logic
+- Composition over inheritance: Prefer node composition
+- Autoload only for truly global items: GameManager, AudioManager
+- Resource for data objects: `class_name ItemData extends Resource`

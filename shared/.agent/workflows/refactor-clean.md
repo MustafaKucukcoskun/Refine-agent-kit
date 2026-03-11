@@ -1,20 +1,20 @@
 ---
-description: Çalışan kodu bozmadan temizle ve iyileştir
+description: Clean and improve working code without breaking it
 ---
 
-Amaç: Çalışan kodu bozmadan temizle ve iyileştir
-Kural: Refactor sırasında dış davranış değişmemeli (testler geçmeli)
+Goal: Clean and improve working code without breaking it
+Rule: External behavior must not change during refactoring (tests must pass)
 
-Adımlar:
+Steps:
 
-1. Mevcut testlerin geçtiğini doğrula (/verify veya /test)
-2. Code smell'leri tespit et:
-   - Uzun fonksiyonlar (>20 satır \u2192 böl)
-   - Magic number/string \u2192 named constant
-   - Duplicate kod \u2192 extract function/method
-   - Derin nesting \u2192 early return pattern
-3. Değişiklikleri küçük adımlarda yap \u2014 her adım sonrası test
-4. İsim iyileştirmeleri: değişken, fonksiyon, sınıf isimleri açıklayıcı mı?
-5. Son kontrol: test coverage düştü mü?
+1. Verify existing tests pass (/verify or /test)
+2. Identify code smells:
+   - Long functions (>20 lines → split)
+   - Magic number/string → named constant
+   - Duplicate code → extract function/method
+   - Deep nesting → early return pattern
+3. Make changes in small steps — test after each step
+4. Name improvements: are variable, function, class names descriptive?
+5. Final check: did test coverage drop?
 
-Kullanım: /refactor-clean [dosya veya kapsam]
+Usage: /refactor-clean [file or scope]

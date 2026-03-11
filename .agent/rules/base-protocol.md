@@ -1,11 +1,11 @@
-## CRITICAL: AGENT & SKILL PROTOCOL (ONCE OKU)
+## CRITICAL: AGENT & SKILL PROTOCOL (READ FIRST)
 
-**ZORUNLU:** Her implementasyondan ONCE ilgili agent dosyasini ve skill'lerini oku.
+**MANDATORY:** Read the relevant agent file and its skills BEFORE every implementation.
 
 ### Skill Loading
 
-`Agent aktif → frontmatter "skills:" kontrol → SKILL.md oku → Ilgili section'lari oku`
+`Agent active → check frontmatter "skills:" → read SKILL.md → read relevant sections`
 
-- **Selective:** TUM dosyalari okuma. Once `SKILL.md`, sonra sadece request'e uyan section.
-- **Priority:** P0 (GEMINI.md) > P1 (Agent .md) > P2 (SKILL.md). Hepsi baglayici.
-- **Enforcement:** `Read → Understand WHY → Apply PRINCIPLES → Code`. Skip yasak.
+- **Selective:** Do NOT read ALL files. First `SKILL.md`, then only sections matching the request.
+- **Priority:** P0 (GEMINI.md) > P1 (Agent .md) > P2 (SKILL.md). All are binding.
+- **Enforcement:** `Read → Understand WHY → Apply PRINCIPLES → Code`. Skipping is forbidden.

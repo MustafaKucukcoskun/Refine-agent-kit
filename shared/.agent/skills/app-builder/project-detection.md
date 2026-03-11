@@ -1,10 +1,10 @@
 # Project Type Detection
 
-> Analyze user requests to determine project type and template.
+> Analyze user requests to determine project type and blueprint.
 
 ## Keyword Matrix
 
-| Keywords | Project Type | Template |
+| Keywords | Project Type | Blueprint |
 |----------|--------------|----------|
 | blog, post, article | Blog | astro-static |
 | e-commerce, product, cart, payment | E-commerce | nextjs-saas |

@@ -8,6 +8,7 @@
     ]
   },
   "primary_agent": "game-developer",
+  "supporting_agents": [],
   "skills": {
     "p0": [
       "unity-developer",
@@ -34,7 +35,7 @@
   ],
   "mcp_status": "LIVE_TESTED",
   "mcp_test_date": "2026-03-08",
-  "mcp_notes": "HTTP localhost:8080. Unity Editor açık olmalı. Python tabanlı (uvx gerekli).",
+  "mcp_notes": "HTTP localhost:8080. Unity Editor must be open. Python-based (uvx required).",
   "mcp_config_when_ready": {
     "unity": {
       "command": "uvx",

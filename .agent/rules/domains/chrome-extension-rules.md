@@ -1,27 +1,27 @@
-# chrome-extension Domain Kuralları
+# chrome-extension Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-manifest.json içinde "content_scripts" mevcut.
+"content_scripts" present in manifest.json.
 
 ## Primary Agent
 
 frontend-specialist
 
-## Manifest Versiyonu
+## Manifest Version
 
-Manifest V3 zorunlu (V2 deprecated, yeni eklenti kabul edilmiyor).
+Manifest V3 mandatory (V2 deprecated, new extensions not accepted).
 
-## Güvenlik \u2014 İhlal Etme
+## Security — Do Not Violate
 
-- eval() YASAK (CSP ihlali, yayın reddedilir)
-- Remote code execution YASAK
-- Minimum izin prensibi: sadece gerekli permission'ları iste
-- host_permissions: sadece erişilmesi gereken domain'ler
+- eval() FORBIDDEN (CSP violation, submission will be rejected)
+- Remote code execution FORBIDDEN
+- Minimum permission principle: only request needed permissions
+- host_permissions: only domains that need to be accessed
 
-## Mimari
+## Architecture
 
-- Background: Service Worker (V3 \u2014 persistent değil)
-- Content Script: sayfa DOM erişimi
+- Background: Service Worker (V3 — not persistent)
+- Content Script: page DOM access
 - Popup: chrome.action.setPopup
-- Mesajlaşma: chrome.runtime.sendMessage / chrome.tabs.sendMessage
+- Messaging: chrome.runtime.sendMessage / chrome.tabs.sendMessage

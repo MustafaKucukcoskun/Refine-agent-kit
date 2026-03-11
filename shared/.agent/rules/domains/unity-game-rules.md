@@ -1,30 +1,30 @@
-# unity-game Domain Kuralları
+# unity-game Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-Proje kökünde Assets/ dizini VE ProjectSettings/ dizini mevcut.
+Assets/ directory AND ProjectSettings/ directory present at project root.
 
 ## Primary Agent
 
 game-developer
 
-## MCP Gereksinimleri
+## MCP Requirements
 
-- unity-mcp aktif olabilmesi için Unity Editor açık olmalı (HTTP localhost:8080)
-- Python 3.10+ ve uv kurulu olmalı
+- Unity Editor must be open for unity-mcp to be active (HTTP localhost:8080)
+- Python 3.10+ and uv must be installed
 
-## Kod Stili
+## Code Style
 
-- MonoBehaviour: Awake() başlatma, Start() bağımlılık kurma
-- Update() içinde allocation yapma (GC yükü)
-- SerializeField tercih et, public field kullanma
-- Coroutine yerine async/await (Unity 2023+)
+- MonoBehaviour: Awake() for initialization, Start() for dependency setup
+- Do not allocate inside Update() (GC overhead)
+- Prefer SerializeField, do not use public fields
+- async/await instead of Coroutine (Unity 2023+)
 
-## Mimari Tercihleri
+## Architectural Preferences
 
-- ScriptableObject: data ve event channel için
-- Object pooling: sık instantiate/destroy yerine
-- Dependency injection: Zenject/VContainer (büyük projeler)
+- ScriptableObject: for data and event channels
+- Object pooling: instead of frequent instantiate/destroy
+- Dependency injection: Zenject/VContainer (large projects)
 
 ## Test
 

@@ -1,7 +1,7 @@
 # Domain: Python ML / Image Processing
 
-> Bu dizin Python ML, görüntü işleme veya veri bilimi projesi içerir.
-> Agent routing: Bu dizindeki dosyalar için aşağıdaki kurallar geçerlidir.
+> This directory contains a Python ML, image processing, or data science project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
@@ -11,7 +11,7 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Önemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | python-patterns | testing-patterns | clean-code |
 | clean-code | performance-profiling | |
@@ -26,10 +26,10 @@
 
 ## ML/CV-Specific Rules
 
-- NumPy vectorization tercih et, Python loop'larından kaçın
-- Memory management: Large array'leri işledikten sonra `del` + `gc.collect()`
-- Batch processing: Tek tek işleme yerine batch pipeline kur
-- Reproducibility: Random seed set et, model versioning yap
-- Type hints: `np.ndarray`, `torch.Tensor` tip belirt
+- Prefer NumPy vectorization, avoid Python loops
+- Memory management: `del` + `gc.collect()` after processing large arrays
+- Batch processing: Build batch pipelines instead of processing one-by-one
+- Reproducibility: Set random seed, do model versioning
+- Type hints: Specify types like `np.ndarray`, `torch.Tensor`
 - GPU: `.to(device)` pattern, CUDA availability check
-- Profiling: `line_profiler`, `memory_profiler` ile hot path bul
+- Profiling: Find hot paths with `line_profiler`, `memory_profiler`

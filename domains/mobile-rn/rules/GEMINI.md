@@ -1,7 +1,7 @@
 # GEMINI.md — Antigravity Agent System (mobile-rn)
 
-> Bu dosya bu workspace'te agent routing ve skill sistemini tanimlar.
-> Global kod kalitesi kurallari ~/.gemini/GEMINI.md'den yuklenir.
+> This file defines the agent routing and skill system for this workspace.
+> Global code quality rules are loaded from ~/.gemini/GEMINI.md.
 
 ---
 
@@ -9,12 +9,12 @@
 
 ---
 
-## REQUEST CLASSIFIER (ADIM 1)
+## REQUEST CLASSIFIER (STEP 1)
 
-| Tip | Trigger | Aksiyon |
-|-----|---------|---------|
-| **SORU** | "what is", "explain", "nasil calisir" | Text yanit |
-| **SIMPLE CODE** | "fix", "ekle", "degistir" (tek dosya) | Inline edit |
+| Type | Trigger | Action |
+|------|---------|--------|
+| **QUESTION** | "what is", "explain", "how does it work" | Text response |
+| **SIMPLE CODE** | "fix", "add", "change" (single file) | Inline edit |
 | **COMPLEX CODE** | "build", "create", "implement" | `{task-slug}.md` + Agent |
 | **MOBILE UI** | "screen", "component", "tab", "navigation" | `{task-slug}.md` + mobile-developer |
 | **SLASH CMD** | /create, /debug, /verify, /code-review | Command flow |
@@ -29,65 +29,65 @@
 
 ---
 
-## TIER 1: REACT NATIVE KOD KURALLARI
+## TIER 1: REACT NATIVE CODE RULES
 
 ### Primary Agent: `mobile-developer`
 ### Supporting: `performance-optimizer`, `test-engineer`
 
 ### Skill Priority
 
-| Oncelik | Skill'ler |
-|---------|-----------|
+| Priority | Skills |
+|----------|--------|
 | **P0** | react-native-best-practices, mobile-design |
 | **P1** | expo-app-design, clean-code |
 | **P2** | testing-patterns |
 
 ### React Native-Specific Rules
 
-- **New Architecture default:** TurboModules + Fabric renderer. Legacy bridge kullanma.
-- **Expo managed preferred:** Bare workflow sadece native modul zorunluysa. `expo prebuild` ile yonet.
-- **StyleSheet API / NativeWind:** Inline style YASAK. `StyleSheet.create()` veya NativeWind class'lari.
-- **SafeAreaView zorunlu:** Her ekranda `SafeAreaView` veya `useSafeAreaInsets()` kullan.
-- **Platform.OS minimize:** Platform-specific dosyalar tercih et (`.ios.tsx`, `.android.tsx`).
-- **TypeScript strict:** `any` YASAK. Proper type definitions.
-- **Testing:** Jest + React Native Testing Library. Her screen icin snapshot + interaction test.
+- **New Architecture default:** TurboModules + Fabric renderer. Do not use legacy bridge.
+- **Expo managed preferred:** Bare workflow only if native modules are required. Manage with `expo prebuild`.
+- **StyleSheet API / NativeWind:** Inline styles FORBIDDEN. Use `StyleSheet.create()` or NativeWind classes.
+- **SafeAreaView mandatory:** Use `SafeAreaView` or `useSafeAreaInsets()` on every screen.
+- **Platform.OS minimize:** Prefer platform-specific files (`.ios.tsx`, `.android.tsx`).
+- **TypeScript strict:** `any` FORBIDDEN. Proper type definitions.
+- **Testing:** Jest + React Native Testing Library. Snapshot + interaction test for every screen.
 
 @./gemini-modes.md
 
 ### Final Checklist
 
-Sira: **Lint → Unit Tests → Platform Test (iOS + Android) → Performance → Bundle Size**
+Order: **Lint → Unit Tests → Platform Test (iOS + Android) → Performance → Bundle Size**
 
 ---
 
-## TIER 2: REACT NATIVE PLATFORM & ARCHITECTURE KURALLARI
+## TIER 2: REACT NATIVE PLATFORM & ARCHITECTURE RULES
 
 ### Component Architecture
 
-- Functional components only: Class component YASAK
-- Custom hooks: Is mantigi hook'lara tasi (useAuth, useApi, useForm)
-- Memoization: `React.memo`, `useMemo`, `useCallback` dogru kullan
-- FlatList: Large list'ler icin `getItemLayout`, `keyExtractor` zorunlu
+- Functional components only: Class components FORBIDDEN
+- Custom hooks: Move business logic to hooks (useAuth, useApi, useForm)
+- Memoization: Use `React.memo`, `useMemo`, `useCallback` correctly
+- FlatList: `getItemLayout`, `keyExtractor` mandatory for large lists
 
 ### Navigation
 
 - React Navigation 7+: Stack, Tab, Drawer navigator
 - Deep linking: Expo Linking + universal links
-- Type-safe navigation: `@react-navigation/native` ile typed routes
+- Type-safe navigation: Typed routes with `@react-navigation/native`
 
 ### State Management
 
-- Zustand veya Jotai: Lightweight global state
-- React Query / TanStack Query: Server state yonetimi
+- Zustand or Jotai: Lightweight global state
+- React Query / TanStack Query: Server state management
 - AsyncStorage: Persist only non-sensitive data
 - Expo SecureStore: Sensitive data (tokens, keys)
 
 ### Performance
 
-- Hermes engine: Default, performans izle
-- Bundle size: `npx react-native-bundle-visualizer` ile kontrol
-- Image optimization: `expo-image` veya `FastImage`
-- Animation: `react-native-reanimated` (JS thread'i bloklamaz)
+- Hermes engine: Default, monitor performance
+- Bundle size: Check with `npx react-native-bundle-visualizer`
+- Image optimization: `expo-image` or `FastImage`
+- Animation: `react-native-reanimated` (does not block JS thread)
 
 ---
 

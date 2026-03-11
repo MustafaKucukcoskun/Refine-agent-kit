@@ -1,9 +1,9 @@
 # refine-agent-kit
 
 [![npm version](https://img.shields.io/npm/v/refine-agent-kit.svg)](https://www.npmjs.com/package/refine-agent-kit)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://opensource.org/license/agpl-v3)
 
-AI Agent toolkit for **Google Antigravity IDE**. 21 specialist agents, 64 skills, 13 domains, design persona system, and anti-AI-slop protection.
+AI Agent toolkit for **Google Antigravity IDE**. 21 specialist agents, 65 skill modules across 54 skill packs, 13 domains, design persona system, and anti-AI-slop protection.
 
 ## What is this?
 
@@ -44,7 +44,7 @@ cp .env.agent.example .env
 | ------------------------------ | -------- | -------------------------------------- | ---------------------------------------------------------------- |
 | `GITHUB_PERSONAL_ACCESS_TOKEN` | Yes      | GitHub code search, PR tools           | [github.com/settings/tokens](https://github.com/settings/tokens) |
 | `CONTEXT7_API_KEY`             | Yes      | Up-to-date library documentation       | [context7.com](https://context7.com)                             |
-| `MAGIC_UI_API_KEY`             | Optional | 21st.dev UI components (next-web only) | [21st.dev/settings/api](https://21st.dev/settings/api)           |
+| `TWENTYFIRST_API_KEY`          | Optional | 21st.dev UI components (next-web only) | [21st.dev/settings/api](https://21st.dev/settings/api)           |
 | Figma                          | Auto     | Design file access                     | OAuth — browser login when first used                            |
 | Supabase                       | Auto     | Database management                    | OAuth — browser login when first used                            |
 
@@ -56,21 +56,21 @@ Open your project in Google Antigravity IDE. The agents activate automatically �
 
 Pick the domain that matches your project:
 
-| Domain             | Best for                                | Primary Agent       | Extra MCP                         |
-| ------------------ | --------------------------------------- | ------------------- | --------------------------------- |
-| `next-web`         | Next.js + React + Tailwind + shadcn     | frontend-specialist | shadcn, magic-ui, figma, supabase |
-| `python-backend`   | FastAPI + PostgreSQL + SQLAlchemy       | backend-specialist  | —                                 |
-| `python-ml`        | PyTorch + OpenCV + NumPy                | backend-specialist  | —                                 |
-| `python-data`      | Pandas + Polars + DuckDB + scikit-learn | backend-specialist  | —                                 |
-| `mobile-flutter`   | Flutter 3.x + Dart 3 + Riverpod         | mobile-developer    | —                                 |
-| `mobile-rn`        | React Native + Expo + TypeScript        | mobile-developer    | —                                 |
-| `electron-desktop` | Electron + Node.js desktop apps         | frontend-specialist | —                                 |
-| `chrome-extension` | Chrome Extension (Manifest V3)          | frontend-specialist | —                                 |
-| `cli-tool`         | CLI tools (Node.js or Python)           | backend-specialist  | —                                 |
-| `csharp-backend`   | ASP.NET Core + EF Core + C# 13          | backend-specialist  | —                                 |
-| `godot-game`       | Godot 4.x + GDScript + 2D/3D            | game-developer      | —                                 |
-| `unity-game`       | Unity 2023+ + C# + URP                  | game-developer      | —                                 |
-| `phaser-game`      | Phaser 3.x + TypeScript + HTML5         | game-developer      | —                                 |
+| Domain             | Best for                                | Primary Agent       | Extra MCP                               |
+| ------------------ | --------------------------------------- | ------------------- | --------------------------------------- |
+| `next-web`         | Next.js + React + Tailwind + shadcn     | frontend-specialist | shadcn, 21st-dev-magic, figma, supabase |
+| `python-backend`   | FastAPI + PostgreSQL + SQLAlchemy       | backend-specialist  | —                                       |
+| `python-ml`        | PyTorch + OpenCV + NumPy                | backend-specialist  | —                                       |
+| `python-data`      | Pandas + Polars + DuckDB + scikit-learn | backend-specialist  | —                                       |
+| `mobile-flutter`   | Flutter 3.x + Dart 3 + Riverpod         | mobile-developer    | —                                       |
+| `mobile-rn`        | React Native + Expo + TypeScript        | mobile-developer    | —                                       |
+| `electron-desktop` | Electron + Node.js desktop apps         | frontend-specialist | —                                       |
+| `chrome-extension` | Chrome Extension (Manifest V3)          | frontend-specialist | —                                       |
+| `cli-tool`         | CLI tools (Node.js or Python)           | backend-specialist  | —                                       |
+| `csharp-backend`   | ASP.NET Core + EF Core + C# 13          | backend-specialist  | —                                       |
+| `godot-game`       | Godot 4.x + GDScript + 2D/3D            | game-developer      | —                                       |
+| `unity-game`       | Unity 2023+ + C# + URP                  | game-developer      | —                                       |
+| `phaser-game`      | Phaser 3.x + TypeScript + HTML5         | game-developer      | —                                       |
 
 **Not sure which to pick?**
 
@@ -103,7 +103,7 @@ npx refine-agent-kit add-domain --domain next-web --subdir apps/dashboard
 
 ```
 my-monorepo/
-├── .agent/                        ← Agent system (21 agents, 64 skills)
+├── .agent/                        ← Agent system (21 agents, 65 skill modules / 54 skill packs)
 ├── .shared/design-system/         ← 59 personas, 107 reference sites
 ├── .agent/rules/GEMINI.md         ← Root agent routing (next-web)
 ├── .agent/mcp_config.json         ← Domain MCP servers
@@ -131,13 +131,38 @@ my-monorepo/
 | Directory                | Contents                                             |
 | ------------------------ | ---------------------------------------------------- |
 | `.agent/agents/`         | 21 specialist AI agents                              |
-| `.agent/skills/`         | 64 domain-specific skills                            |
+| `.agent/skills/`         | 65 skill modules across 54 top-level skill packs |
 | `.agent/workflows/`      | 17 slash command workflows                           |
 | `.agent/domains/`        | 13 domain configuration packs                        |
 | `.agent/rules/`          | Local GEMINI.md + domain routing rules               |
-| `.agent/scripts/`        | 6 utility scripts (verify, checklist, session)       |
+| `.agent/scripts/`        | 6 utility scripts       |
 | `.agent/mcp_config.json` | Domain-specific MCP servers (next-web only)          |
 | `.shared/design-system/` | 59 personas + 107 reference sites + 32 anti-patterns |
+
+## Maintainer Source Of Truth
+
+This package keeps one shipped source tree and one generated development mirror:
+
+- `shared/.agent/` is the only source of truth for the shipped agent system.
+- `shared/.shared/` is the only source of truth for shipped shared assets.
+- Repo-root `.agent/` and `.shared/` are generated mirrors used to run this repository itself with a concrete local domain.
+- The generated `.agent/` mirror is `shared/.agent/` plus the `domains/next-web/` overlay.
+- The generated `.shared/` mirror is `shared/.shared/` plus the local design research report copy used while developing the package.
+
+**Why two trees existed:** this repo needs a local standalone agent setup for dogfooding, while the npm package needs a clean distributable tree. The problem was not the existence of both views, but maintaining both manually.
+
+**Maintainer rule:** edit only `shared/.agent/` and `shared/.shared/`, then regenerate the repo-root mirrors.
+
+```bash
+npm run sync:all
+```
+
+This updates inventory-sensitive docs and regenerates `.agent/` and `.shared/` from the shipped source tree.
+
+## App Builder Blueprints
+
+`shared/.agent/skills/app-builder/blueprints/` contains stack-specific blueprint documents.
+These files are not executable starter repos or code generators. They are selective reference files that the app-builder skill reads when it needs to scaffold a project shape for a specific stack.
 
 ## The 21 Agents
 
@@ -220,6 +245,9 @@ npx refine-agent-kit add-domain --domain python-backend --subdir services/api
 **"`.agent/` already exists"**
 Use `--force` flag to overwrite: `npx refine-agent-kit init --domain next-web --force`
 
+**`npx refine-agent-kit` does not start the CLI**
+If npm resolves the package but the command does not launch, the published version may expose the binary as `refine-kit` instead of `refine-agent-kit`. In that case, either run `npx refine-kit ...` for that older release or publish a newer version whose `bin` field includes `refine-agent-kit`.
+
 **Agents not activating in Antigravity**
 Check that `.agent/rules/GEMINI.md` exists in your project root. Antigravity reads this file to discover the agent system.
 
@@ -231,4 +259,6 @@ Make sure each subdirectory has its own `GEMINI.md` marker. Run `add-domain` for
 
 ## License
 
-MIT
+AGPL-3.0-only
+
+This means downstream users may use, modify, and redistribute the project, but if they distribute a modified version, or run a modified network service based on it, they must provide the corresponding source code under the same license terms.

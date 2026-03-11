@@ -1,24 +1,24 @@
-# python-data Domain Kuralları
+# python-data Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-pyproject.toml, requirements.txt, environment.yml veya Pipfile içinde
-pandas, numpy, scikit-learn, polars veya dask mevcut.
+pandas, numpy, scikit-learn, polars, or dask present in
+pyproject.toml, requirements.txt, environment.yml, or Pipfile.
 
-## Kütüphane Tercihleri
+## Library Preferences
 
-- DataFrame: pandas (genel) veya polars (performans kritikse, >100MB veri)
-- Büyük dosya sorgu: duckdb (SQL arayüzü, Parquet/CSV için)
-- ML: scikit-learn (klasik), PyTorch / transformers (derin öğrenme)
-- Görselleştirme: matplotlib (temel), plotly (interaktif)
+- DataFrame: pandas (general) or polars (if performance-critical, >100MB data)
+- Large file queries: duckdb (SQL interface, for Parquet/CSV)
+- ML: scikit-learn (classical), PyTorch / transformers (deep learning)
+- Visualization: matplotlib (basic), plotly (interactive)
 
 ## Primary Agent
 
-backend-specialist (data-scientist agent P2'de eklenecek)
+backend-specialist (data-scientist agent to be added in P2)
 
-## Kod Stili
+## Code Style
 
-- Type hints zorunlu (pandas-stubs veya polars natif tipler)
-- Notebook vs script: keşif → .ipynb, üretim → .py modül
-- Her dönüşüm adımını test edilebilir fonksiyona böl
-- Lazy evaluation tercih et (polars lazy, dask, jeneratörler)
+- Type hints mandatory (pandas-stubs or polars native types)
+- Notebook vs script: exploration → .ipynb, production → .py module
+- Split each transformation step into a testable function
+- Prefer lazy evaluation (polars lazy, dask, generators)

@@ -1,4 +1,4 @@
-# Antigravity Kit Architecture
+# refine-kit Architecture
 
 > Comprehensive AI Agent Capability Expansion Toolkit
 
@@ -6,13 +6,22 @@
 
 ## 📋 Overview
 
-Antigravity Kit is a modular system consisting of:
+refine-kit is a modular system consisting of:
 
 - **21 Specialist Agents** - Role-based AI personas
-- **53 Skills** - Domain-specific knowledge modules
+- **53 Skill Packs** - Domain-specific knowledge modules
 - **17 Workflows** - Slash command procedures
-- **12 Domain Packs** - Tech stack integrations
+- **13 Domain Packs** - Tech stack integrations
 - **8 MCP Servers** - External tool integrations
+
+---
+
+## 🧭 Source Model
+
+- `shared/.agent/` is the single source of truth for the shipped project agent tree.
+- `shared/.shared/` is the single source of truth for shipped shared assets.
+- The repo-root `.agent/` and `.shared/` directories are generated development mirrors used to dogfood the package in this repository.
+- The development mirror overlays the `next-web` domain on top of `shared/.agent/` so this package repo can run with a concrete local domain.
 
 ---
 
@@ -22,10 +31,10 @@ Antigravity Kit is a modular system consisting of:
 .agent/
 ├── ARCHITECTURE.md          # This file
 ├── agents/                  # 21 Specialist Agents
-├── skills/                  # 53 Skills
+├── skills/                  # 53 Skill Packs (64 modules)
 ├── workflows/               # 17 Slash Commands
-├── domains/                 # 12 Domain Packs
-├── rules/                   # GEMINI.md (global) + 12 domain rules
+├── domains/                 # 13 Domain Packs
+├── rules/                   # GEMINI.md (global) + 13 domain rules
 │   ├── GEMINI.md            # Global rules
 │   └── domains/             # Domain specific rules
 └── scripts/                 # Master Validation Scripts
@@ -63,9 +72,9 @@ Specialist AI personas for different domains.
 
 ---
 
-## 🧩 Skills (53)
+## 🧩 Skills (53 packs / 64 modules)
 
-Modular knowledge domains that agents can load on-demand based on task context.
+Modular knowledge domains that agents can load on-demand based on task context. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules.
 
 ### Frontend & UI
 
@@ -165,7 +174,7 @@ Modular knowledge domains that agents can load on-demand based on task context.
 
 ---
 
-## 📦 Domain Packs (12)
+## 📦 Domain Packs (13)
 
 Pre-configured tech stack integrations.
 
@@ -173,6 +182,7 @@ Pre-configured tech stack integrations.
 | ------------------ |
 | `next-web`         |
 | `python-backend`   |
+| `python-ml`        |
 | `csharp-backend`   |
 | `unity-game`       |
 | `godot-game`       |
@@ -190,16 +200,16 @@ Pre-configured tech stack integrations.
 
 External tool integration via Model Context Protocol. Config: `mcp_config.json`
 
-| Category     | Server           | Package / URL                        | Purpose                              | Auth          |
-| ------------ | ---------------- | ------------------------------------ | ------------------------------------ | ------------- |
-| **GLOBAL**   | `context7`       | `https://mcp.context7.com/mcp`       | Library docs & code examples         | API key (env) |
-| **GLOBAL**   | `github`         | `@modelcontextprotocol/server-github`| GitHub API integration               | PAT (env)     |
-| **GLOBAL**   | `playwright`     | `@playwright/mcp`                    | Browser automation & E2E testing     | No            |
-| **GLOBAL**   | `chrome-devtools`| `chrome-devtools-mcp`                | Console, Network, Performance        | No            |
-| **WEB**      | `shadcn`         | `shadcn@latest mcp`                  | shadcn/ui components                 | No            |
-| **WEB**      | `magic-ui`       | `@21st-dev/magic`                    | 21st.dev production-ready components | API key (env) |
-| **DESIGN**   | `figma`          | `https://mcp.figma.com/mcp`          | Figma Dev Mode design extraction     | OAuth (auto)  |
-| **DATA**     | `supabase`       | `https://mcp.supabase.com/mcp`       | Database & auth integration          | OAuth (auto)  |
+| Category   | Server            | Package / URL                         | Purpose                              | Auth          |
+| ---------- | ----------------- | ------------------------------------- | ------------------------------------ | ------------- |
+| **GLOBAL** | `context7`        | `https://mcp.context7.com/mcp`        | Library docs & code examples         | API key (env) |
+| **GLOBAL** | `github`          | `@modelcontextprotocol/server-github` | GitHub API integration               | PAT (env)     |
+| **GLOBAL** | `playwright`      | `@playwright/mcp`                     | Browser automation & E2E testing     | No            |
+| **GLOBAL** | `chrome-devtools` | `chrome-devtools-mcp`                 | Console, Network, Performance        | No            |
+| **WEB**    | `shadcn`          | `shadcn@latest mcp`                   | shadcn/ui components                 | No            |
+| **WEB**    | `21st-dev-magic`  | `@21st-dev/magic`                     | 21st.dev production-ready components | API key (env) |
+| **DESIGN** | `figma`           | `https://mcp.figma.com/mcp`           | Figma Dev Mode design extraction     | OAuth (auto)  |
+| **DATA**   | `supabase`        | `https://mcp.supabase.com/mcp`        | Database & auth integration          | OAuth (auto)  |
 
 ---
 
@@ -256,6 +266,11 @@ skill-name/
 | `ui-ux-pro-max` | 27    | 50 styles, 21 palettes, 50 fonts |
 | `app-builder`   | 20    | Full-stack scaffolding           |
 
+### App Builder Note
+
+`app-builder` now uses `blueprints/` for stack-specific reference documents.
+These are planning and scaffolding blueprints, not executable starter repos.
+
 ---
 
 ## 📜 Scripts (6)
@@ -264,14 +279,14 @@ Master validation and utility scripts.
 
 ### Scripts
 
-| Script                 | Purpose                                 | When to Use              |
-| ---------------------- | --------------------------------------- | ------------------------ |
-| `checklist.py`         | Priority-based validation (Core checks) | Development, pre-commit  |
-| `verify_all.py`        | Comprehensive verification (All checks) | Pre-deployment, releases |
-| `session_manager.py`   | Session init, CODEBASE.md generation    | Session start            |
-| `setup-agent.py`       | Agent kit installation & setup          | First-time setup         |
-| `auto_preview.py`      | Auto-preview for UI changes             | During development       |
-| `verify_project_tmp.py`| Temporary project verification          | Quick validation         |
+| Script                  | Purpose                                 | When to Use              |
+| ----------------------- | --------------------------------------- | ------------------------ |
+| `checklist.py`          | Priority-based validation (Core checks) | Development, pre-commit  |
+| `verify_all.py`         | Comprehensive verification (All checks) | Pre-deployment, releases |
+| `session_manager.py`    | Session init, CODEBASE.md generation    | Session start            |
+| `setup-agent.py`        | Agent kit installation & setup          | First-time setup         |
+| `auto_preview.py`       | Auto-preview for UI changes             | During development       |
+| `verify_project_tmp.py` | Temporary project verification          | Quick validation         |
 
 ### Usage
 
@@ -309,15 +324,35 @@ For details, see [scripts/README.md](scripts/README.md)
 
 ## 📊 Statistics
 
-| Metric                 | Value                         |
-| ---------------------- | ----------------------------- |
-| **Total Agents**       | 21                            |
-| **Total Skills**       | 53                            |
-| **Total Workflows**    | 17                            |
-| **Total Domain Packs** | 12                            |
-| **Total MCP Servers**  | 8                             |
-| **Total Scripts**      | 6 (master) + 16 (skill-level) |
-| **Coverage**           | ~90% web/mobile development   |
+| Metric                  | Value                         |
+| ----------------------- | ----------------------------- |
+| **Total Agents**        | 21                            |
+| **Total Skill Packs**   | 54                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 64                            |
+| **Total Skill Modules** | 65                            |
+| **Total Skill Modules** | 65                            |
+| **Total Skill Modules** | 65                            |
+| **Total Skill Modules** | 65                            |
+| **Total Skill Modules** | 65                            |
+| **Total Workflows**    | 18                            |
+| **Total Domain Packs** | 13                            |
+| **Total MCP Servers**   | 8                             |
+| **Total Scripts**       | 6 (master) + 16 (skill-level) |
+| **Coverage**            | ~90% web/mobile development   |
 
 ---
 

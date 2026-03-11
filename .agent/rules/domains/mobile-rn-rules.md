@@ -1,32 +1,32 @@
-# mobile-rn Domain Kuralları
+# mobile-rn Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-package.json içinde "react-native" dependency mevcut.
+"react-native" dependency present in package.json.
 
-## Mimari Varsayımı
+## Architecture Assumption
 
-React Native 0.76+ \u2192 New Architecture VARSAYILAN.
-Yeni projede eski mimariyi (bridge) etkinleştirme.
+React Native 0.76+ → New Architecture DEFAULT.
+Do not enable old architecture (bridge) in new projects.
 
 ## Expo vs Bare
 
-- Expo (managed): yeni projeler için birinci tercih
-- Bare workflow: zorunlu native modül varsa
+- Expo (managed): first choice for new projects
+- Bare workflow: if mandatory native module required
 
 ## Primary Agent
 
 mobile-developer
 
-## Stil
+## Styling
 
-- StyleSheet API (default) veya NativeWind
-- Inline style: YASAK (re-render performansı)
+- StyleSheet API (default) or NativeWind
+- Inline style: FORBIDDEN (re-render performance)
 
-## Platform Farkları
+## Platform Differences
 
-- Platform.OS kullanımını minimize et \u2014 cross-platform önce
-- SafeAreaView: her ekranda zorunlu
+- Minimize Platform.OS usage — cross-platform first
+- SafeAreaView: mandatory on every screen
 
 ## Test
 

@@ -1,16 +1,16 @@
 # Domain: CLI Tool (Node.js/Python)
 
-> Bu dizin komut satiri araci (CLI) projesi icerir.
-> Agent routing: Bu dizindeki dosyalar icin asagidaki kurallar gecerlidir.
+> This directory contains a command-line tool (CLI) project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
 - **Primary:** `backend-specialist` — CLI architecture, command parsing, I/O handling
-- **Test:** `test-engineer` — Vitest veya Pytest
+- **Test:** `test-engineer` — Vitest or Pytest
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Onemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | bash-linux | testing-patterns | nodejs-best-practices |
 | clean-code | | |
@@ -19,13 +19,13 @@
 
 - Node.js: commander / yargs
 - Python: Click / Typer
-- Testing: Vitest (Node) veya Pytest (Python)
+- Testing: Vitest (Node) or Pytest (Python)
 
 ## CLI-Specific Rules
 
-- `--help` her zaman calismali: Tum komut ve alt komutlarda yardim
-- `--version` flag ZORUNLU: Semantic versioning goster
-- Hatalar stderr'e: `console.error` / `sys.stderr`, stdout temiz kalmali
-- Output stdout'a: Pipe-friendly cikti, renkli cikti sadece TTY'de
-- Exit code: 0 = basarili, 1+ = hata (anlamli hata kodlari)
-- `--dry-run`: Yikici islemler icin zorunlu dry-run destegi
+- `--help` must always work: Help output in all commands and subcommands
+- `--version` flag MANDATORY: Show semantic versioning
+- Errors to stderr: `console.error` / `sys.stderr`, stdout must stay clean
+- Output to stdout: Pipe-friendly output, colored output only on TTY
+- Exit code: 0 = success, 1+ = error (meaningful error codes)
+- `--dry-run`: Mandatory dry-run support for destructive operations

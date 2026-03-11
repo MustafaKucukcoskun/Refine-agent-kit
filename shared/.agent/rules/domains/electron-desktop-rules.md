@@ -1,27 +1,27 @@
-# electron-desktop Domain Kuralları
+# electron-desktop Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-package.json içinde "electron" veya "@tauri-apps/tauri" mevcut,
-ya da src-tauri/tauri.conf.json mevcut.
+"electron" or "@tauri-apps/tauri" present in package.json,
+or src-tauri/tauri.conf.json present.
 
 ## Primary Agent
 
 frontend-specialist
 
-## Mimari Zorunluluğu
+## Architectural Requirement
 
-- Main process ve Renderer process kesinlikle ayrı tut
-- contextBridge üzerinden IPC (nodeIntegration: false zorunlu)
-- preload script: sadece gerekli API'leri expose et
+- Strictly separate Main process and Renderer process
+- IPC via contextBridge (nodeIntegration: false mandatory)
+- preload script: only expose required APIs
 
-## Güvenlik (İhlal Etme)
+## Security (Do Not Violate)
 
-- nodeIntegration: false (default) \u2014 değiştirme
-- contextIsolation: true (default) \u2014 değiştirme
-- Harici URL: shell.openExternal() kullan, yeni Electron window AÇMA
+- nodeIntegration: false (default) — do not change
+- contextIsolation: true (default) — do not change
+- External URL: use shell.openExternal(), do NOT open new Electron window
 
-## Tauri Notu
+## Tauri Note
 
-Tauri seçilmişse Rust backend gerekir.
-Tauri API için context7 dökümantasyonunu kullan.
+Rust backend required if Tauri is selected.
+Use context7 documentation for Tauri API.

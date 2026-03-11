@@ -5,6 +5,7 @@
     "file": "pubspec.yaml"
   },
   "primary_agent": "mobile-developer",
+  "supporting_agents": [],
   "skills": {
     "p0": [
       "flutter-patterns",
@@ -18,8 +19,8 @@
     ]
   },
   "skill_notes": {
-    "mobile-design": "Mevcut global skill \u2014 referans",
-    "testing-patterns": "Mevcut global skill \u2014 referans"
+    "mobile-design": "Existing global skill \u2014 reference",
+    "testing-patterns": "Existing global skill \u2014 reference"
   },
   "workflows": [
     "/deploy",
@@ -28,5 +29,5 @@
   ],
   "mcp_extra": [],
   "rules_file": "rules/domains/mobile-flutter-rules.md",
-  "notes": "context7 Flutter dökümantasyonu kapsamlı. Serena Dart LSP destekliyor."
+  "notes": "context7 has comprehensive Flutter documentation. Serena supports Dart LSP."
 }
