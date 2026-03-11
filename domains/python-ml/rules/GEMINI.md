@@ -1,7 +1,7 @@
 # GEMINI.md — Antigravity Agent System (python-ml)
 
-> Bu dosya bu workspace'te agent routing ve skill sistemini tanimlar.
-> Global kod kalitesi kurallari ~/.gemini/GEMINI.md'den yuklenir.
+> This file defines the agent routing and skill system for this workspace.
+> Global code quality rules are loaded from ~/.gemini/GEMINI.md.
 
 ---
 
@@ -9,12 +9,12 @@
 
 ---
 
-## REQUEST CLASSIFIER (ADIM 1)
+## REQUEST CLASSIFIER (STEP 1)
 
-| Tip | Trigger | Aksiyon |
-|-----|---------|---------|
-| **SORU** | "what is", "explain", "nasil calisir" | Text yanit |
-| **SIMPLE CODE** | "fix", "ekle", "degistir" (tek dosya) | Inline edit |
+| Type | Trigger | Action |
+|------|---------|--------|
+| **QUESTION** | "what is", "explain", "how does it work" | Text response |
+| **SIMPLE CODE** | "fix", "add", "change" (single file) | Inline edit |
 | **COMPLEX CODE** | "build", "create", "implement" | `{task-slug}.md` + Agent |
 | **ML/CV** | "model", "train", "pipeline", "process" | `{task-slug}.md` + backend-specialist |
 | **SLASH CMD** | /create, /debug, /verify, /code-review | Command flow |
@@ -29,7 +29,7 @@
 
 ---
 
-## TIER 1: PYTHON ML / IMAGE PROCESSING KURALLARI
+## TIER 1: PYTHON ML / IMAGE PROCESSING RULES
 
 ### Primary Agent: `backend-specialist`
 ### Supporting: `performance-optimizer`
@@ -37,34 +37,34 @@
 
 ### Skill Priority
 
-| Oncelik | Skill'ler |
-|---------|-----------|
+| Priority | Skills |
+|----------|--------|
 | **P0** | python-patterns, clean-code |
 | **P1** | testing-patterns, performance-profiling |
 | **P2** | api-patterns |
 
 ### ML/CV-Specific Rules
 
-- **NumPy vectorization:** Python loop'larindan kacin, vectorized operations kullan
-- **Memory management:** Large array'leri isldikten sonra `del` + `gc.collect()`
-- **Batch processing:** Tek tek isleme yerine batch pipeline kur
-- **Reproducibility:** Random seed set et (`np.random.seed`, `torch.manual_seed`)
+- **NumPy vectorization:** Avoid Python loops, use vectorized operations
+- **Memory management:** `del` + `gc.collect()` after processing large arrays
+- **Batch processing:** Build batch pipelines instead of processing one by one
+- **Reproducibility:** Set random seed (`np.random.seed`, `torch.manual_seed`)
 - **Model versioning:** Checkpoint save/load pattern, epoch tracking
-- **Type hints:** `np.ndarray`, `torch.Tensor`, `PIL.Image.Image` tip belirt
+- **Type hints:** Specify types like `np.ndarray`, `torch.Tensor`, `PIL.Image.Image`
 - **GPU handling:** `.to(device)` pattern, CUDA availability check, graceful CPU fallback
-- **Profiling:** `line_profiler`, `memory_profiler` ile hot path bul
-- **Data pipeline:** `torch.utils.data.DataLoader` ile efficient data loading
-- **Logging:** Training metrics: loss, accuracy, epoch — `tensorboard` veya `wandb`
+- **Profiling:** Find hot paths with `line_profiler`, `memory_profiler`
+- **Data pipeline:** Efficient data loading with `torch.utils.data.DataLoader`
+- **Logging:** Training metrics: loss, accuracy, epoch — `tensorboard` or `wandb`
 
 @./gemini-modes.md
 
 ### Final Checklist
 
-Sira: **Reproducibility → Memory → Performance → Tests → Documentation**
+Order: **Reproducibility → Memory → Performance → Tests → Documentation**
 
 ---
 
-## TIER 2: DATA & PERFORMANCE KURALLARI
+## TIER 2: DATA & PERFORMANCE RULES
 
 ### Data Pipeline
 

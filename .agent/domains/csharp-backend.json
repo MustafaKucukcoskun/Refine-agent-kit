@@ -27,5 +27,5 @@
   ],
   "mcp_extra": [],
   "rules_file": "rules/domains/csharp-backend-rules.md",
-  "notes": "Serena LSP C# sembolik analiz için kritik — kurulunca değer katacak."
+  "notes": "Serena LSP is critical for C# symbolic analysis — will add value once installed."
 }

@@ -1,7 +1,7 @@
 # GEMINI.md — Antigravity Agent System (phaser-game)
 
-> Bu dosya bu workspace'te agent routing ve skill sistemini tanimlar.
-> Global kod kalitesi kurallari ~/.gemini/GEMINI.md'den yuklenir.
+> This file defines the agent routing and skill system for this workspace.
+> Global code quality rules are loaded from ~/.gemini/GEMINI.md.
 
 ---
 
@@ -9,12 +9,12 @@
 
 ---
 
-## REQUEST CLASSIFIER (ADIM 1)
+## REQUEST CLASSIFIER (STEP 1)
 
-| Tip | Trigger | Aksiyon |
-|-----|---------|---------|
-| **SORU** | "what is", "explain", "nasil calisir" | Text yanit |
-| **SIMPLE CODE** | "fix", "ekle", "degistir" (tek dosya) | Inline edit |
+| Type | Trigger | Action |
+|------|---------|--------|
+| **QUESTION** | "what is", "explain", "how does it work" | Text response |
+| **SIMPLE CODE** | "fix", "add", "change" (single file) | Inline edit |
 | **COMPLEX CODE** | "build", "create", "implement" | `{task-slug}.md` + Agent |
 | **GAME DESIGN** | "scene", "physics", "sprite", "level" | `{task-slug}.md` + game-developer |
 | **SLASH CMD** | /create, /debug, /verify, /code-review | Command flow |
@@ -29,64 +29,64 @@
 
 ---
 
-## TIER 1: PHASER GAME KOD KURALLARI
+## TIER 1: PHASER GAME CODE RULES
 
 ### Primary Agent: `game-developer`
 ### Supporting: `performance-optimizer`
 
 ### Skill Priority
 
-| Oncelik | Skill'ler |
-|---------|-----------|
+| Priority | Skills |
+|----------|--------|
 | **P0** | game-development, phaser-patterns |
 | **P1** | clean-code |
 | **P2** | testing-patterns |
 
 ### Phaser-Specific Rules
 
-- **Scene architecture:** Her ekran ayri Scene class. Scene gecisi: `this.scene.start()` / `this.scene.launch()` (overlay)
-- **Asset management:** `preload()` icinde yukle, `create()`'te kullan
-- **Physics:** Arcade (basit, hizli) veya Matter.js (kompleks fizik)
-- **Object pooling:** Sik create/destroy yerine pool kullan
-- **Texture atlas:** Ayri spriteler yerine atlas tercih et (performans)
-- **Camera bounds:** Disindaki nesneleri `setActive(false)` yap
-- **TypeScript:** Tip guvenligi icin TypeScript tercih et
+- **Scene architecture:** Each screen is a separate Scene class. Scene transitions: `this.scene.start()` / `this.scene.launch()` (overlay)
+- **Asset management:** Load in `preload()`, use in `create()`
+- **Physics:** Arcade (simple, fast) or Matter.js (complex physics)
+- **Object pooling:** Use pools instead of frequent create/destroy
+- **Texture atlas:** Prefer atlas over individual sprites (performance)
+- **Camera bounds:** Deactivate objects outside bounds with `setActive(false)`
+- **TypeScript:** Prefer TypeScript for type safety
 
 @./gemini-modes.md
 
 ### Final Checklist
 
-Sira: **Performance → Physics → Rendering → Tests → Build**
+Order: **Performance → Physics → Rendering → Tests → Build**
 
 ---
 
-## TIER 2: PHASER ARCHITECTURE KURALLARI
+## TIER 2: PHASER ARCHITECTURE RULES
 
 ### Scene Management
 
 - Boot Scene: Asset preloading, progress bar
-- Menu Scene: Ana menu, ayarlar, credits
-- Game Scene: Ana oyun dongusu
-- UI Scene: Overlay olarak HUD, score, health bar
+- Menu Scene: Main menu, settings, credits
+- Game Scene: Main game loop
+- UI Scene: Overlay HUD, score, health bar
 
 ### Game Loop
 
-- `update(time, delta)`: Frame-based logic, delta kullan
+- `update(time, delta)`: Frame-based logic, use delta
 - Event-driven: `this.events.emit()` / `this.events.on()` pattern
-- State machine: Oyun durumlari icin FSM pattern
+- State machine: FSM pattern for game states
 
 ### Input Handling
 
 - Keyboard: `this.input.keyboard.createCursorKeys()` pattern
 - Touch/Mouse: Pointer events, drag & drop
-- Gamepad: `this.input.gamepad` destegi
+- Gamepad: `this.input.gamepad` support
 
 ### Performance
 
-- Texture atlases: TexturePacker ile optimize
+- Texture atlases: Optimize with TexturePacker
 - Object pooling: `this.add.group({ classType, maxSize })` pattern
-- Camera culling: Viewport disini render etme
-- WebGL: Canvas fallback yerine WebGL tercih et
+- Camera culling: Do not render outside viewport
+- WebGL: Prefer WebGL over Canvas fallback
 
 ---
 

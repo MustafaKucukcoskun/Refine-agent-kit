@@ -1,19 +1,19 @@
-# csharp-backend Domain Kuralları
+# csharp-backend Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-Proje dizininde \*.csproj dosyası mevcut.
+*.csproj file present in project directory.
 
-## Versiyon Varsayımı
+## Version Assumption
 
-.NET 10 + C# 13 (aksi belirtilmedikçe)
+.NET 10 + C# 13 (unless otherwise specified)
 
-## Kod Stili
+## Code Style
 
-- Primary constructors tercih edilir
-- Records immutable data için kullanılır
-- Pattern matching `switch` expression ile
-- `required` keyword zorunlu property'ler için
+- Primary constructors preferred
+- Records used for immutable data
+- Pattern matching with `switch` expressions
+- `required` keyword for mandatory properties
 
 ## Primary Agent
 
@@ -21,4 +21,4 @@ backend-specialist
 
 ## Test
 
-xUnit + FluentAssertions tercih
+xUnit + FluentAssertions preferred

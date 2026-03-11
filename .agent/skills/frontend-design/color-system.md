@@ -48,7 +48,7 @@
 | Luxury/Beauty           | Deep Teal, Gold, Black | Premium            |
 | Urgency/Sales           | Red, Orange            | Action, attention  |
 
-> ⚠️ **Purple BANNED** — AI overuses this. Use Deep Teal/Maroon/Emerald instead.
+> ⚠️ **Purple — AI default, use with caution.** Do not choose without explicit user request: as AI's #1 default color, it signals "AI-generated output." However, if intentionally chosen as a brand color (Twitch, Figma, GitHub etc.) it's fine.
 
 **Selection:** Industry → Hue family → Light/dark mode → ASK USER → Confirm
 

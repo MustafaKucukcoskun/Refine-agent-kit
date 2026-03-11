@@ -1,7 +1,7 @@
 # Domain: React Native App
 
-> Bu dizin React Native mobil uygulama projesi icerir.
-> Agent routing: Bu dizindeki dosyalar icin asagidaki kurallar gecerlidir.
+> This directory contains a React Native mobile application project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
@@ -11,7 +11,7 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Onemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | react-native-best-practices | expo-app-design | testing-patterns |
 | mobile-design | clean-code | |
@@ -27,8 +27,8 @@
 ## React Native-Specific Rules
 
 - New Architecture default: TurboModules + Fabric renderer
-- Expo managed workflow tercih et, bare sadece gerektiginde
-- StyleSheet API veya NativeWind kullan, inline style YASAK
-- SafeAreaView zorunlu: Her ekranda safe area kontrol et
-- Platform.OS kullanimi minimize et: Platform-specific dosyalar tercih et
-- No inline styles: `StyleSheet.create()` ile tanimla
+- Prefer Expo managed workflow, bare only when necessary
+- Use StyleSheet API or NativeWind, inline styles FORBIDDEN
+- SafeAreaView mandatory: Check safe area on every screen
+- Minimize Platform.OS usage: Prefer platform-specific files
+- No inline styles: Define with `StyleSheet.create()`

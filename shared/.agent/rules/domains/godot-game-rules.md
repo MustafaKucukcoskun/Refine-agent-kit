@@ -1,34 +1,34 @@
-# godot-game Domain Kuralları
+# godot-game Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-Proje kökünde project.godot dosyası mevcut.
+project.godot file present at project root.
 
 ## Primary Agent
 
 game-developer
 
-## MCP Gereksinimleri
+## MCP Requirements
 
-- godot-mcp: stdio transport, GODOT_PATH env var tanımlı olmalı
-- Orijinal 14-tool sürümü kullanılıyor (149-tool fork DEĞİL)
+- godot-mcp: stdio transport, GODOT_PATH env var must be defined
+- Using the original 14-tool version (NOT the 149-tool fork)
 
-## Dil Tercihi
+## Language Preference
 
-- GDScript: hızlı prototip ve küçük-orta projeler
-- C#: performans kritik, büyük ekip veya Unity deneyimi varsa
+- GDScript: rapid prototyping and small-medium projects
+- C#: performance-critical, large team, or Unity experience
 
-## Kod Stili (GDScript)
+## Code Style (GDScript)
 
-- Statik tip zorunlu: var yerine her zaman tip belirt
-- Signal'leri sınıf başında tanımla
-- \_ready() \u2192 bağımlılık kurma, \_process() \u2192 her frame mantık
+- Static typing mandatory: always specify type instead of var
+- Define signals at the top of the class
+- _ready() → dependency setup, _process() → per-frame logic
 
-## Mimari Tercihleri
+## Architectural Preferences
 
-- Composition over inheritance: Node hiyerarşisi
-- Autoload: sadece gerçekten global olan şeyler için
-- Resource: veri nesneleri için (ScriptableObject karşılığı)
+- Composition over inheritance: Node hierarchy
+- Autoload: only for truly global things
+- Resource: for data objects (ScriptableObject equivalent)
 
 ## Test
 

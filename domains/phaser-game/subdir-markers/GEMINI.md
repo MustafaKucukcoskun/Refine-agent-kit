@@ -1,7 +1,7 @@
 # Domain: Phaser Web Game
 
-> Bu dizin Phaser HTML5 oyun projesi icerir.
-> Agent routing: Bu dizindeki dosyalar icin asagidaki kurallar gecerlidir.
+> This directory contains a Phaser HTML5 game project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
@@ -11,7 +11,7 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Onemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | game-development | phaser-patterns | testing-patterns |
 
@@ -25,8 +25,8 @@
 
 ## Phaser-Specific Rules
 
-- Scene-based architecture: her ekran ayri Scene class
-- Asset management: preload() icinde yukle, create()'te kullan
-- Object pooling: sik create/destroy yerine pool kullan
-- Texture atlas: ayri spriteler yerine atlas tercih et
-- Camera bounds disindaki nesneleri setActive(false) yap
+- Scene-based architecture: Each screen is a separate Scene class
+- Asset management: Load in preload(), use in create()
+- Object pooling: Use pools instead of frequent create/destroy
+- Texture atlas: Prefer atlas over individual sprites
+- Deactivate objects outside camera bounds with setActive(false)

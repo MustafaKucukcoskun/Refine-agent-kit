@@ -1,25 +1,25 @@
 # Async Python Patterns Skill
 
-## 1. Ne Zaman `async def` / `await` Kullanılır?
+## 1. When to Use `async def` / `await`?
 
-- **Kullanılmalı:** Veritabanı sorguları (async driver ile), harici API istekleri (aiohttp, httpx), dosya okuma/yazma (aiofiles) gibi I/O-bound (giriş/çıkış bekleyen) işlemlerde.
-- **Kullanılmamalı:** Ağır matematiksel hesaplamalar, resim işleme, büyük veri döngüleri gibi CPU-bound işlemlerde. Bunlar event loop'u bloke eder. Bloklayan kodlar için `asyncio.to_thread` veya `ProcessPoolExecutor` kullanılmalıdır.
+- **Should use:** For I/O-bound operations such as database queries (with async driver), external API requests (aiohttp, httpx), file read/write (aiofiles).
+- **Should NOT use:** For CPU-bound operations such as heavy mathematical computations, image processing, large data loops. These block the event loop. Use `asyncio.to_thread` or `ProcessPoolExecutor` for blocking code.
 
-## 2. Püf Noktaları ve Tuzaklar
+## 2. Tips and Pitfalls
 
-- **Synchronous Call Tuzağı:** `async def` ile tanımlanmış bir endpoint içinde `time.sleep()`, `requests.get()`, veya senkron SQLAlchemy sorgusu kullanmak **tüm web sunucusunun (FastAPI vs) asılı kalmasına (block)** neden olur. Senkron kodlar ya `def` ile tanımlanan endpointlerde ya da thread pool içinde çalıştırılmalıdır.
-- **Event Loop Nesting:** Bir async fonksiyonun içinden tekrar `asyncio.run()` çağırmak `RuntimeError: asyncio.run() cannot be called from a running event loop` hatası verir. Uvicorn/FastAPI zaten bir loop üzerinde çalışır.
+- **Synchronous Call Trap:** Using `time.sleep()`, `requests.get()`, or synchronous SQLAlchemy queries inside an `async def` endpoint will **cause the entire web server (FastAPI etc.) to hang (block).** Synchronous code should run either in endpoints defined with `def` or inside a thread pool.
+- **Event Loop Nesting:** Calling `asyncio.run()` from inside an async function raises `RuntimeError: asyncio.run() cannot be called from a running event loop`. Uvicorn/FastAPI already runs on a loop.
 
 ## 3. `asyncio.gather()` vs `asyncio.create_task()`
 
-- **create_task():** Bir coroutine'i hemen çalışmaya başlatmak (planlamak) için kullanılır. Genellikle background (arkaplan) işlemleri için veya bir döngüde biriktirip sonra beklemek için idealdir. (Referansı saklamak zorunludur: `background_tasks.add(task)`)
-- **gather():** Elinizdeki birden fazla task veya coroutine'in bitmesini toplu olarak beklemek istediğinizde kullanılır. Hepsini paralel başlatır ve sonuçlarını sırasıyla bir liste olarak döner. `return_exceptions=True` parametresi ile içlerinden biri patlasa bile diğerlerini iptal ettirmeden devam edebilirsiniz.
+- **create_task():** Used to immediately start (schedule) a coroutine. Ideal for background operations or for accumulating tasks in a loop to await later. (Storing the reference is mandatory: `background_tasks.add(task)`)
+- **gather():** Used when you want to wait for multiple tasks or coroutines to complete collectively. Starts all in parallel and returns results as a list in order. With `return_exceptions=True`, even if one fails, others continue without being cancelled.
 
-## 4. Timeout ve İptal (Cancellation)
+## 4. Timeout and Cancellation
 
-- `asyncio.wait_for(task, timeout=5.0)` ile dış API servislerine bağlanırken uzun süre takılı kalmayı önleyin. Süre dolduğunda `TimeoutError` fırlatılır ve coroutine iptal edilir. Python 3.11+ için daha modern olan `asyncio.timeout(5.0)` context manager'ını kullanın.
-- Bir görevin iptal edilmesi durumunda `asyncio.CancelledError` hatası fırlar. Finally bloğunda I/O veya kaynak cleanup yaparken iptali yutmayın.
+- Use `asyncio.wait_for(task, timeout=5.0)` to prevent hanging when connecting to external API services. When time expires, `TimeoutError` is raised and the coroutine is cancelled. For Python 3.11+, use the more modern `asyncio.timeout(5.0)` context manager.
+- When a task is cancelled, `asyncio.CancelledError` is raised. Do not swallow the cancellation when performing I/O or resource cleanup in a finally block.
 
-## 5. İleri Düzey Performans (uvloop)
+## 5. Advanced Performance (uvloop)
 
-Python'un varsayılan `asyncio` event loop'u yerine, Cython ile yazılmış ve Node.js'ten daha hızlı olan `uvloop` kullanmak FastAPI/Uvicorn projelerinde standard performansı 2 katına çıkarabilir. `uvicorn app:main --loop uvloop` şeklinde veya `asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())` ile ayarlanmalıdır.
+Using `uvloop`, written in Cython and faster than Node.js, instead of Python's default `asyncio` event loop can double standard performance in FastAPI/Uvicorn projects. Set it with `uvicorn app:main --loop uvloop` or `asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())`.

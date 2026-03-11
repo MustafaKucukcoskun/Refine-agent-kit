@@ -1,7 +1,7 @@
 # Domain: C# Backend (.NET)
 
-> Bu dizin C# / .NET backend projesi icerir.
-> Agent routing: Bu dizindeki dosyalar icin asagidaki kurallar gecerlidir.
+> This directory contains a C# / .NET backend project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
@@ -11,7 +11,7 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Onemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | microsoft-dotnet-core | database-design | testing-patterns |
 | api-patterns | clean-code | |
@@ -26,9 +26,9 @@
 
 ## C#-Specific Rules
 
-- Primary constructors tercih et: `class UserService(IRepository repo)`
-- Records immutable data icin: `record UserDto(string Name, int Age);`
-- Pattern matching: switch expressions ile temiz kontrol akisi
-- `required` keyword: Zorunlu property'ler icin kullan
-- Testing: xUnit + FluentAssertions, her endpoint icin test
-- Async/await: `async Task<T>` pattern, `.Result` veya `.Wait()` YASAK
+- Prefer primary constructors: `class UserService(IRepository repo)`
+- Use records for immutable data: `record UserDto(string Name, int Age);`
+- Pattern matching: Clean control flow with switch expressions
+- `required` keyword: Use for mandatory properties
+- Testing: xUnit + FluentAssertions, test for every endpoint
+- Async/await: `async Task<T>` pattern, `.Result` or `.Wait()` FORBIDDEN

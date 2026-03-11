@@ -1,7 +1,7 @@
 # Domain: Electron Desktop App
 
-> Bu dizin Electron masaustu uygulama projesi icerir.
-> Agent routing: Bu dizindeki dosyalar icin asagidaki kurallar gecerlidir.
+> This directory contains an Electron desktop application project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
@@ -11,7 +11,7 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Onemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | electron-patterns | clean-code | testing-patterns |
 | nodejs-best-practices | | |
@@ -25,9 +25,9 @@
 
 ## Electron-Specific Rules
 
-- Main/Renderer process ayirimi ZORUNLU: Is mantigi main'de, UI renderer'da
+- Main/Renderer process separation MANDATORY: Business logic in main, UI in renderer
 - contextBridge IPC only: `ipcMain.handle` + `ipcRenderer.invoke` pattern
-- `nodeIntegration: false` ZORUNLU: Renderer'da Node.js erisimi yok
-- `contextIsolation: true` ZORUNLU: Preload script ile guvenli kopru
-- Preload script: Sadece gerekli API'leri expose et, minimal yuzey alani
-- External URL'ler: `shell.openExternal` kullan, renderer'da acma
+- `nodeIntegration: false` MANDATORY: No Node.js access in renderer
+- `contextIsolation: true` MANDATORY: Secure bridge via preload script
+- Preload script: Only expose necessary APIs, minimal surface area principle
+- External URLs: Use `shell.openExternal`, do not open in renderer

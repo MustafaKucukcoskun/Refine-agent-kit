@@ -1,13 +1,13 @@
-# python-backend Domain Kuralları
+# python-backend Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-pyproject.toml içinde "fastapi" veya "django" mevcut.
+"fastapi" or "django" present in pyproject.toml.
 
-## Proje Tipi Ayrımı
+## Project Type Distinction
 
 - FastAPI → async-first, Pydantic v2, motor/SQLAlchemy async
-- Django → ORM-first, DRF, sync (async views isteğe bağlı)
+- Django → ORM-first, DRF, sync (async views optional)
 
 ## Primary Agent
 
@@ -15,11 +15,11 @@ backend-specialist
 
 ## Dependency Management
 
-- pyproject.toml + uv tercih edilir (requirements.txt ikinci tercih)
-- Type hints zorunlu (mypy veya pyright)
+- pyproject.toml + uv preferred (requirements.txt second choice)
+- Type hints mandatory (mypy or pyright)
 
 ## Test
 
-- pytest zorunlu
+- pytest mandatory
 - FastAPI: httpx + AsyncClient
-- Django: Django test client veya pytest-django
+- Django: Django test client or pytest-django

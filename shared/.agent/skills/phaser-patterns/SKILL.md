@@ -1,32 +1,32 @@
 # Phaser Patterns Skill
 
-## 1. Scene Mimarisi
+## 1. Scene Architecture
 
-- Her ekranı/bölümü (Preload, MainMenu, Game, GameOver) ayrı Phaser `Scene` sınıflarına ayırın.
-- Scene'ler arası geçiş yaparken mevcut scene'i tamamen durdurup diğerine geçmek için `this.scene.start('GameScene')` kullanın.
-- Durdurmadan üst üste ekran (ör. UI Overlay, Pause Menüsü) koymak için `this.scene.launch('UI')` kullanın.
+- Split each screen/section (Preload, MainMenu, Game, GameOver) into separate Phaser `Scene` classes.
+- To fully stop the current scene and switch to another, use `this.scene.start('GameScene')`.
+- To overlay screens without stopping (e.g., UI Overlay, Pause Menu), use `this.scene.launch('UI')`.
 
 ## 2. Asset Pipeline
 
-- Verimli asset yüklemesi için daima özel bir Boot/Preload Scene yazın:
+- Always write a dedicated Boot/Preload Scene for efficient asset loading:
   ```javascript
   preload() {
     this.load.image('player', 'assets/player.png');
-    this.load.atlas('sprites', 'assets/sprites.png', 'assets/sprites.json'); // Çoklu resim yerine Texture Atlas best-practice'dir.
+    this.load.atlas('sprites', 'assets/sprites.png', 'assets/sprites.json'); // Texture Atlas is the best practice over multiple images.
   }
   ```
-- Asla oyun ortasında (create veya update içinde) dosya sistemi çağrısı ile asset yüklemeyin.
+- Never load assets via file system calls in the middle of gameplay (inside create or update).
 
-## 3. Performans: Object Pooling
+## 3. Performance: Object Pooling
 
-- Ekranda sürekli belirip kaybolan mermi, düşman gibi objeler (Geniş alan RPG, Bullet Hell vs.) varsa her seferinde `sprite.destroy()` ve `new Sprite()` **YAPMAYIN**. Garbage collection yüzünden oyun takılır.
-- Bunun yerine `Phaser.GameObjects.Group` veya `Physics.Arcade.Group` oluşturup ölümü gerçekleşen nesneyi `setActive(false).setVisible(false)` yapın, yeni mermi atılacağı zaman o gruptan pasif olanı `getFirstDead()` ile çekip geri aktifleştirin.
+- For objects that constantly appear and disappear on screen such as bullets and enemies (open-world RPG, Bullet Hell, etc.), do **NOT** `sprite.destroy()` and `new Sprite()` each time. Garbage collection will cause the game to stutter.
+- Instead, create a `Phaser.GameObjects.Group` or `Physics.Arcade.Group`, set dead objects to `setActive(false).setVisible(false)`, and when a new bullet is needed, pull a passive one from the group with `getFirstDead()` and reactivate it.
 
 ## 4. Physics (Arcade vs Matter)
 
-- 2D Platformer, Top-down shooter gibi projelerin %90'ı için `Arcade` fizik motoru mükemmeldir (AABB collision kullanır, inanılmaz performanslıdır). Karmaşık poligonlu hitbox'lar, zincir mekanizmaları, sürtünme bazlı araba fizikleri gerekliyse `Matter.js` seçin.
+- For 90% of 2D Platformer, Top-down shooter projects, the `Arcade` physics engine is excellent (uses AABB collision, incredibly performant). Choose `Matter.js` if complex polygon hitboxes, chain mechanisms, or friction-based vehicle physics are required.
 
-## 5. Input ve Hareket
+## 5. Input and Movement
 
-- Basit hareketlerde Update metodu içinde `if (cursors.left.isDown)` mantığını kullanın ama physics ile hareket ediyorsanız sprite'ın x,y koordinatını direk manipüle etmeyin (`sprite.x += 1`), bunun yerine motora yön verin: `sprite.setVelocityX(-200)`.
-- Koordinat manipülasyonu wall(duvar) collision'larını bozar ve kameranın içinden geçmesine yol açar.
+- For simple movement, use `if (cursors.left.isDown)` logic inside the Update method, but if moving with physics, do not directly manipulate the sprite's x,y coordinates (`sprite.x += 1`). Instead, direct the engine: `sprite.setVelocityX(-200)`.
+- Coordinate manipulation breaks wall collision detection and can cause objects to pass through the camera.

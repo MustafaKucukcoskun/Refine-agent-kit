@@ -1,7 +1,7 @@
 # Domain: Python Data Science
 
-> Bu dizin Python veri bilimi / veri muhendisligi projesi icerir.
-> Agent routing: Bu dizindeki dosyalar icin asagidaki kurallar gecerlidir.
+> This directory contains a Python data science / data engineering project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
@@ -10,7 +10,7 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Onemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | data-engineer | performance-profiling | clean-code |
 | python-patterns | testing-patterns | |
@@ -25,10 +25,10 @@
 
 ## Data Science-Specific Rules
 
-- Pandas method chaining tercih et: `.pipe().assign().query()` pattern
-- dtype optimization: Kategorik, int8/16/32 dogru sec, memory azalt
-- Polars lazy evaluation: >100MB veri icin Polars lazy mode tercih et
-- DuckDB: Dosya uzerinde SQL icin duckdb kullan (CSV/Parquet direct query)
-- Type hints zorunlu: `pandas-stubs` ile tip kontrolu
-- Notebook exploration icin, `.py` production icin: Kaggle/EDA notebook, pipeline .py
-- Her transform adimi test edilebilir fonksiyon olmali
+- Prefer Pandas method chaining: `.pipe().assign().query()` pattern
+- dtype optimization: Choose correct types (category, int8/16/32), reduce memory
+- Polars lazy evaluation: Prefer Polars lazy mode for >100MB data
+- DuckDB: Use duckdb for SQL on files (CSV/Parquet direct query)
+- Type hints mandatory: Type checking with `pandas-stubs`
+- Notebook for exploration, `.py` for production: Kaggle/EDA notebook, pipeline .py
+- Every transform step must be a testable function

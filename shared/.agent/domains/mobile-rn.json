@@ -6,6 +6,7 @@
     "contains": "\"react-native\""
   },
   "primary_agent": "mobile-developer",
+  "supporting_agents": [],
   "skills": {
     "p0": [
       "react-native-best-practices",
@@ -20,8 +21,8 @@
     ]
   },
   "skill_notes": {
-    "mobile-design": "Mevcut global skill \u2014 referans",
-    "testing-patterns": "Mevcut global skill \u2014 referans"
+    "mobile-design": "Existing global skill \u2014 reference",
+    "testing-patterns": "Existing global skill \u2014 reference"
   },
   "workflows": [
     "/deploy",
@@ -30,5 +31,5 @@
   ],
   "mcp_extra": [],
   "rules_file": "rules/domains/mobile-rn-rules.md",
-  "notes": "Global MCP yeterli: context7 + serena"
+  "notes": "Global MCP sufficient: context7 + serena"
 }

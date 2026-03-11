@@ -1,7 +1,7 @@
 # Domain: Unity Game
 
-> Bu dizin Unity oyun motoru projesi icerir.
-> Agent routing: Bu dizindeki dosyalar icin asagidaki kurallar gecerlidir.
+> This directory contains a Unity game engine project.
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
@@ -10,7 +10,7 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Onemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | unity-developer | game-development/3d-games | testing-patterns |
 | game-development | game-development/game-art | |
@@ -24,10 +24,10 @@
 
 ## Unity-Specific Rules
 
-- `Awake()` initialization, `Start()` setup: Lifecycle sirasi onemli
-- `Update()` icinde allocation YASAK: new, string concat, LINQ kacinilmali
-- `[SerializeField]` tercih et: `public` field yerine private + SerializeField
-- async/await tercih et (Unity 2023+): Coroutine yerine modern async pattern
-- ScriptableObject: Data ve event'ler icin kullan, MonoBehaviour degil
-- Object pooling: Instantiate/Destroy yerine pool pattern
-- DI: Zenject veya VContainer ile dependency injection
+- `Awake()` for initialization, `Start()` for setup: Lifecycle order matters
+- Allocation in `Update()` FORBIDDEN: Avoid new, string concat, LINQ
+- Prefer `[SerializeField]`: Use private + SerializeField instead of `public` field
+- Prefer async/await (Unity 2023+): Modern async pattern instead of coroutines
+- ScriptableObject: Use for data and events, not MonoBehaviour
+- Object pooling: Pool pattern instead of Instantiate/Destroy
+- DI: Dependency injection with Zenject or VContainer

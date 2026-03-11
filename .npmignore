@@ -9,6 +9,9 @@ node_modules/
 # Internal research (not for distribution)
 **/research-report.md
 
+# Auto-generated
+CODEBASE.md
+
 # OS files
 .DS_Store
 Thumbs.db

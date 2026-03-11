@@ -17,8 +17,9 @@
       }
     ]
   },
-  "trigger_note": "Tauri projeleri de bu domain'e girer (Electron alternatifi)",
+  "trigger_note": "Tauri projects also fall under this domain (Electron alternative)",
   "primary_agent": "frontend-specialist",
+  "supporting_agents": [],
   "skills": {
     "p0": [
       "electron-patterns",
@@ -29,8 +30,8 @@
     ]
   },
   "skill_notes": {
-    "nodejs-best-practices": "Mevcut global skill \u2014 referans",
-    "testing-patterns": "Mevcut global skill \u2014 referans"
+    "nodejs-best-practices": "Existing global skill \u2014 reference",
+    "testing-patterns": "Existing global skill \u2014 reference"
   },
   "workflows": [
     "/deploy",

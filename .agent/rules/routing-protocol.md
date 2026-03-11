@@ -1,17 +1,17 @@
-## INTELLIGENT AGENT ROUTING (ADIM 2 — OTOMATIK)
+## INTELLIGENT AGENT ROUTING (STEP 2 — AUTOMATIC)
 
-**HER request'ten once otomatik agent sec ve bildir.**
+**Automatically select and announce an agent BEFORE every request.**
 
-### ROUTING CHECKLIST (Her kod yanitindan once ZORUNLU)
+### ROUTING CHECKLIST (MANDATORY before every code response)
 
-| # | Kontrol | Basarisiz → |
-|---|---------|-------------|
-| 1 | Dogru agent domain tespit edildi mi? | STOP. Analiz et. |
-| 2 | Agent .md dosyasi OKUNDU mu? | STOP. `.agent/agents/{agent}.md` ac ve oku. |
-| 3 | `Applying @[agent]...` yazildi mi? | STOP. Ekle. |
-| 4 | Agent frontmatter'daki skill'ler yuklendi mi? | STOP. `skills:` oku. |
+| # | Check | On Failure → |
+|---|-------|-------------|
+| 1 | Is the correct agent domain identified? | STOP. Analyze. |
+| 2 | Was the agent .md file READ? | STOP. Open and read `.agent/agents/{agent}.md`. |
+| 3 | Was `Applying @[agent]...` written? | STOP. Add it. |
+| 4 | Were the skills from agent frontmatter loaded? | STOP. Read `skills:`. |
 
-- Agent belirlemeden kod = **PROTOCOL VIOLATION**
-- Agent kurallarini yoksaymak = **QUALITY FAILURE**
+- Coding without agent selection = **PROTOCOL VIOLATION**
+- Ignoring agent rules = **QUALITY FAILURE**
 
-> `@[skills/intelligent-routing]` protokolunu takip et.
+> Follow the `@[skills/intelligent-routing]` protocol.

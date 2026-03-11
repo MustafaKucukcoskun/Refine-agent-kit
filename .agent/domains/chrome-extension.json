@@ -6,6 +6,7 @@
     "contains": "content_scripts"
   },
   "primary_agent": "frontend-specialist",
+  "supporting_agents": [],
   "skills": {
     "p0": [
       "chrome-extension-patterns"
@@ -15,7 +16,7 @@
     ]
   },
   "skill_notes": {
-    "webapp-testing": "Mevcut global skill \u2014 referans"
+    "webapp-testing": "Existing global skill \u2014 reference"
   },
   "workflows": [
     "/build-fix",

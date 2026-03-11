@@ -1,26 +1,26 @@
-# mobile-flutter Domain Kuralları
+# mobile-flutter Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-pubspec.yaml mevcut.
+pubspec.yaml present.
 
 ## Primary Agent
 
 mobile-developer
 
-## State Yönetimi Tercihleri
+## State Management Preferences
 
-- Riverpod 2.x + kod üretimi (`@riverpod` annotation): karmaşık state için birinci tercih
-- Provider: basit projeler veya mevcut Provider kodbase'leri için geçerli
-- BLoC: ekip BLoC deneyimliyse tercih edilebilir
-- setState: sadece lokal, izole widget state'i için
+- Riverpod 2.x + code generation (`@riverpod` annotation): first choice for complex state
+- Provider: valid for simple projects or existing Provider codebases
+- BLoC: can be preferred if team has BLoC experience
+- setState: only for local, isolated widget state
 
-## Kod Stili
+## Code Style
 
-- Dart 3.x: records, sealed classes, patterns \u2014 aktif kullan
-- `const` constructor'ları maksimuma çıkar
-- Widget'ları küçük tut (tek sorumluluk)
+- Dart 3.x: records, sealed classes, patterns — actively use
+- Maximize `const` constructor usage
+- Keep widgets small (single responsibility)
 
 ## Test
 
-flutter_test + mocktail (mock için)
+flutter_test + mocktail (for mocking)

@@ -1,7 +1,7 @@
 # Domain: Python Backend
 
-> Bu dizin Python backend projesi (FastAPI/Django) içerir.
-> Agent routing: Bu dizindeki dosyalar için aşağıdaki kurallar geçerlidir.
+> This directory contains a Python backend project (FastAPI/Django).
+> Agent routing: The following rules apply to files in this directory.
 
 ## Agent Routing
 
@@ -12,7 +12,7 @@
 
 ## Skill Priority
 
-| P0 (Kritik) | P1 (Önemli) | P2 (Destek) |
+| P0 (Critical) | P1 (Important) | P2 (Supporting) |
 |-------------|-------------|-------------|
 | python-patterns | postgres-patterns | supabase-postgres-best-practices |
 | fastapi-pro / django-patterns | database-migrations | |
@@ -28,8 +28,8 @@
 
 ## Python-Specific Rules
 
-- Type hints zorunlu: `def get_user(user_id: int) -> User:`
-- Pydantic model kullan (FastAPI): Request/response validation
-- Async endpoint'lerde `await` doğru kullanılmalı
+- Type hints mandatory: `def get_user(user_id: int) -> User:`
+- Use Pydantic models (FastAPI): Request/response validation
+- `await` must be used correctly in async endpoints
 - Connection pooling: SQLAlchemy `create_async_engine`
-- Logging: `structlog` veya `logging` — print() YASAK production'da
+- Logging: `structlog` or `logging` — print() FORBIDDEN in production

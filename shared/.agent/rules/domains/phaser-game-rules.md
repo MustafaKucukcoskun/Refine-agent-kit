@@ -1,26 +1,26 @@
-# phaser-game Domain Kuralları
+# phaser-game Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-package.json içinde "phaser" dependency mevcut.
+"phaser" dependency present in package.json.
 
 ## Primary Agent
 
 game-developer
 
-## Phaser Versiyonu
+## Phaser Version
 
-Phaser 3.x (aksi belirtilmedikçe)
+Phaser 3.x (unless otherwise specified)
 
-## Mimari
+## Architecture
 
-- Scene-based yapı: her ekran ayrı Scene class
-- Scene geçişi: this.scene.start() / this.scene.launch() (overlay)
-- Asset yönetimi: preload() içinde yükle, create()'te kullan
-- Physics: Arcade (basit, hızlı) veya Matter.js (kompleks)
+- Scene-based structure: each screen is a separate Scene class
+- Scene transition: this.scene.start() / this.scene.launch() (overlay)
+- Asset management: load in preload(), use in create()
+- Physics: Arcade (simple, fast) or Matter.js (complex)
 
-## Performans
+## Performance
 
-- Object pooling: sık create/destroy yerine
-- Texture atlas kullan (ayrı spriteler yerine)
-- Camera bounds dışındaki nesneleri setActive(false) yap
+- Object pooling: instead of frequent create/destroy
+- Use texture atlas (instead of separate sprites)
+- setActive(false) for objects outside camera bounds

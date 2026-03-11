@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Session Manager - Antigravity Kit
+Session Manager - refine-kit
 =================================
 Analyzes project state, detects tech stack, tracks file statistics, generates
 CODEBASE.md with file dependency map, and provides session summaries.

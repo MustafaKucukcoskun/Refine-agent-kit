@@ -1,7 +1,7 @@
 # GEMINI.md — Antigravity Agent System (python-data)
 
-> Bu dosya bu workspace'te agent routing ve skill sistemini tanimlar.
-> Global kod kalitesi kurallari ~/.gemini/GEMINI.md'den yuklenir.
+> This file defines the agent routing and skill system for this workspace.
+> Global code quality rules are loaded from ~/.gemini/GEMINI.md.
 
 ---
 
@@ -9,12 +9,12 @@
 
 ---
 
-## REQUEST CLASSIFIER (ADIM 1)
+## REQUEST CLASSIFIER (STEP 1)
 
-| Tip | Trigger | Aksiyon |
-|-----|---------|---------|
-| **SORU** | "what is", "explain", "nasil calisir" | Text yanit |
-| **SIMPLE CODE** | "fix", "ekle", "degistir" (tek dosya) | Inline edit |
+| Type | Trigger | Action |
+|------|---------|--------|
+| **QUESTION** | "what is", "explain", "how does it work" | Text response |
+| **SIMPLE CODE** | "fix", "add", "change" (single file) | Inline edit |
 | **COMPLEX CODE** | "build", "create", "implement" | `{task-slug}.md` + Agent |
 | **DATA PIPELINE** | "pipeline", "etl", "transform", "dataset" | `{task-slug}.md` + backend-specialist |
 | **SLASH CMD** | /create, /debug, /verify, /code-review | Command flow |
@@ -29,39 +29,39 @@
 
 ---
 
-## TIER 1: PYTHON DATA SCIENCE KOD KURALLARI
+## TIER 1: PYTHON DATA SCIENCE CODE RULES
 
 ### Primary Agent: `backend-specialist`
 ### Supporting: `performance-optimizer`
 
 ### Skill Priority
 
-| Oncelik | Skill'ler |
-|---------|-----------|
+| Priority | Skills |
+|----------|--------|
 | **P0** | data-engineer, python-patterns |
 | **P1** | performance-profiling, testing-patterns |
 | **P2** | clean-code |
 
 ### Data Science-Specific Rules
 
-- **Pandas method chaining:** `.pipe().assign().query()` pattern. Intermediate variable'lar minimize et.
-- **dtype optimization:** Kategorik icin `category`, integer icin `int8/16/32` dogru sec. Memory %50+ azaltilabilir.
-- **Polars lazy evaluation:** >100MB veri icin Polars lazy mode tercih et. `collect()` en sona.
-- **DuckDB:** Dosya uzerinde SQL icin duckdb kullan. CSV/Parquet direct query, pandas'a yuklemeden.
-- **Type hints zorunlu:** `pandas-stubs` ile tip kontrolu. `def transform(df: pd.DataFrame) -> pd.DataFrame:`
-- **Notebook vs .py:** Notebook exploration/EDA icin, `.py` production pipeline icin. Ikisini karistirma.
-- **Testable transforms:** Her transform adimi bagimsiz, test edilebilir fonksiyon olmali.
-- **Testing:** Pytest + numpy.testing. `np.testing.assert_array_almost_equal` ile numerik test.
+- **Pandas method chaining:** `.pipe().assign().query()` pattern. Minimize intermediate variables.
+- **dtype optimization:** Choose `category` for categoricals, `int8/16/32` for integers. Can reduce memory by 50%+.
+- **Polars lazy evaluation:** Prefer Polars lazy mode for >100MB data. `collect()` at the end.
+- **DuckDB:** Use duckdb for SQL on files. CSV/Parquet direct query without loading into pandas.
+- **Type hints mandatory:** Type checking with `pandas-stubs`. `def transform(df: pd.DataFrame) -> pd.DataFrame:`
+- **Notebook vs .py:** Notebook for exploration/EDA, `.py` for production pipeline. Do not mix.
+- **Testable transforms:** Every transform step must be an independent, testable function.
+- **Testing:** Pytest + numpy.testing. `np.testing.assert_array_almost_equal` for numerical tests.
 
 @./gemini-modes.md
 
 ### Final Checklist
 
-Sira: **Type Check → Lint → Unit Tests → Data Validation → Performance Profile → Reproducibility Check**
+Order: **Type Check → Lint → Unit Tests → Data Validation → Performance Profile → Reproducibility Check**
 
 ---
 
-## TIER 2: DATA PIPELINE & ML KURALLARI
+## TIER 2: DATA PIPELINE & ML RULES
 
 ### Data Pipeline
 
@@ -73,26 +73,26 @@ Sira: **Type Check → Lint → Unit Tests → Data Validation → Performance P
 
 ### ML / Model Development
 
-- Experiment tracking: MLflow veya Weights & Biases
+- Experiment tracking: MLflow or Weights & Biases
 - Feature engineering: Feature store pattern, reusable transforms
-- Model versioning: DVC veya MLflow Model Registry
+- Model versioning: DVC or MLflow Model Registry
 - Reproducibility: Random seed, requirements.txt / pyproject.toml, data versioning
 - Evaluation: train/val/test split, cross-validation, proper metrics
 
 ### Visualization
 
-- matplotlib: Publication-quality, `plt.style.use()` ile tutarli stil
+- matplotlib: Publication-quality, consistent style with `plt.style.use()`
 - plotly: Interactive dashboards, Dash apps
-- Naming: Her chart'ta title, axis labels, units ZORUNLU
+- Naming: Title, axis labels, units MANDATORY on every chart
 - Color: Colorblind-friendly palette (viridis, cividis)
 
 ### Performance
 
-- Vectorization: NumPy/Pandas vectorized ops, Python loop YASAK (large data)
-- Memory: `del` + `gc.collect()` large DataFrame'lerden sonra
+- Vectorization: NumPy/Pandas vectorized ops, Python loops FORBIDDEN (large data)
+- Memory: `del` + `gc.collect()` after large DataFrames
 - Chunking: `pd.read_csv(chunksize=...)` for large files
 - Parallel: `joblib`, `multiprocessing`, `dask` for embarrassingly parallel tasks
-- Profiling: `line_profiler`, `memory_profiler` ile bottleneck bul
+- Profiling: Find bottlenecks with `line_profiler`, `memory_profiler`
 
 ---
 

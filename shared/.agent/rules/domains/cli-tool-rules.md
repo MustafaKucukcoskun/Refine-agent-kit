@@ -1,32 +1,32 @@
-# cli-tool Domain Kuralları
+# cli-tool Domain Rules
 
-## Aktif Olma Koşulu
+## Activation Condition
 
-package.json "bin" alanı VEYA pyproject.toml [project.scripts] VEYA setup.py entry_points mevcut.
+package.json "bin" field OR pyproject.toml [project.scripts] OR setup.py entry_points present.
 
 ## Primary Agent
 
 backend-specialist
 
-## Kütüphane Tercihleri
+## Library Preferences
 
 Node.js:
 
-- commander.js veya yargs (argüman parsing)
-- inquirer (interaktif prompt)
-- picocolors veya chalk (renk \u2014 hafif olanı tercih)
-- ora (spinner), execa (alt process çalıştırma)
+- commander.js or yargs (argument parsing)
+- inquirer (interactive prompt)
+- picocolors or chalk (color — prefer lightweight)
+- ora (spinner), execa (subprocess execution)
 
 Python:
 
-- Click (önerilen) veya Typer (type-hint bazlı)
-- rich (terminal formatlama)
+- Click (recommended) or Typer (type-hint based)
+- rich (terminal formatting)
 
-## UX Kuralları
+## UX Rules
 
-- --help her zaman çalışmalı
-- --version flag zorunlu
-- Hata mesajları stderr'e (process.stderr / sys.stderr)
-- Çıktılar stdout'a
-- Exit code: 0 = başarı, 1+ = hata
-- Yıkıcı işlemler için --dry-run sun
+- --help must always work
+- --version flag mandatory
+- Error messages to stderr (process.stderr / sys.stderr)
+- Output to stdout
+- Exit code: 0 = success, 1+ = error
+- Offer --dry-run for destructive operations
