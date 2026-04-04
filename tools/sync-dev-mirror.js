@@ -5,9 +5,7 @@ const path = require("path");
 
 const packageRoot = path.resolve(__dirname, "..");
 const sourceAgentDir = path.join(packageRoot, "shared", ".agent");
-const sourceSharedDir = path.join(packageRoot, "shared", ".shared");
 const targetAgentDir = path.join(packageRoot, ".agent");
-const targetSharedDir = path.join(packageRoot, ".shared");
 const devDomain = "next-web";
 
 function resetDir(dirPath) {
@@ -31,13 +29,10 @@ function ensureExists(targetPath, label) {
 }
 
 ensureExists(sourceAgentDir, "shared agent source");
-ensureExists(sourceSharedDir, "shared design source");
 
 resetDir(targetAgentDir);
-resetDir(targetSharedDir);
 
 copyDir(sourceAgentDir, targetAgentDir);
-copyDir(sourceSharedDir, targetSharedDir);
 
 copyFile(
   path.join(packageRoot, "domains", devDomain, "rules", "GEMINI.md"),
@@ -52,7 +47,7 @@ const researchReport = path.join(packageRoot, "research-report.md");
 if (fs.existsSync(researchReport)) {
   copyFile(
     researchReport,
-    path.join(targetSharedDir, "design-system", "research-report.md"),
+    path.join(targetAgentDir, ".shared", "design-system", "research-report.md"),
   );
 }
 
@@ -60,9 +55,7 @@ console.log(
   JSON.stringify(
     {
       sourceAgentDir,
-      sourceSharedDir,
       targetAgentDir,
-      targetSharedDir,
       devDomain,
       status: "ok",
     },

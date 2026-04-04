@@ -1,6 +1,6 @@
 ---
 name: multiplayer
-description: Multiplayer game development principles. Architecture, networking, synchronization.
+description: Multiplayer game development principles. Architecture, networking, synchronization. Use when building multiplayer games, netcode, lobbies, matchmaking, WebSocket connections, or dedicated servers.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

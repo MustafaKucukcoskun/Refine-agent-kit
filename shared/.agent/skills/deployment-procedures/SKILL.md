@@ -1,6 +1,6 @@
 ---
 name: deployment-procedures
-description: Production deployment principles and decision-making. Safe deployment workflows, rollback strategies, and verification. Teaches thinking, not scripts.
+description: Production deployment workflows with rollback strategies and verification gates. Use when deploying to production, setting up CI/CD pipelines, planning blue-green or canary deployments, or creating pre-flight checklists for releases.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

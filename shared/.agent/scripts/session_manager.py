@@ -108,7 +108,7 @@ def print_status(root: Path):
     print("\n====================\n")
 
 EXCLUDE_DIRS = {".git", "node_modules", ".next", "dist", "build", ".agent", ".gemini",
-                "__pycache__", ".venv", "venv", ".shared", "coverage", ".turbo"}
+                "__pycache__", ".venv", "venv", "coverage", ".turbo"}
 JS_TS_EXTENSIONS = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"}
 PY_EXTENSIONS = {".py"}
 CS_EXTENSIONS = {".cs"}

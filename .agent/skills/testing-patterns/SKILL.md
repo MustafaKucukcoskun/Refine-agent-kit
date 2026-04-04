@@ -1,6 +1,6 @@
 ---
 name: testing-patterns
-description: Testing patterns and principles. Unit, integration, mocking strategies.
+description: Testing patterns for unit, integration, and component tests. Use when writing tests, choosing a test framework (Jest, Vitest, pytest), designing mocks and stubs, or improving test coverage and reliability.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

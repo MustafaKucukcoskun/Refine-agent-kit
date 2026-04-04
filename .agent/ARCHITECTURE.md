@@ -9,8 +9,8 @@
 refine-kit is a modular system consisting of:
 
 - **21 Specialist Agents** - Role-based AI personas
-- **53 Skill Packs** - Domain-specific knowledge modules
-- **17 Workflows** - Slash command procedures
+- **54 Skill Packs** - Domain-specific knowledge modules
+- **30 Workflows** - Slash command procedures
 - **13 Domain Packs** - Tech stack integrations
 - **8 MCP Servers** - External tool integrations
 
@@ -19,8 +19,8 @@ refine-kit is a modular system consisting of:
 ## 🧭 Source Model
 
 - `shared/.agent/` is the single source of truth for the shipped project agent tree.
-- `shared/.shared/` is the single source of truth for shipped shared assets.
-- The repo-root `.agent/` and `.shared/` directories are generated development mirrors used to dogfood the package in this repository.
+- Design system assets (personas, reference sites, anti-patterns) live inside `shared/.agent/.shared/design-system/`.
+- The repo-root `.agent/` directory is a generated development mirror used to dogfood the package in this repository.
 - The development mirror overlays the `next-web` domain on top of `shared/.agent/` so this package repo can run with a concrete local domain.
 
 ---
@@ -31,8 +31,8 @@ refine-kit is a modular system consisting of:
 .agent/
 ├── ARCHITECTURE.md          # This file
 ├── agents/                  # 21 Specialist Agents
-├── skills/                  # 53 Skill Packs (64 modules)
-├── workflows/               # 17 Slash Commands
+├── skills/                  # 54 Skill Packs (65 modules)
+├── workflows/               # 30 Slash Commands
 ├── domains/                 # 13 Domain Packs
 ├── rules/                   # GEMINI.md (global) + 13 domain rules
 │   ├── GEMINI.md            # Global rules
@@ -72,9 +72,9 @@ Specialist AI personas for different domains.
 
 ---
 
-## 🧩 Skills (53 packs / 64 modules)
+## 🧩 Skills (54 packs / 65 modules)
 
-Modular knowledge domains that agents can load on-demand based on task context. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules. Current shipped inventory: 53 top-level skill packs and 64 total SKILL.md modules.
+Modular knowledge domains that agents can load on-demand based on task context. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules.
 
 ### Frontend & UI
 
@@ -213,29 +213,42 @@ External tool integration via Model Context Protocol. Config: `mcp_config.json`
 
 ---
 
-## 🔄 Workflows (17)
+## 🔄 Workflows (30)
 
 Slash command procedures. Invoke with `/command`.
 
-| Command            | Description                |
-| ------------------ | -------------------------- |
-| `/plan`            | Task breakdown             |
-| `/create`          | Create new features        |
-| `/debug`           | Debug issues               |
-| `/test`            | Run tests                  |
-| `/tdd`             | Test-driven development    |
-| `/code-review`     | Automated code review      |
-| `/refactor-clean`  | Clean refactoring          |
-| `/security-review` | Security analysis          |
-| `/deploy`          | Deploy application         |
-| `/build-fix`       | Auto build fixing          |
-| `/verify`          | Full system verification   |
-| `/orchestrate`     | Multi-agent coordination   |
-| `/brainstorm`      | Socratic discovery         |
-| `/enhance`         | Improve existing code      |
-| `/preview`         | Preview changes            |
-| `/status`          | Check project status       |
-| `/ui-ux-pro-max`   | Advanced UI/UX design task |
+| Command | Description |
+| ------- | ----------- |
+| `/brainstorm` | Structured brainstorming for projects and features. Explores multiple options before implementation. |
+| `/build-fix` | Build/CI error analysis and fix. Reads full stack trace, categorizes, finds root cause, and applies minimum fix. Adapts to project domain. |
+| `/code-review` | Code review workflow. Systematic review for security, performance, readability, and test coverage. |
+| `/create` | Create new application command. Triggers App Builder skill and starts interactive dialogue with user. |
+| `/debug` | Debugging command. Activates DEBUG mode for systematic problem investigation. |
+| `/deploy` | Deployment command for production releases. Pre-flight checks and deployment execution. Adapts to project domain. |
+| `/eas-build` | Expo EAS Build and Submit workflow. Configures build profiles, triggers cloud builds, manages credentials, and submits to app stores. Use for React Native/Expo cloud builds, app store submission, or CI/CD mobile pipeline. |
+| `/eda` | Exploratory Data Analysis workflow. Profile dataset, detect quality issues, visualize distributions, analyze correlations, and generate actionable insights. Use for data profiling, dataset investigation, feature analysis, or data quality audit. |
+| `/enhance` | Add or update features in existing application. Used for iterative development. |
+| `/export` | Godot 4.x game export to target platforms. Configures export presets, verifies templates, builds release binaries via headless CLI. Use for game distribution, platform builds, CI/CD export, or release packaging. |
+| `/migrate` | Database migration workflow with Alembic/SQLAlchemy or Django ORM. Generates, reviews, and applies schema migrations safely. Use for schema changes, database versioning, migration review, or rollback planning. |
+| `/orchestrate` | Coordinate multiple agents for complex tasks. Use for multi-perspective analysis, comprehensive reviews, or tasks requiring different domain expertise running in parallel workspaces. |
+| `/package` | Electron or Tauri desktop app packaging. Builds platform-specific installers with code signing, notarization, and auto-update configuration. Use for desktop distribution, installer creation, or release builds. |
+| `/plan` | Create project plan using project-planner agent. No code writing - only plan file generation. |
+| `/prefab` | Unity prefab and asset creation. Generates prefab structure with components, materials, physics, and proper asset organization. Use for game entity creation, reusable components, prefab variants, or asset pipeline setup. |
+| `/preview` | Preview server start, stop, and status check. Local development server management. Adapts to project domain. |
+| `/publish` | Chrome Web Store publishing workflow. Validates manifest v3, builds extension zip, uploads to CWS, and tracks review status. Use for extension release, store submission, or publishing updates. |
+| `/python-review` | Python-specific code review. Type safety, async correctness, PEP compliance, import hygiene, security patterns. Deeper than generic /code-review. |
+| `/refactor-clean` | Systematic refactoring workflow for cleaning and improving working code without breaking behavior. Detects code smells, applies safe transformations, and verifies with tests after each step. |
+| `/release` | CLI tool release pipeline. Version bump, changelog generation, npm/PyPI publish, git tag, and GitHub release. Use for package publishing, version management, or release automation. |
+| `/scaffold` | ASP.NET Core project scaffolding. Generates solution structure with controllers, EF Core, authentication, and Docker configuration. Use for new .NET projects, solution setup, or architecture initialization. |
+| `/scene` | Game scene creation wizard for Godot and Phaser. Generates scene structure with nodes/objects, scripts, physics setup, and signal wiring. Use for level design, UI screens, player/enemy creation, or menu systems. |
+| `/security-review` | Security-focused code review. OWASP Top 10, credentials, auth, input validation, dependency CVEs. |
+| `/status` | Display agent and project status. Progress tracking and status board. |
+| `/store-deploy` | Flutter app store deployment for iOS App Store and Google Play Store. Handles signing, release builds, store submission, and phased rollout. Use for mobile app publishing, store release, or production deployment. |
+| `/tdd` | Test-Driven Development cycle. Write failing test first, then implement. |
+| `/test` | Test generation and test running command. Creates and executes tests for code. Adapts to project domain automatically. |
+| `/train` | ML model training pipeline. Data splitting, preprocessing, model training, evaluation metrics, and artifact export. Use for model development, hyperparameter tuning, experiment tracking, or training pipeline setup. |
+| `/ui-ux-pro-max` | Plan and implement UI with AI-powered design intelligence — 50+ styles, 95+ color palettes, and automated design system generation |
+| `/verify` | Project integrity verification. Checks agent/skill files, workflow references, imports, and config consistency. |
 
 ---
 
@@ -328,30 +341,11 @@ For details, see [scripts/README.md](scripts/README.md)
 | ----------------------- | ----------------------------- |
 | **Total Agents**        | 21                            |
 | **Total Skill Packs**   | 54                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
-| **Total Skill Modules** | 64                            |
 | **Total Skill Modules** | 65                            |
-| **Total Skill Modules** | 65                            |
-| **Total Skill Modules** | 65                            |
-| **Total Skill Modules** | 65                            |
-| **Total Skill Modules** | 65                            |
-| **Total Workflows**    | 18                            |
-| **Total Domain Packs** | 13                            |
+| **Total Workflows**     | 30                            |
+| **Total Domain Packs**  | 13                            |
 | **Total MCP Servers**   | 8                             |
-| **Total Scripts**       | 6 (master) + 16 (skill-level) |
+| **Total Scripts**       | 7 (master) + 16 (skill-level) |
 | **Coverage**            | ~90% web/mobile development   |
 
 ---

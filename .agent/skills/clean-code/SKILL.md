@@ -1,7 +1,7 @@
 ---
 name: clean-code
-description: Pragmatic coding standards - concise, direct, no over-engineering, no unnecessary comments
-allowed-tools: Read, Write, Edit
+description: Pragmatic coding standards enforcing concise, readable code. Use on every code modification to prevent over-engineering, unnecessary abstractions, verbose comments, and premature optimization. Global quality gate for all agents.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 version: 2.0
 priority: CRITICAL
 ---

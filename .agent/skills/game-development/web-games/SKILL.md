@@ -1,6 +1,6 @@
 ---
 name: web-games
-description: Web browser game development principles. Framework selection, WebGPU, optimization, PWA.
+description: Web browser game development principles. Framework selection, WebGPU, optimization, PWA. Use when building browser games with Phaser, PixiJS, WebGL, or HTML5 Canvas, including PWA and optimization.
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 

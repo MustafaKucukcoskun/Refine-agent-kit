@@ -1,5 +1,5 @@
 ---
-name: react-best-practices
+name: nextjs-react-expert
 description: React and Next.js performance optimization from Vercel Engineering. Use when building React components, optimizing performance, eliminating waterfalls, reducing bundle size, reviewing code for performance issues, or implementing server/client-side optimizations.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
@@ -106,7 +106,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 | Database optimization   | `@[skills/database-design]`       |
 | Testing strategies      | `@[skills/testing-patterns]`      |
 | UI/UX design principles | `@[skills/frontend-design]`       |
-| TypeScript patterns     | `@[skills/typescript-expert]`     |
+| Code quality patterns   | `@[skills/clean-code]`            |
 | Deployment & DevOps     | `@[skills/deployment-procedures]` |
 
 ---

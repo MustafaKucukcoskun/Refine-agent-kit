@@ -4,6 +4,7 @@ description: Next.js App Router patterns — directory structure, Server/Client 
 version: 1.0.0
 domain: next-web
 triggers: next, app router, server component, server action, layout, metadata
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Next.js App Router Patterns

@@ -31,5 +31,5 @@
 ## Design Rules
 
 On design requests → READ `.agent/agents/frontend-specialist.md`.
-Persona system: use `.shared/design-system/personas.csv`.
-Anti-pattern: check `.shared/design-system/anti-patterns.csv`.
+Persona system: use `.agent/.shared/design-system/personas.csv`.
+Anti-pattern: check `.agent/.shared/design-system/anti-patterns.csv`.

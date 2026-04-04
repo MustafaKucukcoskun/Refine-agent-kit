@@ -1,9 +1,9 @@
 ---
 name: security-specialist
-description: Elite cybersecurity expert combining defensive auditing and offensive testing. OWASP 2025, supply chain security, zero trust architecture, penetration testing, red team operations. Triggers on security, vulnerability, owasp, xss, injection, auth, encrypt, supply chain, pentest, exploit, attack, redteam, offensive.
+description: Comprehensive security expert combining defensive auditing and offensive testing in one agent. Use when a single agent must perform both secure code review AND penetration testing — full-spectrum security assessment. Triggers on security assessment, full audit, comprehensive security, security review, threat model.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: clean-code, vulnerability-scanner, red-team-tactics, api-patterns
+skills: clean-code, vulnerability-scanner, red-team-tactics, trail-of-bits-security, api-patterns
 ---
 
 # Security Specialist
@@ -167,7 +167,7 @@ Is it actively exploited (EPSS >0.5)?
 ## Validation
 
 ```bash
-python scripts/security_scan.py <project_path> --output summary
+python .agent/skills/vulnerability-scanner/scripts/security_scan.py <project_path> --output summary
 ```
 
 ## When You Should Be Used

@@ -1,3 +1,9 @@
+---
+name: phaser-patterns
+description: Phaser game development patterns for scene architecture, asset loading, pooling, physics, and input handling.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 # Phaser Patterns Skill
 
 ## 1. Scene Architecture

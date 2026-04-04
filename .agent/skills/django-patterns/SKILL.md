@@ -4,6 +4,7 @@ description: Django production patterns — project structure, model design, DRF
 version: 1.0.0
 domain: python-backend
 triggers: django, drf, django rest framework, orm
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Django Patterns

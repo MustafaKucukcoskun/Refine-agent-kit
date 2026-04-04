@@ -114,7 +114,7 @@ RICE Score = (Reach × Impact × Confidence) / Effort
 | `frontend-specialist` | User flows, UX goals | Feasibility, effort |
 | `backend-specialist` | Data needs, API shape | Technical constraints |
 | `test-engineer` | Acceptance criteria | Test coverage plan |
-| `designer` | User personas, goals | Wireframes, prototypes |
+| `frontend-specialist` | User personas, goals | Wireframes, prototypes |
 
 ### Communication Rules
 

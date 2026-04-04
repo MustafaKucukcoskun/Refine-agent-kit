@@ -11,13 +11,13 @@
 
 ## REQUEST CLASSIFIER (STEP 1)
 
-| Type | Trigger | Action |
-|------|---------|--------|
-| **QUESTION** | "what is", "explain", "how does it work" | Text response |
-| **SIMPLE CODE** | "fix", "add", "change" (single file) | Inline edit |
-| **COMPLEX CODE** | "build", "create", "implement" | `{task-slug}.md` + Agent |
-| **DESIGN/UI** | "design", "ui", "page", "landing" | `{task-slug}.md` + frontend-specialist |
-| **SLASH CMD** | /create, /debug, /verify, /deploy | Command flow |
+| Type             | Trigger                                  | Action                                 |
+| ---------------- | ---------------------------------------- | -------------------------------------- |
+| **QUESTION**     | "what is", "explain", "how does it work" | Text response                          |
+| **SIMPLE CODE**  | "fix", "add", "change" (single file)     | Inline edit                            |
+| **COMPLEX CODE** | "build", "create", "implement"           | `{task-slug}.md` + Agent               |
+| **DESIGN/UI**    | "design", "ui", "page", "landing"        | `{task-slug}.md` + frontend-specialist |
+| **SLASH CMD**    | /create, /debug, /verify, /deploy        | Command flow                           |
 
 ---
 
@@ -32,15 +32,16 @@
 ## TIER 1: NEXT-WEB CODE RULES
 
 ### Primary Agent: `frontend-specialist`
+
 ### Supporting: `seo-specialist`, `performance-optimizer`
 
 ### Skill Priority
 
-| Priority | Skills |
-|----------|--------|
-| **P0** | nextjs-react-expert, nextjs-app-router-patterns, frontend-design, tailwind-patterns |
-| **P1** | seo-fundamentals, web-design-guidelines, webapp-testing, geo-fundamentals |
-| **P2** | nodejs-best-practices, i18n-localization |
+| Priority | Skills                                                                              |
+| -------- | ----------------------------------------------------------------------------------- |
+| **P0**   | nextjs-react-expert, nextjs-app-router-patterns, frontend-design, tailwind-patterns |
+| **P1**   | seo-fundamentals, web-design-guidelines, webapp-testing, geo-fundamentals           |
+| **P2**   | nodejs-best-practices, i18n-localization                                            |
 
 ### Next.js-Specific Rules
 
@@ -64,8 +65,8 @@ Order: **Security → Lint → Schema → Tests → UX → SEO → Lighthouse/E2
 
 > **Design rules are not here — they are in the specialist agent files.**
 
-| Task | Read |
-|------|------|
+| Task                     | Read                                   |
+| ------------------------ | -------------------------------------- |
 | Web UI/UX / Landing Page | `.agent/agents/frontend-specialist.md` |
 
 ### DESIGN FLOW (Mandatory for Every Design Request)
@@ -84,11 +85,11 @@ Order: **Security → Lint → Schema → Tests → UX → SEO → Lighthouse/E2
    - UI library preference? (Pure Tailwind / shadcn / custom)
 
 4. Persona Selection (Sector + Emotion Matrix + AI Analysis):
-   → Read `.shared/design-system/personas.csv`
+   → Read `.agent/.shared/design-system/personas.csv`
    → Suggest 3 personas based on sector + emotion + project architecture
    → Let user choose
 
-5. `.shared/design-system/reference-sites.csv` → Review reference sites matching the sector
+5. `.agent/.shared/design-system/reference-sites.csv` → Review reference sites matching the sector
 
 6. FULL IMPLEMENTATION → All sections + animations + micro-interactions
    Static design = FAIL. Every element moves.
@@ -105,6 +106,6 @@ tailwind-patterns, seo-fundamentals, web-design-guidelines, webapp-testing
 
 **Workflows:** /ui-ux-pro-max, /deploy, /preview, /create, /debug, /verify, /code-review
 
-**Design System:** `.shared/design-system/` → `personas.csv`, `reference-sites.csv`, `anti-patterns.csv`
+**Design System:** `.agent/.shared/design-system/` → `personas.csv`, `reference-sites.csv`, `anti-patterns.csv`
 
 ---

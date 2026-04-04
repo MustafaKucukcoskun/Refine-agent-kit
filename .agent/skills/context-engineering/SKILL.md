@@ -4,6 +4,7 @@ description: Context window management, progressive skill loading, token budget 
 version: 1.0.0
 domain: global
 triggers: context, token, budget, overflow, loading, progressive, JIT
+allowed-tools: Read, Glob, Grep
 ---
 
 # Context Engineering

@@ -1,6 +1,6 @@
 ---
 name: vr-ar
-description: VR/AR development principles. Comfort, interaction, performance requirements.
+description: VR/AR development principles. Comfort, interaction, performance requirements. Use when developing VR/AR experiences with OpenXR, ARKit, ARCore, Meta Quest, or XR interaction design.
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 

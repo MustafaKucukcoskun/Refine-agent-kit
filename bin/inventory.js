@@ -95,6 +95,7 @@ function getInventory(packageRoot) {
   const designSystemDir = path.join(
     packageRoot,
     "shared",
+    ".agent",
     ".shared",
     "design-system",
   );

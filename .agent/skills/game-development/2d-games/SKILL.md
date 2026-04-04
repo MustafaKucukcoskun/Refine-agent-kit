@@ -1,6 +1,6 @@
 ---
 name: 2d-games
-description: 2D game development principles. Sprites, tilemaps, physics, camera.
+description: 2D game development principles. Sprites, tilemaps, physics, camera. Use when building 2D games, working with sprites, tilemaps, pixel art, or side-scrollers in Godot, Unity, or Phaser.
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 

@@ -4,6 +4,7 @@ description: FastAPI advanced patterns — Pydantic v2 models, dependency inject
 version: 1.0.0
 domain: python-backend
 triggers: fastapi, pydantic, async api, python api
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # FastAPI Pro Patterns

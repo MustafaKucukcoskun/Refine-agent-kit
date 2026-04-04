@@ -42,7 +42,7 @@ When `/debug` is triggered:
 
 ## Output Format
 
-```markdown
+````markdown
 ## 🔍 Debug: [Issue]
 
 ### 1. Symptom
@@ -80,7 +80,7 @@ When `/debug` is triggered:
 
 ### 7. Prevention
 🛡️ [How to prevent this in the future]
-```
+````
 
 ---
 

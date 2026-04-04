@@ -4,6 +4,7 @@ description: Unity C# patterns — MonoBehaviour lifecycle, ScriptableObject arc
 version: 1.0.0
 domain: unity-game
 triggers: unity, monobehaviour, scriptableobject, input system, rigidbody
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Unity Developer Patterns

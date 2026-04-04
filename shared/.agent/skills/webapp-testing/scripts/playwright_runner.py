@@ -5,7 +5,7 @@ Script: playwright_runner.py
 Purpose: Run basic Playwright browser tests
 Usage: python playwright_runner.py <url> [--screenshot]
 Output: JSON with page info, health status, and optional screenshot path
-Note: Requires playwright (pip install playwright && playwright install chromium)
+Note: Requires playwright (run: python -m pip install playwright; python -m playwright install chromium)
 Screenshots: Saved to system temp directory (auto-cleaned by OS)
 """
 import sys
@@ -33,7 +33,7 @@ def run_basic_test(url: str, take_screenshot: bool = False) -> dict:
     if not PLAYWRIGHT_AVAILABLE:
         return {
             "error": "Playwright not installed",
-            "fix": "pip install playwright && playwright install chromium"
+            "fix": "python -m pip install playwright; python -m playwright install chromium"
         }
     
     result = {

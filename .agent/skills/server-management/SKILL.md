@@ -1,6 +1,6 @@
 ---
 name: server-management
-description: Server management principles and decision-making. Process management, monitoring strategy, and scaling decisions. Teaches thinking, not commands.
+description: Server and process management for production environments. Use when configuring PM2, Nginx, systemd, setting up health checks, log rotation, monitoring (Grafana, Prometheus), or planning horizontal/vertical scaling strategies.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

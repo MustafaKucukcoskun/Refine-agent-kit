@@ -1,12 +1,13 @@
 ---
 name: bash-linux
-description: Bash/Linux terminal patterns. Critical commands, piping, error handling, scripting. Use when working on macOS or Linux systems.
+description: Bash/Linux terminal patterns. Critical commands, piping, error handling, scripting. Use when working on macOS or Linux systems. Not for Windows command execution.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Bash Linux Patterns
 
 > Essential patterns for Bash on Linux/macOS.
+> Windows note: If OS is Windows, use `powershell-windows` for executable commands.
 
 ---
 

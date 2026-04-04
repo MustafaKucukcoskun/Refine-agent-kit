@@ -3,7 +3,7 @@
 /**
  * refine-kit CLI
  * AI Agent toolkit installer for Google Antigravity IDE.
- * Global rules → ~/.gemini/ | Project files → .agent/ + .shared/
+ * Global rules → ~/.gemini/ | Project files → .agent/
  * Zero dependencies — Node.js native modules only.
  */
 
@@ -175,6 +175,55 @@ function copyRecursive(src, dest, exclude = []) {
     count++;
   }
   return count;
+}
+
+// Default agent directory name (.agent for backward compat, .agents for newer Antigravity)
+const DEFAULT_AGENT_DIR_NAME = ".agent";
+
+/**
+ * Resolve the agent directory path.
+ * Priority: --agents-dir flag > existing directory auto-detect > default (.agent)
+ *
+ * For init: uses flag or default (creates new directory)
+ * For list/update/add-domain: detects which directory exists, prefers metadata
+ */
+function resolveAgentDir(targetDir, args, mode = "detect") {
+  // Explicit flag takes priority
+  if (args["agents-dir"]) {
+    const name = args["agents-dir"];
+    if (name !== ".agent" && name !== ".agents") {
+      console.log(
+        c("red", "  ✖ ") +
+          `Invalid --agents-dir value: ${name}. Use ".agent" or ".agents".`,
+      );
+      process.exit(1);
+    }
+    return path.join(targetDir, name);
+  }
+
+  // For init: default to .agent unless .agents already exists
+  if (mode === "init") {
+    const agentsPlural = path.join(targetDir, ".agents");
+    if (fs.existsSync(agentsPlural)) return agentsPlural;
+    return path.join(targetDir, DEFAULT_AGENT_DIR_NAME);
+  }
+
+  // For detect (list/update/add-domain): find existing directory
+  const agentSingular = path.join(targetDir, ".agent");
+  const agentsPlural = path.join(targetDir, ".agents");
+
+  // Check metadata first (most reliable)
+  for (const dir of [agentSingular, agentsPlural]) {
+    const metaPath = path.join(dir, ".refine-kit.json");
+    if (fs.existsSync(metaPath)) return dir;
+  }
+
+  // Fallback: whichever exists
+  if (fs.existsSync(agentSingular)) return agentSingular;
+  if (fs.existsSync(agentsPlural)) return agentsPlural;
+
+  // Neither exists — return default
+  return path.join(targetDir, DEFAULT_AGENT_DIR_NAME);
 }
 
 function countFiles(dir) {
@@ -387,17 +436,19 @@ async function cmdInit(args) {
     process.exit(1);
   }
 
-  // ── Step 3: Check existing .agent/ ──
-  const agentDir = path.join(targetDir, ".agent");
+  // ── Step 3: Check existing agent directory ──
+  const agentDir = resolveAgentDir(targetDir, args, "init");
+  const agentDirName = path.basename(agentDir);
   if (fs.existsSync(agentDir) && !force) {
-    console.log(c("red", "  ✖ ") + `.agent/ already exists in ${targetDir}`);
+    console.log(
+      c("red", "  ✖ ") + `${agentDirName}/ already exists in ${targetDir}`,
+    );
     console.log(c("dim", "    Use --force to overwrite."));
     process.exit(1);
   }
 
   // ── Step 4: Copy shared base + domain-specific files (FILTERED) ──
   const sharedAgentSrc = path.join(PACKAGE_ROOT, "shared", ".agent");
-  const sharedDesignSrc = path.join(PACKAGE_ROOT, "shared", ".shared");
   const domainSrc = path.join(PACKAGE_ROOT, "domains", domain);
 
   if (!quiet)
@@ -670,26 +721,54 @@ async function cmdInit(args) {
       console.log(c("green", "  ✔ ") + `${scCount} domain-specific script(s)`);
   }
 
-  // Copy shared .shared/ design system (only for UI-based domains)
-  const UI_DOMAINS = new Set([
-    "next-web",
-    "mobile-flutter",
-    "mobile-rn",
-    "electron-desktop",
-    "chrome-extension",
+  // ── 4h: Copy .shared/ assets (design-system, ui-ux-pro-max data) ──
+  const NON_UI_DOMAINS = new Set([
+    "csharp-backend",
+    "python-backend",
+    "python-data",
+    "python-ml",
+    "godot-game",
+    "unity-game",
+    "phaser-game",
+    "cli-tool",
   ]);
-  const sharedDest = path.join(targetDir, ".shared");
-  if (fs.existsSync(sharedDesignSrc) && UI_DOMAINS.has(domain)) {
-    const designCount = copyRecursive(sharedDesignSrc, sharedDest);
+
+  const sharedAssetsSrc = path.join(sharedAgentSrc, ".shared");
+  if (fs.existsSync(sharedAssetsSrc) && !NON_UI_DOMAINS.has(domain)) {
+    const sharedCount = copyRecursive(
+      sharedAssetsSrc,
+      path.join(agentDir, ".shared"),
+      ["__pycache__"],
+    );
+    totalCount += sharedCount;
     if (!quiet)
-      console.log(c("green", "  ✔ ") + `${designCount} design system files`);
-  } else if (!quiet && !UI_DOMAINS.has(domain)) {
+      console.log(
+        c("green", "  ✔ ") + `${sharedCount} design system & asset files`,
+      );
+  } else if (!quiet && NON_UI_DOMAINS.has(domain)) {
     console.log(c("dim", "  ⊘ ") + "Design system skipped (not a UI domain)");
   }
 
   // ── Step 5: Create env template ──
   createEnvTemplate(targetDir, domain);
   if (!quiet) console.log(c("green", "  ✔ ") + ".env.agent.example created");
+
+  // ── Step 5b: Write metadata for list/update ──
+  const metaPath = path.join(agentDir, ".refine-kit.json");
+  fs.writeFileSync(
+    metaPath,
+    JSON.stringify(
+      {
+        version: VERSION,
+        domain: domain,
+        agentDirName: path.basename(agentDir),
+        installedAt: new Date().toISOString().split("T")[0],
+      },
+      null,
+      2,
+    ) + "\n",
+    "utf-8",
+  );
 
   // ── Step 6: Summary ──
   if (!quiet) {
@@ -698,7 +777,7 @@ async function cmdInit(args) {
           .readdirSync(path.join(agentDir, "agents"))
           .filter((f) => f.endsWith(".md")).length
       : 0;
-    const totalFiles = countFiles(agentDir) + countFiles(sharedDest);
+    const totalFiles = countFiles(agentDir);
     const d = DOMAINS[domain];
 
     console.log("");
@@ -716,7 +795,7 @@ async function cmdInit(args) {
     console.log("");
     console.log(c("dim", "    Global:  ~/.gemini/GEMINI.md"));
     console.log(c("dim", "    Global:  ~/.gemini/antigravity/mcp_config.json"));
-    console.log(c("dim", "    Local:   .agent/ + .shared/"));
+    console.log(c("dim", `    Local:   ${agentDirName}/`));
     console.log("");
 
     console.log(c("yellow", "\n  Next steps:"));
@@ -839,8 +918,8 @@ async function cmdAddDomain(args) {
     "subdir-markers",
     "mcp_config.json",
   );
+  const agentDir = resolveAgentDir(targetDir, args);
   if (fs.existsSync(mcpSrc)) {
-    const agentDir = path.join(targetDir, ".agent");
     if (fs.existsSync(agentDir)) {
       const mcpDest = path.join(agentDir, "mcp_config.json");
       if (fs.existsSync(mcpDest)) {
@@ -855,7 +934,91 @@ async function cmdAddDomain(args) {
         if (!quiet)
           console.log(
             c("green", "  ✔ ") +
-              "Domain MCP servers merged into .agent/mcp_config.json",
+              `Domain MCP servers merged into ${path.basename(agentDir)}/mcp_config.json`,
+          );
+      }
+    }
+  }
+
+  // Install missing skills required by the new domain
+  if (fs.existsSync(agentDir)) {
+    const sharedAgentSrc = path.join(PACKAGE_ROOT, "shared", ".agent");
+    const domainConfigPath = path.join(
+      sharedAgentSrc,
+      "domains",
+      `${domain}.json`,
+    );
+    if (fs.existsSync(domainConfigPath)) {
+      const domainConfig = JSON.parse(
+        fs.readFileSync(domainConfigPath, "utf-8"),
+      );
+      const neededSkills = new Set();
+      if (domainConfig.skills) {
+        for (const tier of Object.values(domainConfig.skills)) {
+          for (const skill of tier || []) neededSkills.add(skill);
+        }
+      }
+      // Also collect skills from the domain's agents frontmatter
+      const domainAgents = new Set();
+      if (domainConfig.primary_agent)
+        domainAgents.add(domainConfig.primary_agent);
+      for (const a of domainConfig.supporting_agents || [])
+        domainAgents.add(a);
+      const agentsSrcDir = path.join(sharedAgentSrc, "agents");
+      for (const agentName of domainAgents) {
+        const agentFile = path.join(agentsSrcDir, `${agentName}.md`);
+        if (fs.existsSync(agentFile)) {
+          const content = fs.readFileSync(agentFile, "utf-8");
+          const fmMatch = content.match(/^---[\s\S]*?^---/m);
+          if (fmMatch) {
+            const skillMatch = fmMatch[0].match(/skills:\s*(.+)/);
+            if (skillMatch) {
+              skillMatch[1]
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean)
+                .forEach((s) => neededSkills.add(s));
+            }
+          }
+        }
+      }
+
+      // Copy only skills that don't already exist
+      const skillsSrc = path.join(sharedAgentSrc, "skills");
+      const skillsDest = path.join(agentDir, "skills");
+      let addedSkills = 0;
+      for (const skillName of neededSkills) {
+        const destSkillDir = path.join(skillsDest, skillName);
+        if (fs.existsSync(destSkillDir)) continue; // already installed
+        const srcSkillDir = path.join(skillsSrc, skillName);
+        if (!fs.existsSync(srcSkillDir)) continue; // not in package
+        copyRecursive(srcSkillDir, destSkillDir);
+        addedSkills++;
+      }
+      if (addedSkills > 0 && !quiet) {
+        console.log(
+          c("green", "  ✔ ") +
+            `${addedSkills} additional skill(s) installed for ${DOMAINS[domain].label}`,
+        );
+      }
+
+      // Copy domain-specific rules file if not present
+      const domainRulesFile = `${domain}-rules.md`;
+      const rulesSrc = path.join(
+        sharedAgentSrc,
+        "rules",
+        "domains",
+        domainRulesFile,
+      );
+      const rulesDest = path.join(agentDir, "rules", "domains", domainRulesFile);
+      if (fs.existsSync(rulesSrc) && !fs.existsSync(rulesDest)) {
+        const rulesDestDir = path.dirname(rulesDest);
+        if (!fs.existsSync(rulesDestDir))
+          fs.mkdirSync(rulesDestDir, { recursive: true });
+        fs.copyFileSync(rulesSrc, rulesDest);
+        if (!quiet)
+          console.log(
+            c("green", "  ✔ ") + `Domain rules: ${domainRulesFile}`,
           );
       }
     }
@@ -864,104 +1027,338 @@ async function cmdAddDomain(args) {
   console.log("");
 }
 
+// ── List Command ───────────────────────────────────────────────────────────
+
+function cmdList(args) {
+  const targetDir = args.path || process.cwd();
+  const agentDir = resolveAgentDir(targetDir, args);
+
+  if (!fs.existsSync(agentDir)) {
+    console.log(
+      c("red", "  ✖ ") +
+        "No .agent/ or .agents/ found in this directory. Run " +
+        c("bold", "refine-kit init") +
+        " first.",
+    );
+    process.exit(1);
+  }
+
+  printBanner();
+
+  // Detect installed version and domain from .agent/.refine-kit.json metadata
+  const metaPath = path.join(agentDir, ".refine-kit.json");
+  let installedVersion = null;
+  let installedDate = null;
+  let rootDomain = null;
+  if (fs.existsSync(metaPath)) {
+    try {
+      const meta = JSON.parse(fs.readFileSync(metaPath, "utf-8"));
+      installedVersion = meta.version || null;
+      installedDate = meta.installedAt || null;
+      rootDomain = meta.domain || null;
+    } catch {}
+  }
+
+  // Fallback: detect root domain from rules/GEMINI.md
+  if (!rootDomain) {
+    const rulesGemini = path.join(agentDir, "rules", "GEMINI.md");
+    if (fs.existsSync(rulesGemini)) {
+      const content = fs.readFileSync(rulesGemini, "utf-8");
+      for (const key of Object.keys(DOMAINS)) {
+        if (content.includes(`(${key})`) || content.includes(key)) {
+          rootDomain = key;
+          break;
+        }
+      }
+    }
+  }
+
+  // Count installed files
+  const agentMds = fs.existsSync(path.join(agentDir, "agents"))
+    ? fs
+        .readdirSync(path.join(agentDir, "agents"))
+        .filter((f) => f.endsWith(".md")).length
+    : 0;
+  const skillDirs = fs.existsSync(path.join(agentDir, "skills"))
+    ? fs
+        .readdirSync(path.join(agentDir, "skills"))
+        .filter((f) =>
+          fs.statSync(path.join(agentDir, "skills", f)).isDirectory(),
+        ).length
+    : 0;
+  const workflowMds = fs.existsSync(path.join(agentDir, "workflows"))
+    ? fs
+        .readdirSync(path.join(agentDir, "workflows"))
+        .filter((f) => f.endsWith(".md")).length
+    : 0;
+  const totalFiles = countFiles(agentDir);
+
+  console.log("  " + c("bold", "Installed Agent System"));
+  console.log("");
+  console.log(
+    `    Domain:     ${rootDomain ? c("bold", DOMAINS[rootDomain]?.label || rootDomain) : c("dim", "unknown")}`,
+  );
+  if (installedVersion)
+    console.log(`    Version:    ${c("bold", `v${installedVersion}`)}`);
+  if (installedDate) console.log(`    Installed:  ${c("dim", installedDate)}`);
+  console.log(`    Agents:     ${c("bold", String(agentMds))}`);
+  console.log(`    Skills:     ${c("bold", String(skillDirs))}`);
+  console.log(`    Workflows:  ${c("bold", String(workflowMds))}`);
+  console.log(`    Files:      ${c("bold", String(totalFiles))}`);
+  console.log("");
+
+  // Scan for subdirectory GEMINI.md markers (monorepo domains)
+  const subdomains = [];
+  const SCAN_EXCLUDE = new Set([
+    "node_modules",
+    "dist",
+    "build",
+    ".next",
+    "out",
+    "coverage",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "bin",
+    "shared",
+    "domains",
+    "tools",
+    "global",
+    "public",
+    "static",
+    "vendor",
+  ]);
+  function scanSubDir(dir, rel) {
+    if (!fs.existsSync(dir)) return;
+    for (const item of fs.readdirSync(dir)) {
+      if (item.startsWith(".") || SCAN_EXCLUDE.has(item)) continue;
+      const fullPath = path.join(dir, item);
+      if (!fs.statSync(fullPath).isDirectory()) continue;
+      const geminiPath = path.join(fullPath, "GEMINI.md");
+      const relPath = rel ? `${rel}/${item}` : item;
+      if (fs.existsSync(geminiPath)) {
+        const content = fs.readFileSync(geminiPath, "utf-8");
+        let detectedDomain = null;
+        for (const key of Object.keys(DOMAINS)) {
+          if (content.includes(key)) {
+            detectedDomain = key;
+            break;
+          }
+        }
+        if (detectedDomain) {
+          subdomains.push({
+            path: relPath,
+            domain: detectedDomain,
+            label: DOMAINS[detectedDomain]?.label || detectedDomain,
+          });
+        }
+      }
+      // Only scan 2 levels deep
+      if ((rel || "").split("/").length < 2) {
+        scanSubDir(fullPath, relPath);
+      }
+    }
+  }
+  scanSubDir(targetDir, "");
+
+  if (subdomains.length > 0) {
+    console.log("  " + c("bold", "Subdirectory Domains (monorepo)"));
+    console.log("");
+    for (const sd of subdomains) {
+      console.log(
+        `    ${c("cyan", sd.path.padEnd(30))} ${c("dim", sd.domain)} (${sd.label})`,
+      );
+    }
+    console.log("");
+  }
+
+  // Check global installation
+  const globalGemini = path.join(GEMINI_DIR, "GEMINI.md");
+  const globalMcp = path.join(ANTIGRAVITY_DIR, "mcp_config.json");
+  console.log("  " + c("bold", "Global Installation"));
+  console.log("");
+  console.log(
+    `    ~/.gemini/GEMINI.md                    ${fs.existsSync(globalGemini) ? c("green", "✔") : c("red", "✖")}`,
+  );
+  console.log(
+    `    ~/.gemini/antigravity/mcp_config.json  ${fs.existsSync(globalMcp) ? c("green", "✔") : c("red", "✖")}`,
+  );
+  console.log("");
+}
+
+// ── Update Command ─────────────────────────────────────────────────────────
+
+async function cmdUpdate(args) {
+  const targetDir = args.path || process.cwd();
+  const agentDir = resolveAgentDir(targetDir, args);
+  const quiet = args.quiet || false;
+  const dryRun = args["dry-run"] || false;
+
+  if (!fs.existsSync(agentDir)) {
+    console.log(
+      c("red", "  ✖ ") +
+        "No .agent/ or .agents/ found. Run " +
+        c("bold", "refine-kit init") +
+        " first.",
+    );
+    process.exit(1);
+  }
+
+  if (!quiet) printBanner();
+
+  // Detect installed domain and version from metadata
+  const metaPath = path.join(agentDir, ".refine-kit.json");
+  let domain = args.domain || null;
+  let installedVersion = null;
+  if (fs.existsSync(metaPath)) {
+    try {
+      const meta = JSON.parse(fs.readFileSync(metaPath, "utf-8"));
+      installedVersion = meta.version || null;
+      if (!domain) domain = meta.domain || null;
+    } catch {}
+  }
+
+  // Fallback: detect domain from rules/GEMINI.md
+  if (!domain) {
+    const rulesGemini = path.join(agentDir, "rules", "GEMINI.md");
+    if (fs.existsSync(rulesGemini)) {
+      const content = fs.readFileSync(rulesGemini, "utf-8");
+      for (const key of Object.keys(DOMAINS)) {
+        if (content.includes(`(${key})`) || content.includes(key)) {
+          domain = key;
+          break;
+        }
+      }
+    }
+  }
+
+  if (!domain) {
+    console.log(
+      c("red", "  ✖ ") +
+        "Could not detect installed domain. Use " +
+        c("bold", "--domain <name>") +
+        " to specify.",
+    );
+    process.exit(1);
+  }
+
+  if (!quiet) {
+    console.log(
+      c("blue", "  ⟳ ") +
+        `Updating ${c("bold", DOMAINS[domain]?.label || domain)} ...`,
+    );
+    console.log("");
+    if (installedVersion) {
+      console.log(
+        `    Installed: v${installedVersion}  →  Available: v${VERSION}`,
+      );
+    } else {
+      console.log(`    Available: v${VERSION}`);
+    }
+
+    if (installedVersion === VERSION) {
+      console.log("");
+      console.log(c("green", "  ✔ ") + "Already up to date!");
+      console.log("");
+      return;
+    }
+    console.log("");
+  }
+
+  if (dryRun) {
+    console.log(c("yellow", "  ⚑ ") + "Dry run — no files will be changed.");
+    console.log("");
+    console.log("  Would update:");
+    console.log(`    Domain:  ${c("bold", DOMAINS[domain]?.label || domain)}`);
+    console.log(
+      `    From:    ${installedVersion ? `v${installedVersion}` : "unknown"}`,
+    );
+    console.log(`    To:      v${VERSION}`);
+    console.log(`    Path:    ${targetDir}`);
+    console.log("");
+    return;
+  }
+
+  // Re-run init with --force to overwrite
+  args.force = true;
+  args.domain = domain;
+  args.path = targetDir;
+  await cmdInit(args);
+
+  if (!quiet) {
+    console.log(c("green", "  ✔ ") + `Updated to v${VERSION}`);
+    console.log("");
+  }
+}
+
 function cmdHelp() {
   printBanner();
   console.log("  " + c("bold", "Usage:"));
-  console.log("    npx refine-agent-kit init [options]");
+  console.log("    npx refine-kit <command> [options]");
   console.log("");
   console.log("  " + c("bold", "Commands:"));
+  console.log("");
   console.log(
-    "    init            Install global rules + agent system + domain",
+    `    ${c("green", "init")}            Install agent system into your project`,
   );
   console.log(
-    "    add-domain      Add domain marker to a subdirectory (monorepo)",
+    `    ${c("green", "add-domain")}      Add a domain to a monorepo subdirectory`,
   );
-  console.log("    help            Show this help message");
-  console.log("    version         Show version");
+  console.log(
+    `    ${c("green", "list")}            Show what's installed in this project`,
+  );
+  console.log(
+    `    ${c("green", "update")}          Update agent system to latest version`,
+  );
+  console.log(`    ${c("green", "help")}            Show this help message`);
+  console.log(`    ${c("green", "version")}         Show version`);
   console.log("");
   console.log("  " + c("bold", "Options:"));
-  console.log("    --domain <d>    Select domain (skip interactive prompt)");
-  console.log("    --subdir <dir>  Subdirectory for add-domain (monorepo)");
-  console.log("    --force         Overwrite existing files");
-  console.log("    --path <dir>    Install to a specific directory");
-  console.log("    --skip-global   Skip global ~/.gemini/ installation");
-  console.log("    --yes           Skip interactive prompts");
-  console.log("    --quiet         Minimal output");
   console.log("");
-  console.log("  " + c("bold", "Domains:"));
-  for (const [key, domain] of Object.entries(DOMAINS)) {
-    console.log(`    ${c("bold", key.padEnd(20))} ${domain.label}`);
-    console.log(`    ${" ".repeat(20)} ${c("dim", domain.description)}`);
+  console.log(
+    "    --domain, -d <name>  Select domain (skip interactive prompt)",
+  );
+  console.log("    --subdir, -s <dir>   Target subdirectory (for add-domain)");
+  console.log("    --force, -f          Overwrite existing agent directory");
+  console.log("    --path, -p <dir>     Run in a different directory");
+  console.log(
+    "    --agents-dir <name>  Agent directory name (.agent or .agents)",
+  );
+  console.log("    --skip-global        Don't touch ~/.gemini/ global files");
+  console.log(
+    "    --dry-run            Show what update would do (for update)",
+  );
+  console.log("    --yes, -y            Skip interactive prompts");
+  console.log("    --quiet, -q          Minimal output");
+  console.log("");
+  console.log("  " + c("bold", "Available Domains") + c("dim", " (13):"));
+  console.log("");
+  for (const [key, d] of Object.entries(DOMAINS)) {
+    console.log(`    ${c("cyan", key.padEnd(20))} ${d.label}`);
   }
   console.log("");
-  console.log("  " + c("bold", "Examples:"));
+  console.log("  " + c("bold", "Quick Start:"));
   console.log("");
-  console.log("    " + c("magenta", "Single project:"));
+  console.log(c("dim", "    # New project — interactive domain picker"));
+  console.log("    npx refine-kit init");
+  console.log("");
+  console.log(c("dim", "    # Direct domain selection"));
+  console.log("    npx refine-kit init --domain next-web");
+  console.log("");
+  console.log(c("dim", "    # Monorepo — add backend to services/api"));
   console.log(
-    c("dim", "    npx refine-agent-kit init                   # Interactive"),
-  );
-  console.log(
-    c("dim", "    npx refine-agent-kit init --domain next-web # Direct"),
-  );
-  console.log(
-    c(
-      "dim",
-      "    npx refine-agent-kit init --domain next-web -f # Force overwrite",
-    ),
+    "    npx refine-kit add-domain -d python-backend -s services/api",
   );
   console.log("");
-  console.log("    " + c("magenta", "Monorepo (multi-technology):"));
-  console.log(
-    c("dim", "    npx refine-agent-kit init --domain next-web # Root setup"),
-  );
-  console.log(
-    c(
-      "dim",
-      "    npx refine-agent-kit add-domain --domain python-backend --subdir services/api",
-    ),
-  );
-  console.log(
-    c(
-      "dim",
-      "    npx refine-agent-kit add-domain --domain python-ml --subdir services/ml",
-    ),
-  );
-  console.log(
-    c(
-      "dim",
-      "    npx refine-agent-kit add-domain --domain next-web --subdir apps/landing",
-    ),
-  );
+  console.log(c("dim", "    # Check what's installed"));
+  console.log("    npx refine-kit list");
   console.log("");
-  console.log("  " + c("bold", "What gets installed:"));
+  console.log(c("dim", "    # Update to latest version"));
+  console.log("    npx refine-kit update");
   console.log("");
-  console.log("    " + c("magenta", "GLOBAL") + " (~/.gemini/):");
-  console.log(
-    "      GEMINI.md                    Code quality + anti-slop rules",
-  );
-  console.log(
-    "      antigravity/mcp_config.json  context7, github, playwright, chrome-devtools",
-  );
-  console.log("");
-  console.log("    " + c("blue", "PROJECT") + " (.agent/ + .shared/):");
-  console.log(
-    `      .agent/agents/               ${INVENTORY.agents} specialist AI agents`,
-  );
-  console.log(
-    `      .agent/skills/               Domain-filtered (${INVENTORY.skillPacks} total skill packs)`,
-  );
-  console.log(
-    `      .agent/workflows/            ${INVENTORY.workflows} slash command workflows`,
-  );
-  console.log(
-    "      .agent/rules/GEMINI.md       Agent routing & domain rules",
-  );
-  console.log(
-    `      .agent/mcp_config.json       Domain MCP servers for ${INVENTORY.domains} domain packs`,
-  );
-  console.log(
-    `      .shared/design-system/       ${INVENTORY.personas} personas + ${INVENTORY.referenceSites} reference sites + ${INVENTORY.antiPatterns} anti-patterns`,
-  );
+  console.log("  " + c("bold", "Aliases:") + c("dim", " Both work the same:"));
+  console.log("    npx refine-kit init");
+  console.log("    npx refine-agent-kit init");
   console.log("");
 }
 
@@ -976,6 +1373,8 @@ function parseArgs(argv) {
     switch (arg) {
       case "init":
       case "add-domain":
+      case "list":
+      case "update":
       case "help":
       case "version":
         args.command = arg;
@@ -995,6 +1394,9 @@ function parseArgs(argv) {
       case "--skip-global":
         args["skip-global"] = true;
         break;
+      case "--dry-run":
+        args["dry-run"] = true;
+        break;
       case "--path":
       case "-p":
         i++;
@@ -1009,6 +1411,10 @@ function parseArgs(argv) {
       case "-s":
         i++;
         args.subdir = argv[i];
+        break;
+      case "--agents-dir":
+        i++;
+        args["agents-dir"] = argv[i];
         break;
       case "--help":
       case "-h":
@@ -1040,6 +1446,12 @@ async function main() {
       break;
     case "add-domain":
       await cmdAddDomain(args);
+      break;
+    case "list":
+      cmdList(args);
+      break;
+    case "update":
+      await cmdUpdate(args);
       break;
     case "version":
       console.log(`refine-kit v${VERSION}`);

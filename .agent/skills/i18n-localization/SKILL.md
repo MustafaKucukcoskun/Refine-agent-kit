@@ -1,7 +1,7 @@
 ---
 name: i18n-localization
-description: Internationalization and localization patterns. Detecting hardcoded strings, managing translations, locale files, RTL support.
-allowed-tools: Read, Glob, Grep
+description: Internationalization (i18n) and localization (l10n) patterns. Use when adding multi-language support, detecting hardcoded strings, setting up translation files (JSON/PO), implementing locale switching, or adding RTL layout support.
+allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # i18n & Localization
