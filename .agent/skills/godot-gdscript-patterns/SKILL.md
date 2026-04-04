@@ -4,6 +4,7 @@ description: GDScript 4.x patterns — static typing, signals, scene/node compos
 version: 1.0.0
 domain: godot-game
 triggers: godot, gdscript, signal, scene, node, autoload
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Godot GDScript 4.x Patterns

@@ -1,6 +1,6 @@
 ---
 name: code-review-checklist
-description: Code review guidelines covering code quality, security, and best practices.
+description: Structured code review checklist for pull requests and code changes. Use when reviewing code for security vulnerabilities, performance issues, readability, error handling, and test coverage before merging.
 allowed-tools: Read, Glob, Grep
 ---
 

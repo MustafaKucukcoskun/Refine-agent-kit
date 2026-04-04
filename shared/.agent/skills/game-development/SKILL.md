@@ -1,6 +1,6 @@
 ---
 name: game-development
-description: Game development orchestrator. Routes to platform-specific skills based on project needs.
+description: Game development orchestrator covering 2D, 3D, multiplayer, mobile, web, VR/AR, audio, and art pipelines. Use when starting a game project, choosing an engine (Unity, Godot, Phaser), or needing game design, physics, or rendering guidance. Routes to platform-specific sub-skills.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

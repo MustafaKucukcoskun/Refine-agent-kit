@@ -1,6 +1,6 @@
 ---
 name: game-design
-description: Game design principles. GDD structure, balancing, player psychology, progression.
+description: Game design principles. GDD structure, balancing, player psychology, progression. Use when writing game design documents, balancing mechanics, designing progression systems, or planning player experience.
 allowed-tools: Read, Glob, Grep
 ---
 

@@ -16,6 +16,45 @@ function replaceInFile(filePath, replacements) {
 
 const inventory = getInventory(packageRoot);
 
+const workflowsDir = path.join(packageRoot, "shared", ".agent", "workflows");
+
+function buildWorkflowSection() {
+  const workflowFiles = fs
+    .readdirSync(workflowsDir)
+    .filter((f) => f.endsWith(".md"))
+    .sort();
+
+  const rows = workflowFiles.map((fileName) => {
+    const command = `/${fileName.replace(/\.md$/, "")}`;
+    const fileContent = fs.readFileSync(
+      path.join(workflowsDir, fileName),
+      "utf-8",
+    );
+    const frontmatter = fileContent.match(/^---[\s\S]*?---/);
+    const description = frontmatter
+      ? (frontmatter[0].match(/\ndescription:\s*([^\n]+)/) || [])[1]
+      : null;
+
+    const safeDescription = (description || "Workflow command")
+      .trim()
+      .replace(/\|/g, "\\|");
+
+    return `| \`${command}\` | ${safeDescription} |`;
+  });
+
+  return `## 🔄 Workflows (${inventory.workflows})
+
+Slash command procedures. Invoke with \`/command\`.
+
+| Command | Description |
+| ------- | ----------- |
+${rows.join("\n")}
+
+---`;
+}
+
+const workflowsSection = buildWorkflowSection();
+
 const packageJsonPath = path.join(packageRoot, "package.json");
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 packageJson.description = `AI Agent toolkit for Google Antigravity IDE. ${inventory.agents} agents, ${inventory.skillModules} skill modules across ${inventory.skillPacks} skill packs, ${inventory.domains} domains, design persona system, anti-AI-slop protection.`;
@@ -39,6 +78,10 @@ replaceInFile(path.join(packageRoot, "README.md"), [
     `| \`.agent/skills/\`         | ${inventory.skillModules} skill modules across ${inventory.skillPacks} top-level skill packs |`,
   ],
   [
+    /\| `\.agent\/workflows\/`\s+\| [^|]+\|/,
+    `| \`.agent/workflows/\`      | ${inventory.workflows} slash command workflows                         |`,
+  ],
+  [
     /\| `\.agent\/domains\/`\s+\| [^|]+\|/,
     `| \`.agent/domains/\`        | ${inventory.domains} domain configuration packs                        |`,
   ],
@@ -47,51 +90,57 @@ replaceInFile(path.join(packageRoot, "README.md"), [
     `| \`.agent/scripts/\`        | ${inventory.scripts} utility scripts       |`,
   ],
   [
-    /\| `\.shared\/design-system\/` \| [^|]+\|/,
-    `| \`.shared/design-system/\` | ${inventory.personas} personas + ${inventory.referenceSites} reference sites + ${inventory.antiPatterns} anti-patterns |`,
+    /\| `(?:\.agent\/)?\.shared\/design-system\/` \| [^|]+\|/,
+    `| \`.agent/.shared/design-system/\` | ${inventory.personas} personas + ${inventory.referenceSites} reference sites + ${inventory.antiPatterns} anti-patterns |`,
   ],
 ]);
 
+const architectureStatsBlock = `## 📊 Statistics
+
+| Metric                  | Value                         |
+| ----------------------- | ----------------------------- |
+| **Total Agents**        | ${inventory.agents}                            |
+| **Total Skill Packs**   | ${inventory.skillPacks}                            |
+| **Total Skill Modules** | ${inventory.skillModules}                            |
+| **Total Workflows**     | ${inventory.workflows}                            |
+| **Total Domain Packs**  | ${inventory.domains}                            |
+| **Total MCP Servers**   | 8                             |
+| **Total Scripts**       | ${inventory.scripts} (master) + 16 (skill-level) |
+| **Coverage**            | ~90% web/mobile development   |
+
+---`;
+
 replaceInFile(path.join(packageRoot, "shared", ".agent", "ARCHITECTURE.md"), [
-  [/\*\*53 Skills\*\*/g, `**${inventory.skillPacks} Skill Packs**`],
-  [/\*\*12 Domain Packs\*\*/g, `**${inventory.domains} Domain Packs**`],
+  [/\*\*\d+ Skill Packs\*\*/g, `**${inventory.skillPacks} Skill Packs**`],
+  [/\*\*\d+ Workflows\*\*/g, `**${inventory.workflows} Workflows**`],
+  [/\*\*\d+ Domain Packs\*\*/g, `**${inventory.domains} Domain Packs**`],
   [
-    /├── skills\/\s+# 53 Skills/,
+    /├── skills\/\s+# \d+ Skill Packs \(\d+ modules\)/,
     `├── skills/                  # ${inventory.skillPacks} Skill Packs (${inventory.skillModules} modules)`,
   ],
   [
-    /├── domains\/\s+# 12 Domain Packs/,
+    /├── workflows\/\s+# \d+ Slash Commands/,
+    `├── workflows/               # ${inventory.workflows} Slash Commands`,
+  ],
+  [
+    /├── domains\/\s+# \d+ Domain Packs/,
     `├── domains/                 # ${inventory.domains} Domain Packs`,
   ],
   [
-    /├── rules\/\s+# GEMINI\.md \(global\) \+ 12 domain rules/,
+    /├── rules\/\s+# GEMINI\.md \(global\) \+ \d+ domain rules/,
     `├── rules/                   # GEMINI.md (global) + ${inventory.domains} domain rules`,
   ],
   [
-    /## 🧩 Skills \(53\)/,
+    /## 🧩 Skills \(\d+ packs \/ \d+ modules\)/,
     `## 🧩 Skills (${inventory.skillPacks} packs / ${inventory.skillModules} modules)`,
   ],
-  [/## 📦 Domain Packs \(12\)/, `## 📦 Domain Packs (${inventory.domains})`],
+  [/## 📦 Domain Packs \(\d+\)/, `## 📦 Domain Packs (${inventory.domains})`],
   [
-    /Modular knowledge domains that agents can load on-demand based on task context\./,
+    /Modular knowledge domains that agents can load on-demand based on task context\.[^\n]*/,
     `Modular knowledge domains that agents can load on-demand based on task context. Current shipped inventory: ${inventory.skillPacks} top-level skill packs and ${inventory.skillModules} total SKILL.md modules.`,
   ],
-  [
-    /\| \*\*Total Skills\*\*\s+\| [^|]+\|/,
-    `| **Total Skill Packs**   | ${inventory.skillPacks}                            |`,
-  ],
-  [
-    /\| \*\*Total Skill Packs\*\*\s+\| [^|]+\|/,
-    `| **Total Skill Packs**   | ${inventory.skillPacks}                            |`,
-  ],
-  [
-    /\| \*\*Total Workflows\*\*\s+\| [^|]+\|/,
-    `| **Total Skill Modules** | ${inventory.skillModules}                            |\n| **Total Workflows**    | ${inventory.workflows}                            |`,
-  ],
-  [
-    /\| \*\*Total Domain Packs\*\*\s+\| [^|]+\|/,
-    `| **Total Domain Packs** | ${inventory.domains}                            |`,
-  ],
+  [/## 🔄 Workflows \(\d+\)[\s\S]*?\n---/, `${workflowsSection}`],
+  [/## 📊 Statistics[\s\S]*?(?=\n## )/, `${architectureStatsBlock}\n`],
 ]);
 
 replaceInFile(path.join(packageRoot, "DEVELOPMENT-ROADMAP.md"), [

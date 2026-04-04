@@ -1,6 +1,6 @@
 ---
 name: 3d-games
-description: 3D game development principles. Rendering, shaders, physics, cameras.
+description: 3D game development principles. Rendering, shaders, physics, cameras. Use when building 3D games, configuring cameras, shaders, lighting, or physics in Godot, Unity, or Unreal.
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 

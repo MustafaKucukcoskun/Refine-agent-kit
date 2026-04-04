@@ -1,6 +1,6 @@
 ---
 name: documentation-templates
-description: Documentation templates and structure guidelines. README, API docs, code comments, and AI-friendly documentation.
+description: Documentation templates for README, API reference, changelogs, and architecture docs. Use when creating project documentation, writing API docs, structuring a knowledge base, or generating AI-friendly documentation with clear examples.
 allowed-tools: Read, Glob, Grep
 ---
 

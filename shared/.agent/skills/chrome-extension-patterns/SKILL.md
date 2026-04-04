@@ -1,3 +1,9 @@
+---
+name: chrome-extension-patterns
+description: Chrome Extension Manifest V3 patterns, secure architecture, IPC messaging, and extension storage best practices.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 # Chrome Extension Patterns Skill
 
 ## 1. Manifest V3 Fundamentals

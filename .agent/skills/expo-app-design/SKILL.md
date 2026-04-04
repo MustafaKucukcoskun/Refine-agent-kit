@@ -1,3 +1,9 @@
+---
+name: expo-app-design
+description: Expo app design and delivery patterns including Expo Router, app.config.ts, EAS build profiles, and OTA update strategy.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 # Expo App Design Skill
 
 ## 1. Expo Router (File-based Routing)

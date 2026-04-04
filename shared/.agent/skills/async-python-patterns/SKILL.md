@@ -1,3 +1,9 @@
+---
+name: async-python-patterns
+description: Async Python patterns for I/O-bound concurrency with asyncio, task orchestration, timeout/cancellation, and event loop safety.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 # Async Python Patterns Skill
 
 ## 1. When to Use `async def` / `await`?

@@ -1,3 +1,9 @@
+---
+name: data-engineer
+description: Data engineering patterns for pandas, polars, DuckDB, ETL pipelines, and data quality controls.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 # Data Engineer Skill
 
 ## 1. Pandas Best Practices

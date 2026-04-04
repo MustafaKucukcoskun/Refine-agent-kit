@@ -1,3 +1,9 @@
+---
+name: trail-of-bits-security
+description: Security fundamentals inspired by Trail of Bits practices: input validation, secret hygiene, OWASP risks, and secure auth patterns.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 # Trail of Bits Security Principles
 
 This skill is global and should be applied in every domain.

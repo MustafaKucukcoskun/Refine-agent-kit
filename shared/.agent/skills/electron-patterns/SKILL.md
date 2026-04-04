@@ -1,3 +1,9 @@
+---
+name: electron-patterns
+description: Electron architecture patterns for Main/Renderer isolation, secure IPC, window hardening, and packaging practices.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 # Electron Patterns Skill
 
 ## 1. Architectural Principles (Main vs Renderer)

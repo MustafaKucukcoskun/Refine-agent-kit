@@ -37,7 +37,8 @@
   "mcp_extra": [
     "21st-dev-magic",
     "shadcn",
-    "magicui"
+    "figma",
+    "supabase"
   ],
   "rules_file": "rules/domains/next-web-rules.md",
   "notes": "frontend-specialist stays global, marked as PRIMARY in this domain."

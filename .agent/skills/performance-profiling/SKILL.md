@@ -1,6 +1,6 @@
 ---
 name: performance-profiling
-description: Performance profiling principles. Measurement, analysis, and optimization techniques.
+description: Performance profiling and optimization for web and server applications. Use when diagnosing slow pages, high memory usage, CPU bottlenecks, Core Web Vitals failures, or when running Lighthouse audits and flame graph analysis.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

@@ -17,7 +17,7 @@ When you code in [Google Antigravity IDE](https://antigravity.google/), the AI a
 ## Prerequisites
 
 - **Node.js 18+** — [Download](https://nodejs.org/)
-- **Google Antigravity IDE** — [idx.google.com](https://antigravity.google/)
+- **Google Antigravity IDE** — [https://antigravity.google/](https://antigravity.google/)
 - **GitHub account** — For GitHub MCP server (code search, PR management)
 
 ## Quick Start
@@ -104,7 +104,7 @@ npx refine-agent-kit add-domain --domain next-web --subdir apps/dashboard
 ```
 my-monorepo/
 ├── .agent/                        ← Agent system (21 agents, 65 skill modules / 54 skill packs)
-├── .shared/design-system/         ← 59 personas, 107 reference sites
+├── .agent/.shared/design-system/  ← 59 personas, 107 reference sites
 ├── .agent/rules/GEMINI.md         ← Root agent routing (next-web)
 ├── .agent/mcp_config.json         ← Domain MCP servers
 ├── apps/
@@ -126,38 +126,36 @@ my-monorepo/
 | `GEMINI.md`                   | Code quality rules, anti-AI-slop, scope expansion |
 | `antigravity/mcp_config.json` | context7, github, playwright, chrome-devtools     |
 
-### Project (`.agent/` + `.shared/`) — This project only
+### Project (`.agent/`) — This project only
 
-| Directory                | Contents                                             |
-| ------------------------ | ---------------------------------------------------- |
-| `.agent/agents/`         | 21 specialist AI agents                              |
+| Directory                       | Contents                                             |
+| ------------------------------- | ---------------------------------------------------- |
+| `.agent/agents/`                | 21 specialist AI agents                              |
 | `.agent/skills/`         | 65 skill modules across 54 top-level skill packs |
-| `.agent/workflows/`      | 17 slash command workflows                           |
+| `.agent/workflows/`      | 30 slash command workflows                         |
 | `.agent/domains/`        | 13 domain configuration packs                        |
-| `.agent/rules/`          | Local GEMINI.md + domain routing rules               |
-| `.agent/scripts/`        | 6 utility scripts       |
-| `.agent/mcp_config.json` | Domain-specific MCP servers (next-web only)          |
-| `.shared/design-system/` | 59 personas + 107 reference sites + 32 anti-patterns |
+| `.agent/rules/`                 | Local GEMINI.md + domain routing rules               |
+| `.agent/scripts/`        | 7 utility scripts       |
+| `.agent/mcp_config.json`        | Domain-specific MCP servers (next-web only)          |
+| `.agent/.shared/design-system/` | 59 personas + 107 reference sites + 32 anti-patterns |
 
 ## Maintainer Source Of Truth
 
 This package keeps one shipped source tree and one generated development mirror:
 
 - `shared/.agent/` is the only source of truth for the shipped agent system.
-- `shared/.shared/` is the only source of truth for shipped shared assets.
-- Repo-root `.agent/` and `.shared/` are generated mirrors used to run this repository itself with a concrete local domain.
+- Design system assets (personas, reference sites, anti-patterns) live inside `shared/.agent/.shared/design-system/`.
+- Repo-root `.agent/` is a generated mirror used to run this repository itself with a concrete local domain.
 - The generated `.agent/` mirror is `shared/.agent/` plus the `domains/next-web/` overlay.
-- The generated `.shared/` mirror is `shared/.shared/` plus the local design research report copy used while developing the package.
+  **Why two trees exist:** this repo needs a local standalone agent setup for dogfooding, while the npm package needs a clean distributable tree. The mirror approach keeps both in sync automatically.
 
-**Why two trees existed:** this repo needs a local standalone agent setup for dogfooding, while the npm package needs a clean distributable tree. The problem was not the existence of both views, but maintaining both manually.
-
-**Maintainer rule:** edit only `shared/.agent/` and `shared/.shared/`, then regenerate the repo-root mirrors.
+**Maintainer rule:** edit only `shared/.agent/`, then regenerate the repo-root mirror.
 
 ```bash
 npm run sync:all
 ```
 
-This updates inventory-sensitive docs and regenerates `.agent/` and `.shared/` from the shipped source tree.
+This updates inventory-sensitive docs and regenerates `.agent/` from the shipped source tree.
 
 ## App Builder Blueprints
 
@@ -222,22 +220,30 @@ Global rules prevent generic AI output across ALL languages:
 
 ```bash
 # Install full agent system (interactive domain selection)
-npx refine-agent-kit init
+npx refine-kit init
 
 # Install with specific domain (skip prompts)
-npx refine-agent-kit init --domain next-web
+npx refine-kit init --domain next-web
 
 # Add domain marker to subdirectory (monorepo)
-npx refine-agent-kit add-domain --domain python-backend --subdir services/api
+npx refine-kit add-domain --domain python-backend --subdir services/api
+
+# Show what's installed
+npx refine-kit list
+
+# Update agent system to latest version
+npx refine-kit update
 
 # Options
---domain <d>     Select domain: next-web, python-backend, python-ml
---subdir <dir>   Target subdirectory (for add-domain)
---force          Overwrite existing .agent/ files
---skip-global    Skip ~/.gemini/ installation
---path <dir>     Target directory (default: current directory)
---yes            Skip interactive prompts
---quiet          Minimal output
+--domain, -d <name>  Select domain (skip interactive prompt)
+--subdir, -s <dir>   Target subdirectory (for add-domain)
+--force, -f          Overwrite existing agent directory
+--path, -p <dir>     Run in a different directory
+--agents-dir <name>  Agent directory name (.agent or .agents)
+--skip-global        Don't touch ~/.gemini/ global files
+--dry-run            Show what update would do (for update)
+--yes, -y            Skip interactive prompts
+--quiet, -q          Minimal output
 ```
 
 ## Troubleshooting

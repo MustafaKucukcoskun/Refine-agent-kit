@@ -1,6 +1,7 @@
 ---
 name: intelligent-routing
 description: Automatic agent selection and intelligent task routing. Analyzes user requests and automatically selects the best specialist agent(s) without requiring explicit user mentions.
+allowed-tools: Read, Glob, Grep
 version: 1.0.0
 ---
 
@@ -11,6 +12,21 @@ version: 1.0.0
 ## Core Principle
 
 > **The AI should act as an intelligent Project Manager**, analyzing each request and automatically selecting the best specialist(s) for the job.
+
+## Quality-Aware Routing Layer
+
+Routing should optimize for output quality, not only keyword match.
+
+Before selecting agent(s), classify request intent:
+
+| Intent Type      | Primary Goal                 | Preferred Agent Path                     |
+| ---------------- | ---------------------------- | ---------------------------------------- |
+| **Execution**    | Implement concrete change    | Domain specialist(s)                     |
+| **Architecture** | Compare system-level options | `project-planner` + `architecture` skill |
+| **Exploration**  | Discover unknown options     | `brainstorming` + `project-planner`      |
+| **Optimization** | Improve existing quality     | `orchestrator` + relevant specialists    |
+
+If user asks for "best possible", "future-proof", "original" or equivalent quality intent, include at least one planning/architecture pass before coding.
 
 ## How It Works
 
@@ -35,21 +51,23 @@ graph TD
 
 **Use this matrix to automatically select agents:**
 
-| User Intent         | Keywords                                   | Selected Agent(s)                           | Auto-invoke? |
-| ------------------- | ------------------------------------------ | ------------------------------------------- | ------------ |
-| **Authentication**  | "login", "auth", "signup", "password"      | `security-auditor` + `backend-specialist`   | ✅ YES       |
-| **UI Component**    | "button", "card", "layout", "style"        | `frontend-specialist`                       | ✅ YES       |
-| **Mobile UI**       | "screen", "navigation", "touch", "gesture" | `mobile-developer`                          | ✅ YES       |
-| **API Endpoint**    | "endpoint", "route", "API", "POST", "GET"  | `backend-specialist`                        | ✅ YES       |
-| **Database**        | "schema", "migration", "query", "table"    | `database-architect` + `backend-specialist` | ✅ YES       |
-| **Bug Fix**         | "error", "bug", "not working", "broken"    | `debugger`                                  | ✅ YES       |
-| **Test**            | "test", "coverage", "unit", "e2e"          | `test-engineer`                             | ✅ YES       |
-| **Deployment**      | "deploy", "production", "CI/CD", "docker"  | `devops-engineer`                           | ✅ YES       |
-| **Security Review** | "security", "vulnerability", "exploit"     | `security-auditor` + `penetration-tester`   | ✅ YES       |
-| **Performance**     | "slow", "optimize", "performance", "speed" | `performance-optimizer`                     | ✅ YES       |
-| **Product Def**     | "requirements", "user story", "backlog", "MVP" | `product-owner`                             | ✅ YES       |
-| **New Feature**     | "build", "create", "implement", "new app"  | `orchestrator` → multi-agent                | ⚠️ ASK FIRST |
-| **Complex Task**    | Multiple domains detected                  | `orchestrator` → multi-agent                | ⚠️ ASK FIRST |
+| User Intent         | Keywords                                                        | Selected Agent(s)                           | Auto-invoke? |
+| ------------------- | --------------------------------------------------------------- | ------------------------------------------- | ------------ |
+| **Authentication**  | "login", "auth", "signup", "password"                           | `security-auditor` + `backend-specialist`   | ✅ YES       |
+| **UI Component**    | "button", "card", "layout", "style"                             | `frontend-specialist`                       | ✅ YES       |
+| **Mobile UI**       | "screen", "navigation", "touch", "gesture"                      | `mobile-developer`                          | ✅ YES       |
+| **API Endpoint**    | "endpoint", "route", "API", "POST", "GET"                       | `backend-specialist`                        | ✅ YES       |
+| **Database**        | "schema", "migration", "query", "table"                         | `database-architect` + `backend-specialist` | ✅ YES       |
+| **Bug Fix**         | "error", "bug", "not working", "broken"                         | `debugger`                                  | ✅ YES       |
+| **Test**            | "test", "coverage", "unit", "e2e"                               | `test-engineer`                             | ✅ YES       |
+| **Deployment**      | "deploy", "production", "CI/CD", "docker"                       | `devops-engineer`                           | ✅ YES       |
+| **Security Review** | "security", "vulnerability", "exploit"                          | `security-auditor` + `penetration-tester`   | ✅ YES       |
+| **Performance**     | "slow", "optimize", "performance", "speed"                      | `performance-optimizer`                     | ✅ YES       |
+| **Product Def**     | "requirements", "user story", "backlog", "MVP"                  | `product-owner`                             | ✅ YES       |
+| **Architecture**    | "architecture", "system design", "trade-off", "ADR", "scalable" | `project-planner`                           | ✅ YES       |
+| **Concept Quality** | "quality", "original", "different", "vision", "best"            | `project-planner` + `orchestrator`          | ⚠️ ASK FIRST |
+| **New Feature**     | "build", "create", "implement", "new app"                       | `orchestrator` → multi-agent                | ⚠️ ASK FIRST |
+| **Complex Task**    | Multiple domains detected                                       | `orchestrator` → multi-agent                | ⚠️ ASK FIRST |
 
 ### 3. Automatic Routing Protocol
 
@@ -60,25 +78,38 @@ Before responding to ANY request:
 ```javascript
 // Pseudo-code for decision tree
 function analyzeRequest(userMessage) {
-    // 1. Classify request type
-    const requestType = classifyRequest(userMessage);
+  // 1. Classify request type
+  const requestType = classifyRequest(userMessage);
 
-    // 2. Detect domains
-    const domains = detectDomains(userMessage);
+  // 2. Detect domains
+  const domains = detectDomains(userMessage);
 
-    // 3. Determine complexity
-    const complexity = assessComplexity(domains);
+  // 3. Determine complexity
+  const complexity = assessComplexity(domains);
 
-    // 4. Select agent(s)
-    if (complexity === "SIMPLE" && domains.length === 1) {
-        return selectSingleAgent(domains[0]);
-    } else if (complexity === "MODERATE" && domains.length <= 2) {
-        return selectMultipleAgents(domains);
-    } else {
-        return "orchestrator"; // Complex task
-    }
+  // 4. Estimate routing confidence
+  const confidence = estimateConfidence(userMessage, domains, complexity);
+
+  if (confidence < 0.7) {
+    return "ask-clarifying-questions";
+  }
+
+  // 5. Select agent(s)
+  if (complexity === "SIMPLE" && domains.length === 1) {
+    return selectSingleAgent(domains[0]);
+  } else if (complexity === "MODERATE" && domains.length <= 2) {
+    return selectMultipleAgents(domains);
+  } else {
+    return "orchestrator"; // Complex task
+  }
 }
 ```
+
+### Confidence Rule
+
+- **Confidence >= 0.7**: Auto-route.
+- **Confidence 0.5-0.69**: Ask 1-2 focused questions, then route.
+- **Confidence < 0.5**: Trigger `brainstorming` protocol first.
 
 ## 4. Response Format
 

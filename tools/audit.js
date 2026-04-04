@@ -5,6 +5,7 @@
  */
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const SHARED = path.join(ROOT, "shared", ".agent");
@@ -19,6 +20,26 @@ let issues = 0;
 function warn(msg) {
   issues++;
   console.log("  WARNING: " + msg);
+}
+
+function isBinaryByExtension(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  return [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".webp",
+    ".ico",
+    ".pdf",
+    ".zip",
+    ".gz",
+    ".7z",
+    ".tgz",
+    ".exe",
+    ".dll",
+    ".pyc",
+  ].includes(ext);
 }
 
 // ── 1. Check domain JSON consistency ──
@@ -201,7 +222,64 @@ for (const bf of baseFiles) {
   }
 }
 
-// ── 5. Summary ──
+// ── 5. Secret hygiene on tracked files ──
+console.log("\n=== TRACKED SECRET HYGIENE ===\n");
+const issuesBeforeSecrets = issues;
+let trackedFiles = [];
+try {
+  trackedFiles = execSync("git ls-files", {
+    cwd: ROOT,
+    encoding: "utf-8",
+    stdio: ["ignore", "pipe", "ignore"],
+  })
+    .split(/\r?\n/)
+    .filter(Boolean);
+} catch {
+  console.log("  Skipped: git metadata not available.");
+}
+
+if (trackedFiles.length > 0) {
+  const trackedEnv = trackedFiles.filter((f) => {
+    const base = path.basename(f);
+    if (base === ".env.agent.example") return false;
+    return base === ".env" || /^\.env\./.test(base);
+  });
+  if (trackedEnv.length > 0) {
+    warn(`Tracked env file(s): ${trackedEnv.join(", ")}`);
+  }
+
+  const hardcodedKeyPattern =
+    /^\s*(GITHUB_PERSONAL_ACCESS_TOKEN|CONTEXT7_API_KEY|TWENTYFIRST_API_KEY)\s*=\s*([^\s#'"`][^\s#'"`]*)\s*$/m;
+  const tokenSignaturePatterns = [
+    /github_pat_[A-Za-z0-9_]{20,}/,
+    /ghp_[A-Za-z0-9]{20,}/,
+    /ctx7sk-[A-Za-z0-9-]{10,}/,
+  ];
+
+  for (const rel of trackedFiles) {
+    const full = path.join(ROOT, rel);
+    if (!fs.existsSync(full) || isBinaryByExtension(full)) continue;
+    let content;
+    try {
+      content = fs.readFileSync(full, "utf-8");
+    } catch {
+      continue;
+    }
+    const hasHardcodedKey = hardcodedKeyPattern.test(content);
+    const hasTokenSignature = tokenSignaturePatterns.some((p) =>
+      p.test(content),
+    );
+    if (hasHardcodedKey || hasTokenSignature) {
+      warn(`Potential hardcoded secret in tracked file: ${rel}`);
+    }
+  }
+
+  if (issues === issuesBeforeSecrets) {
+    console.log("  No tracked env or hardcoded key patterns found.");
+  }
+}
+
+// ── 6. Summary ──
 console.log("\n=== SUMMARY ===\n");
 console.log(`  Domains: ${domainFiles.length}`);
 console.log(

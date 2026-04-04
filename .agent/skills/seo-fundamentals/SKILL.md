@@ -1,6 +1,6 @@
 ---
 name: seo-fundamentals
-description: SEO fundamentals, E-E-A-T, Core Web Vitals, and Google algorithm principles.
+description: SEO fundamentals, E-E-A-T, Core Web Vitals, and Google algorithm principles. Use when optimizing search rankings, writing meta tags, implementing structured data, or improving page indexing.
 allowed-tools: Read, Glob, Grep
 ---
 

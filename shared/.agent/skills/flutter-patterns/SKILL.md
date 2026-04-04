@@ -1,3 +1,9 @@
+---
+name: flutter-patterns
+description: Flutter architecture and UI patterns with Riverpod, GoRouter, Dart 3 features, and testing practices.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 # Flutter Patterns Skill
 
 ## 1. Architecture and State Management (Riverpod 2.x)

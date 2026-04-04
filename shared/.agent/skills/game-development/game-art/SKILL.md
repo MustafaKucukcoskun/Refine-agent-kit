@@ -1,6 +1,6 @@
 ---
 name: game-art
-description: Game art principles. Visual style selection, asset pipeline, animation workflow.
+description: Game art principles. Visual style selection, asset pipeline, animation workflow. Use when creating game art, choosing visual styles, setting up asset pipelines, or working with Aseprite, Blender, or Spine.
 allowed-tools: Read, Glob, Grep
 ---
 

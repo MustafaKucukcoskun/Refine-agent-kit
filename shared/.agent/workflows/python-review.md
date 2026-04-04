@@ -86,7 +86,7 @@ When `/python-review` is triggered:
 
 ## Output Format
 
-```markdown
+````markdown
 ## 🐍 Python Review: [File/Scope]
 
 ### 🔴 Critical (Must Fix)
@@ -124,7 +124,7 @@ When `/python-review` is triggered:
 
 **Python version target:** [detected from pyproject.toml]
 **Framework:** [FastAPI / Django / Flask / None]
-```
+````
 
 ---
 
@@ -145,4 +145,3 @@ When `/python-review` is triggered:
 - **Detect the framework** — adapt checks to FastAPI vs Django vs Flask
 - **Version-aware** — check `requires-python` before flagging syntax issues
 - **Async is the #1 trap** — sync-in-async bugs are invisible until production load
-```

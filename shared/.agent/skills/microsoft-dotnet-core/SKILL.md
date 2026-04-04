@@ -4,6 +4,7 @@ description: ASP.NET Core production patterns — minimal API vs controllers, de
 version: 1.0.0
 domain: csharp-backend
 triggers: dotnet, csharp, asp.net, entity framework, ef core, csproj
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # ASP.NET Core / .NET Patterns

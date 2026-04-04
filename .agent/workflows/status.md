@@ -8,6 +8,12 @@ $ARGUMENTS
 
 ---
 
+## Rules
+
+> **ALWAYS read actual files and run real commands before reporting.** NEVER fabricate file counts, agent statuses, or progress percentages. If a script or file is unavailable, say so — do not guess.
+
+---
+
 ## Task
 
 Show current project and agent status.

@@ -52,7 +52,6 @@ When `/tdd` is triggered:
 ```[language]
 // test code
 ```
-````
 
 **Result:** ❌ FAIL — [reason]
 
@@ -70,8 +69,7 @@ When `/tdd` is triggered:
 ### Cycle 2
 
 [Next requirement...]
-
-```
+````
 
 ---
 
@@ -93,4 +91,3 @@ When `/tdd` is triggered:
 - **Minimum code** — resist adding "while I'm here" features
 - **Fast cycles** — each RED-GREEN-REFACTOR should be minutes, not hours
 - **One behavior per test** — don't combine multiple assertions
-```
