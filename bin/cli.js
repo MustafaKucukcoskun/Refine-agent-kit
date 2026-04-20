@@ -308,11 +308,13 @@ function installGlobal(force, quiet) {
   }
 
   // ── MCP config (global servers) ──
+  // Always merge — never overwrite. The user's own MCP servers must be
+  // preserved even when --force is passed (force is for updates, not for
+  // destroying user config).
   const globalMcpSrc = path.join(PACKAGE_ROOT, "global", "mcp_config.json");
   const globalMcpDest = path.join(ANTIGRAVITY_DIR, "mcp_config.json");
 
-  if (fs.existsSync(globalMcpDest) && !force) {
-    // Merge: add our servers without removing user's existing ones
+  if (fs.existsSync(globalMcpDest)) {
     try {
       const existing = JSON.parse(fs.readFileSync(globalMcpDest, "utf-8"));
       const incoming = JSON.parse(fs.readFileSync(globalMcpSrc, "utf-8"));
@@ -328,6 +330,16 @@ function installGlobal(force, quiet) {
             "Global MCP config merged (existing servers preserved)",
         );
     } catch {
+      // Existing config is malformed — back it up, then write fresh
+      const backupPath = globalMcpDest + ".bak";
+      try {
+        fs.copyFileSync(globalMcpDest, backupPath);
+        if (!quiet)
+          console.log(
+            c("yellow", "  ⚠ ") +
+              `Existing MCP config was malformed, backed up to ${backupPath}`,
+          );
+      } catch {}
       fs.copyFileSync(globalMcpSrc, globalMcpDest);
       if (!quiet)
         console.log(c("green", "  ✔ ") + "Global MCP config installed");
@@ -340,6 +352,62 @@ function installGlobal(force, quiet) {
     if (!quiet) console.log(c("green", "  ✔ ") + "Global MCP config installed");
   }
 
+  return true;
+}
+
+// ── Domain MCP → Global Merge ──────────────────────────────────────────────
+//
+// Antigravity reads MCP servers ONLY from ~/.gemini/antigravity/mcp_config.json
+// — per-workspace mcp_config.json files are NOT loaded. So when a user installs
+// a domain with extra MCP servers (e.g. next-web ships shadcn/figma/supabase),
+// we must merge those servers into the global config or they'll never activate.
+// The file is still also copied to .agent/ for reference and potential future
+// per-workspace support.
+
+function mergeDomainMcpToGlobal(domain, quiet) {
+  const domainSrc = path.join(PACKAGE_ROOT, "domains", domain);
+  const domainMcpSrc = path.join(domainSrc, "mcp_config.json");
+  if (!fs.existsSync(domainMcpSrc)) return false;
+
+  const globalMcpDest = path.join(ANTIGRAVITY_DIR, "mcp_config.json");
+  if (!fs.existsSync(ANTIGRAVITY_DIR)) {
+    fs.mkdirSync(ANTIGRAVITY_DIR, { recursive: true });
+  }
+
+  let incoming;
+  try {
+    incoming = JSON.parse(fs.readFileSync(domainMcpSrc, "utf-8"));
+  } catch (err) {
+    console.warn(
+      c("yellow", "  ⚠ ") + `Domain MCP config malformed, skipping merge: ${err.message}`,
+    );
+    return false;
+  }
+
+  let existing = { mcpServers: {} };
+  if (fs.existsSync(globalMcpDest)) {
+    try {
+      existing = JSON.parse(fs.readFileSync(globalMcpDest, "utf-8"));
+    } catch {
+      // Corrupt global config — overwrite with incoming rather than crash
+      existing = { mcpServers: {} };
+    }
+  }
+
+  const merged = mergeJson(existing, incoming);
+  fs.writeFileSync(
+    globalMcpDest,
+    JSON.stringify(merged, null, 4) + "\n",
+    "utf-8",
+  );
+
+  const serverNames = Object.keys(incoming.mcpServers || {});
+  if (!quiet && serverNames.length > 0) {
+    console.log(
+      c("green", "  ✔ ") +
+        `Domain MCP servers merged into global config: ${serverNames.join(", ")}`,
+    );
+  }
   return true;
 }
 
@@ -496,6 +564,10 @@ async function cmdInit(args) {
     "context-engineering",
     "mcp-builder",
     "trail-of-bits-security",
+    "error-handling-patterns",
+    "async-javascript-patterns",
+    "cache-strategy-patterns",
+    "observability-patterns",
   ]);
 
   // Collect skills from domain primary + supporting agents' frontmatter
@@ -689,7 +761,8 @@ async function cmdInit(args) {
     if (!quiet) console.log(c("green", "  ✔ ") + `Domain rules: ${domain}`);
   }
 
-  // Copy domain-specific MCP config (if exists)
+  // Copy domain-specific MCP config (for reference — Antigravity doesn't read
+  // per-workspace configs, but keeping it helps users see what was installed)
   const domainMcpSrc = path.join(domainSrc, "mcp_config.json");
   const domainMcpDest = path.join(agentDir, "mcp_config.json");
   if (fs.existsSync(domainMcpSrc)) {
@@ -697,8 +770,14 @@ async function cmdInit(args) {
     if (!quiet)
       console.log(
         c("green", "  ✔ ") +
-          `Domain MCP servers: ${DOMAINS[domain].mcpExtra.join(", ")}`,
+          `Domain MCP config (reference): ${DOMAINS[domain].mcpExtra.join(", ")}`,
       );
+  }
+
+  // Merge domain MCP into the global Antigravity config (the one Antigravity
+  // actually reads). Skip if user passed --skip-global.
+  if (!args["skip-global"] && fs.existsSync(domainMcpSrc)) {
+    mergeDomainMcpToGlobal(domain, quiet);
   }
 
   // Overlay domain-specific workflows (adds/replaces shared workflows)
@@ -824,8 +903,16 @@ async function cmdInit(args) {
       );
     }
 
+    const restartStep = d.mcpExtra.includes("21st-dev-magic") ? "4" : "3";
+    const openStep = String(Number(restartStep) + 1);
     console.log(
-      c("dim", `    ${d.mcpExtra.includes("21st-dev-magic") ? "4" : "3"}.`) +
+      c("dim", `    ${restartStep}.`) +
+        " " +
+        c("yellow", "Restart Antigravity IDE") +
+        " to activate MCP servers (they are NOT hot-reloaded)",
+    );
+    console.log(
+      c("dim", `    ${openStep}.`) +
         " Open project in " +
         c("bold", "Google Antigravity") +
         " — agents activate automatically!",
@@ -1368,6 +1455,15 @@ function parseArgs(argv) {
   const args = { command: null, force: false, quiet: false, yes: false };
   let i = 2;
 
+  function requireValue(flag) {
+    if (i + 1 >= argv.length || argv[i + 1].startsWith("-")) {
+      console.error(c("red", `  ✖ Error: ${flag} requires a value`));
+      process.exit(1);
+    }
+    i++;
+    return argv[i];
+  }
+
   while (i < argv.length) {
     const arg = argv[i];
     switch (arg) {
@@ -1399,22 +1495,18 @@ function parseArgs(argv) {
         break;
       case "--path":
       case "-p":
-        i++;
-        args.path = argv[i];
+        args.path = requireValue(arg);
         break;
       case "--domain":
       case "-d":
-        i++;
-        args.domain = argv[i];
+        args.domain = requireValue(arg);
         break;
       case "--subdir":
       case "-s":
-        i++;
-        args.subdir = argv[i];
+        args.subdir = requireValue(arg);
         break;
       case "--agents-dir":
-        i++;
-        args["agents-dir"] = argv[i];
+        args["agents-dir"] = requireValue(arg);
         break;
       case "--help":
       case "-h":
