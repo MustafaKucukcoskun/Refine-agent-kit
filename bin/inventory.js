@@ -71,9 +71,15 @@ function collectDomainSkillReferences(domainsDir) {
   for (const fileName of fs.readdirSync(domainsDir)) {
     if (!fileName.endsWith(".json")) continue;
 
-    const domainConfig = JSON.parse(
-      fs.readFileSync(path.join(domainsDir, fileName), "utf-8"),
-    );
+    let domainConfig;
+    try {
+      domainConfig = JSON.parse(
+        fs.readFileSync(path.join(domainsDir, fileName), "utf-8"),
+      );
+    } catch (err) {
+      console.warn(`  ⚠ Skipping malformed domain JSON: ${fileName} (${err.message})`);
+      continue;
+    }
     const skillGroups = Object.values(domainConfig.skills || {});
 
     for (const group of skillGroups) {
