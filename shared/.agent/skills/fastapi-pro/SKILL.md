@@ -1,6 +1,6 @@
 ---
 name: fastapi-pro
-description: FastAPI advanced patterns — Pydantic v2 models, dependency injection, router architecture, async patterns, OAuth2/JWT auth, SQLAlchemy async, lifespan events. Use when building FastAPI applications.
+description: Production FastAPI patterns — Pydantic v2 models, async dependency injection, router architecture, OAuth2/JWT auth, SQLAlchemy 2.x async, lifespan events, background tasks, middleware, error handling, pytest + httpx testing. Use when building a new FastAPI service, migrating from Flask, adding auth, wiring a DB, or debugging async behavior. Keywords: FastAPI, Pydantic, async API, Python backend, REST, OAuth2, JWT, SQLAlchemy async, uvicorn.
 version: 1.0.0
 domain: python-backend
 triggers: fastapi, pydantic, async api, python api
@@ -10,6 +10,17 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 # FastAPI Pro Patterns
 
 > Production-ready FastAPI patterns. Pydantic v2, async-first, type-safe.
+
+## When to Use vs. Related Skills
+
+| You want to… | Use |
+|---|---|
+| New FastAPI endpoint / service | **fastapi-pro** (this) |
+| General Python code quality | `python-patterns` + this |
+| Async concurrency patterns | `async-python-patterns` + this |
+| Database schema design | `database-design` + this |
+| Django web app (not API) | `django-patterns` (not this) |
+| Deployment to prod | `deployment-procedures` + this |
 
 ---
 
@@ -251,3 +262,90 @@ app = FastAPI(lifespan=lifespan)
 | Errors          | Custom `Exception` + `exception_handler`          |
 | Config          | `BaseSettings` with `.env` file                   |
 | Testing         | `httpx.AsyncClient` + `dependency_overrides`      |
+
+---
+
+## Error Handling Pattern
+
+```python
+from fastapi import Request, status
+from fastapi.responses import JSONResponse
+
+class AppError(Exception):
+    def __init__(self, code: str, message: str, status_code: int = 400):
+        self.code = code
+        self.message = message
+        self.status_code = status_code
+
+class NotFoundError(AppError):
+    def __init__(self, resource: str, id: str):
+        super().__init__(
+            code="NOT_FOUND",
+            message=f"{resource} {id} not found",
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
+
+@app.exception_handler(AppError)
+async def app_error_handler(_: Request, exc: AppError) -> JSONResponse:
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"code": exc.code, "message": exc.message},
+    )
+
+# Usage:
+@router.get("/users/{id}")
+async def get_user(id: str) -> UserOut:
+    user = await repo.find(id)
+    if not user:
+        raise NotFoundError("user", id)
+    return user
+```
+
+## Testing Pattern
+
+```python
+# conftest.py
+import pytest
+from httpx import AsyncClient, ASGITransport
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from app.main import app
+from app.deps import get_db
+
+@pytest.fixture
+async def db_session():
+    engine = create_async_engine("sqlite+aiosqlite:///:memory:")
+    # ... schema setup
+    session_factory = async_sessionmaker(engine, expire_on_commit=False)
+    async with session_factory() as session:
+        yield session
+
+@pytest.fixture
+async def client(db_session):
+    app.dependency_overrides[get_db] = lambda: db_session
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
+        yield c
+    app.dependency_overrides.clear()
+
+# test_users.py
+async def test_get_user_404(client):
+    r = await client.get("/users/nope")
+    assert r.status_code == 404
+    assert r.json()["code"] == "NOT_FOUND"
+
+async def test_create_user_happy(client):
+    r = await client.post("/users", json={"email": "a@b.com", "name": "Ada", "age": 30})
+    assert r.status_code == 201
+    assert r.json()["email"] == "a@b.com"
+```
+
+## Pitfalls
+
+| Pitfall | Fix |
+|---|---|
+| Blocking I/O inside async endpoint | Use async driver (asyncpg, httpx) — NEVER `requests`/`psycopg2` in async |
+| `session.commit()` inside iteration | Commit once at end; use bulk operations |
+| Leaking DB sessions | Use `Depends(get_db)` with `yield` — FastAPI closes on response |
+| No request/response models | Always declare `response_model=UserOut` — security + docs |
+| Sync validators doing I/O | Keep validators pure; do lookups in the service layer |
+| `async def` without actual awaits | Use plain `def` — it will run in thread pool correctly |
+| Global mutable state (caches) | Use `lru_cache` on dep providers, not module-level dicts |
