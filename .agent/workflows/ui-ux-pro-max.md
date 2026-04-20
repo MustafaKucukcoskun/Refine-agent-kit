@@ -1,320 +1,245 @@
 ---
-description: Plan and implement UI with AI-powered design intelligence — 50+ styles, 95+ color palettes, and automated design system generation
+description: Plan and implement high-quality UI with AI-powered design intelligence. Uses 59 design personas, 107 reference sites, 33 anti-patterns, plus 50+ styles and 97 color palettes. Produces a complete design system (MASTER.md + per-page overrides) before any code is written. Use when building new UI from scratch, designing a landing page, creating a design system, or planning visual direction. Keywords: design, UI, UX, landing page, style, design system, color palette, typography, layout.
 ---
 
-# /ui-ux-pro-max
+# /ui-ux-pro-max — AI-Powered Design System Generator
 
 $ARGUMENTS
 
-Comprehensive design guide for web and mobile applications. Contains 50+ styles, 97 color palettes, 57 font pairings, 99 UX guidelines, and 25 chart types across 9 technology stacks. Searchable database with priority-based recommendations.
+---
 
-## Prerequisites
+## Purpose
 
-Check if Python is installed:
+Produce a **complete design system** (persona, colors, typography, UX rules, anti-patterns) before writing any UI code. Outputs a `design-system/MASTER.md` as the single source of truth.
 
-```bash
-python --version
-# Windows fallback:
-py --version
-```
+---
 
-Optional: detect OS and print install command plan automatically:
+## When to Use
 
-```bash
-python .agent/scripts/os_command_router.py detect
-python .agent/scripts/os_command_router.py command install-python
-```
+| Use when | Do NOT use for |
+|---|---|
+| Starting new UI from scratch | Bug fixes in existing UI → use `/enhance` |
+| Landing page, marketing site | Pure code refactor → use `/refactor-clean` |
+| Design system for multi-page app | Quick style tweaks (1-2 lines CSS) |
+| Visual consistency across screens | Backend-only features |
 
-If Python is not installed, install it based on user's OS:
+---
 
-**macOS:**
+## Quick Start (5 min)
 
 ```bash
-brew install python3
-```
+# 1. Generate design system (interactive)
+python .agent/.shared/ui-ux-pro-max/scripts/search.py \
+  "saas fitness app wellness modern" --design-system --persist -p "FitApp"
 
-**Ubuntu/Debian:**
+# 2. Review the output
+cat design-system/MASTER.md
 
-```bash
-sudo apt update
-sudo apt install python3
-```
-
-**Windows:**
-
-```powershell
-winget install Python.Python.3.12
+# 3. Implement UI using the recommendations
 ```
 
 ---
 
-## How to Use This Workflow
+## Phase-Gated Flow
 
-When user requests UI/UX work (design, build, create, implement, review, fix, improve), follow this workflow:
-
-### Step 1: Analyze User Requirements
-
-Extract key information from user request:
-
-- **Product type**: SaaS, e-commerce, portfolio, dashboard, landing page, etc.
-- **Style keywords**: minimal, playful, professional, elegant, dark mode, etc.
-- **Industry**: healthcare, fintech, gaming, education, etc.
-- **Stack**: React, Vue, Next.js, or default to `html-tailwind`
-
-### Step 2: Generate Design System (REQUIRED)
-
-**Always start with `--design-system`** to get comprehensive recommendations with reasoning:
-
-```bash
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "<product_type> <industry> <keywords>" --design-system [-p "Project Name"]
 ```
-
-This command:
-
-1. Searches 5 domains in parallel (product, style, color, landing, typography)
-2. Applies reasoning rules from `ui-reasoning.csv` to select best matches
-3. Returns complete design system: pattern, style, colors, typography, effects
-4. Includes anti-patterns to avoid
-
-**Example:**
-
-```bash
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "beauty spa wellness service" --design-system -p "Serenity Spa"
+Phase 0: Requirement Analysis  →  Phase 1: Design System Generation
+                                           ↓
+                                     [GATE 1]
+                                           ↓
+Phase 2: Page-Level Overrides  →  Phase 3: Implementation Plan
+                                           ↓
+                                     [GATE 2]
+                                           ↓
+Phase 4: UI Implementation  →  Phase 5: Pre-Delivery QA
 ```
-
-### Step 2b: Persist Design System (Master + Overrides Pattern)
-
-To save the design system for hierarchical retrieval across sessions, add `--persist`:
-
-```bash
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "Project Name"
-```
-
-This creates:
-
-- `design-system/MASTER.md` — Global Source of Truth with all design rules
-- `design-system/pages/` — Folder for page-specific overrides
-
-**With page-specific override:**
-
-```bash
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "Project Name" --page "dashboard"
-```
-
-This also creates:
-
-- `design-system/pages/dashboard.md` — Page-specific deviations from Master
-
-**How hierarchical retrieval works:**
-
-1. When building a specific page (e.g., "Checkout"), first check `design-system/pages/checkout.md`
-2. If the page file exists, its rules **override** the Master file
-3. If not, use `design-system/MASTER.md` exclusively
-
-### Step 3: Supplement with Detailed Searches (as needed)
-
-After getting the design system, use domain searches to get additional details:
-
-```bash
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> [-n <max_results>]
-```
-
-**When to use detailed searches:**
-
-| Need                  | Domain       | Example                                 |
-| --------------------- | ------------ | --------------------------------------- |
-| More style options    | `style`      | `--domain style "glassmorphism dark"`   |
-| Chart recommendations | `chart`      | `--domain chart "real-time dashboard"`  |
-| UX best practices     | `ux`         | `--domain ux "animation accessibility"` |
-| Alternative fonts     | `typography` | `--domain typography "elegant luxury"`  |
-| Landing structure     | `landing`    | `--domain landing "hero social-proof"`  |
-
-### Step 4: Stack Guidelines (Default: html-tailwind)
-
-Get implementation-specific best practices. If user doesn't specify a stack, **default to `html-tailwind`**.
-
-```bash
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "<keyword>" --stack html-tailwind
-```
-
-Available stacks: `html-tailwind`, `react`, `nextjs`, `vue`, `svelte`, `swiftui`, `react-native`, `flutter`, `shadcn`, `jetpack-compose`
 
 ---
 
-## Search Reference
+## Phase 0: Requirement Analysis
 
-### Available Domains
+Extract from user's request:
 
-| Domain       | Use For                              | Example Keywords                                         |
-| ------------ | ------------------------------------ | -------------------------------------------------------- |
-| `product`    | Product type recommendations         | SaaS, e-commerce, portfolio, healthcare, beauty, service |
-| `style`      | UI styles, colors, effects           | glassmorphism, minimalism, dark mode, brutalism          |
-| `typography` | Font pairings, Google Fonts          | elegant, playful, professional, modern                   |
-| `color`      | Color palettes by product type       | saas, ecommerce, healthcare, beauty, fintech, service    |
-| `landing`    | Page structure, CTA strategies       | hero, hero-centric, testimonial, pricing, social-proof   |
-| `chart`      | Chart types, library recommendations | trend, comparison, timeline, funnel, pie                 |
-| `ux`         | Best practices, anti-patterns        | animation, accessibility, z-index, loading               |
-| `react`      | React/Next.js performance            | waterfall, bundle, suspense, memo, rerender, cache       |
-| `web`        | Web interface guidelines             | aria, focus, keyboard, semantic, virtualize              |
-| `prompt`     | AI prompts, CSS keywords             | (style name)                                             |
+| Dimension | Example |
+|---|---|
+| **Product type** | SaaS, e-commerce, portfolio, dashboard, landing |
+| **Industry** | health, fintech, gaming, education, beauty |
+| **Style mood** | minimal, playful, brutalist, elegant, editorial |
+| **Stack** | html-tailwind (default), react, nextjs, vue, svelte, shadcn, swiftui, react-native, flutter |
+| **Mode** | light, dark, both |
 
-### Available Stacks
-
-| Stack             | Focus                                                 |
-| ----------------- | ----------------------------------------------------- |
-| `html-tailwind`   | Tailwind utilities, responsive, a11y (DEFAULT)        |
-| `react`           | State, hooks, performance, patterns                   |
-| `nextjs`          | SSR, routing, images, API routes                      |
-| `vue`             | Composition API, Pinia, Vue Router                    |
-| `svelte`          | Runes, stores, SvelteKit                              |
-| `swiftui`         | Views, State, Navigation, Animation                   |
-| `react-native`    | Components, Navigation, Lists                         |
-| `flutter`         | Widgets, State, Layout, Theming                       |
-| `shadcn`          | shadcn/ui components, theming, forms, patterns        |
-| `jetpack-compose` | Composables, Modifiers, State Hoisting, Recomposition |
+If any dimension is unclear, ask **one** clarifying question — not five.
 
 ---
 
-## Example Workflow
-
-**User request:** "Làm landing page cho dịch vụ chăm sóc da chuyên nghiệp"
-
-### Step 1: Analyze Requirements
-
-- Product type: Beauty/Spa service
-- Style keywords: elegant, professional, soft
-- Industry: Beauty/Wellness
-- Stack: html-tailwind (default)
-
-### Step 2: Generate Design System (REQUIRED)
+## Phase 1: Design System Generation (REQUIRED)
 
 ```bash
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "beauty spa wellness service elegant" --design-system -p "Serenity Spa"
+python .agent/.shared/ui-ux-pro-max/scripts/search.py \
+  "<product_type> <industry> <style keywords>" \
+  --design-system --persist -p "<project_name>"
 ```
 
-**Output:** Complete design system with pattern, style, colors, typography, effects, and anti-patterns.
+**What this produces (`design-system/MASTER.md`):**
+- Persona (1 of 59) — style family, risk level, signature element
+- Color palette — primary, secondary, accent, semantic
+- Typography pair — display + body fonts
+- Layout philosophy — grid, spacing, density
+- Animation style — easing, duration range
+- Anti-patterns to avoid — specific to chosen persona
 
-### Step 3: Supplement with Detailed Searches (as needed)
+### 🚦 GATE 1 — Design System Approval
+
+Show user the generated MASTER.md summary. Ask:
+*"Design direction approved, or want a different persona?"*
+
+If user wants alternative, re-run with adjusted keywords or use `--domain style` to browse options.
+
+---
+
+## Phase 2: Page-Level Overrides (Optional)
+
+For multi-page apps, generate per-page overrides where they should differ from MASTER:
 
 ```bash
-# Get UX guidelines for animation and accessibility
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "animation accessibility" --domain ux
-
-# Get alternative typography options if needed
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "elegant luxury serif" --domain typography
+python .agent/.shared/ui-ux-pro-max/scripts/search.py \
+  "<page purpose>" --design-system --persist -p "<project>" --page "<page-name>"
 ```
 
-### Step 4: Stack Guidelines
+**How overrides work:**
+- Page-specific file: `design-system/pages/<page>.md`
+- Applied only when implementing that page
+- Overrides (not replaces) MASTER rules
 
-```bash
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "layout responsive form" --stack html-tailwind
-```
+**Common cases for overrides:**
+- Dashboard (denser layout than landing)
+- Checkout (higher trust signals, reduced distractions)
+- Admin (utility-first, less decorative)
 
-**Then:** Synthesize design system + detailed searches and implement the design.
+---
+
+## Phase 3: Supplement Searches (as needed)
+
+| Need | Command |
+|---|---|
+| More style options | `--domain style "glassmorphism dark"` |
+| Chart recommendations | `--domain chart "real-time dashboard"` |
+| UX best practices | `--domain ux "animation accessibility"` |
+| Alternative fonts | `--domain typography "elegant luxury"` |
+| Landing structure | `--domain landing "hero social-proof"` |
+| Stack-specific patterns | `--stack html-tailwind "layout responsive"` |
+
+### 🚦 GATE 2 — Plan Approval
+
+Present the consolidated design system (MASTER + overrides + supplements) and ask:
+*"Ready to implement? (yes / edit design / cancel)"*
+
+---
+
+## Phase 4: Implementation
+
+Reference `design-system/MASTER.md` and any page-specific overrides at every UI decision point.
+
+**Hierarchical retrieval rule:**
+1. Look for `design-system/pages/<current-page>.md` first
+2. If absent, use `design-system/MASTER.md`
+3. Never invent colors/fonts outside these files
+
+**Supported stacks:**
+`html-tailwind`, `react`, `nextjs`, `vue`, `svelte`, `swiftui`, `react-native`, `flutter`, `shadcn`, `jetpack-compose`
+
+---
+
+## Phase 5: Pre-Delivery QA Checklist
+
+Run through **every** item before declaring done:
+
+### Visual Quality
+- [ ] No emojis as icons — use SVG (Heroicons / Lucide / Simple Icons)
+- [ ] All icons from one consistent set
+- [ ] Brand logos verified correct (Simple Icons)
+- [ ] Hover states don't cause layout shift
+- [ ] Theme colors used directly (e.g. `bg-primary`, not CSS var wrappers)
+
+### Interaction
+- [ ] `cursor-pointer` on every clickable element
+- [ ] Hover feedback (color/shadow/border change)
+- [ ] Transitions 150-300ms (not instant, not > 500ms)
+- [ ] Keyboard focus states visible
+
+### Light/Dark Mode
+- [ ] Text contrast ≥ 4.5:1 in both modes
+- [ ] Glass/transparent elements visible in light mode (`bg-white/80` min, not `/10`)
+- [ ] Body text `#0F172A` (slate-900) light / `#F1F5F9` (slate-100) dark
+- [ ] Muted text `#475569` (slate-600) light / `#94A3B8` (slate-400) dark
+- [ ] Borders `border-gray-200` light / `border-white/10` dark
+
+### Layout
+- [ ] Floating navbar: `top-4 left-4 right-4` (not stuck to `top-0`)
+- [ ] Content padding accounts for fixed navbar height
+- [ ] One consistent `max-w-*` across sections
+- [ ] Responsive at 375, 768, 1024, 1440px
+- [ ] No horizontal scroll on mobile
+
+### Accessibility
+- [ ] `alt` on every image
+- [ ] `<label>` on every form input
+- [ ] Color never the only indicator (also icon/text)
+- [ ] `prefers-reduced-motion` respected
+
+---
+
+## Common Anti-Patterns (auto-flagged by design system)
+
+From `.shared/design-system/anti-patterns.csv` — 33 entries, ranked by severity:
+
+| Pattern | Alternative |
+|---|---|
+| Purple-blue gradient (AI cliché) | Use persona's actual palette |
+| Center-aligned body text | Left-align (or right for RTL) |
+| Inter/Roboto everywhere | Use pair from persona |
+| Bento grid for everything | Context-appropriate layout |
+| Glassmorphism on light bg | Use only on rich backgrounds |
+| Equal 3-column grid default | Asymmetric or single-focus |
+
+Run: `python .agent/.shared/ui-ux-pro-max/scripts/search.py "<term>" --domain ux` for full list.
 
 ---
 
 ## Output Formats
 
-The `--design-system` flag supports two output formats:
-
 ```bash
-# ASCII box (default) - best for terminal display
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system
+# Terminal-friendly
+python .agent/.shared/ui-ux-pro-max/scripts/search.py "query" --design-system
 
-# Markdown - best for documentation
-python .agent/.shared/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system -f markdown
+# Markdown for docs
+python .agent/.shared/ui-ux-pro-max/scripts/search.py "query" --design-system -f markdown
 ```
 
 ---
 
-## Tips for Better Results
+## Anti-Patterns (Workflow itself)
 
-1. **Be specific with keywords** - "healthcare SaaS dashboard" > "app"
-2. **Search multiple times** - Different keywords reveal different insights
-3. **Combine domains** - Style + Typography + Color = Complete design system
-4. **Always check UX** - Search "animation", "z-index", "accessibility" for common issues
-5. **Use stack flag** - Get implementation-specific best practices
-6. **Iterate** - If first search doesn't match, try different keywords
+- ❌ **Writing CSS before running `/ui-ux-pro-max`** — you'll anchor on defaults instead of persona
+- ❌ **Skipping `--persist`** — design system lives only in terminal, lost next session
+- ❌ **Editing `design-system/MASTER.md` manually without regenerating** — drift accumulates
+- ❌ **Ignoring anti-patterns list** — they exist because AI defaults to them
 
 ---
 
-## Common Rules for Professional UI
+## Related
 
-These are frequently overlooked issues that make UI look unprofessional:
-
-### Icons & Visual Elements
-
-| Rule                       | Do                                              | Don't                                  |
-| -------------------------- | ----------------------------------------------- | -------------------------------------- |
-| **No emoji icons**         | Use SVG icons (Heroicons, Lucide, Simple Icons) | Use emojis like 🎨 🚀 ⚙️ as UI icons   |
-| **Stable hover states**    | Use color/opacity transitions on hover          | Use scale transforms that shift layout |
-| **Correct brand logos**    | Research official SVG from Simple Icons         | Guess or use incorrect logo paths      |
-| **Consistent icon sizing** | Use fixed viewBox (24x24) with w-6 h-6          | Mix different icon sizes randomly      |
-
-### Interaction & Cursor
-
-| Rule                   | Do                                                    | Don't                                        |
-| ---------------------- | ----------------------------------------------------- | -------------------------------------------- |
-| **Cursor pointer**     | Add `cursor-pointer` to all clickable/hoverable cards | Leave default cursor on interactive elements |
-| **Hover feedback**     | Provide visual feedback (color, shadow, border)       | No indication element is interactive         |
-| **Smooth transitions** | Use `transition-colors duration-200`                  | Instant state changes or too slow (>500ms)   |
-
-### Light/Dark Mode Contrast
-
-| Rule                      | Do                                  | Don't                                   |
-| ------------------------- | ----------------------------------- | --------------------------------------- |
-| **Glass card light mode** | Use `bg-white/80` or higher opacity | Use `bg-white/10` (too transparent)     |
-| **Text contrast light**   | Use `#0F172A` (slate-900) for text  | Use `#94A3B8` (slate-400) for body text |
-| **Muted text light**      | Use `#475569` (slate-600) minimum   | Use gray-400 or lighter                 |
-| **Border visibility**     | Use `border-gray-200` in light mode | Use `border-white/10` (invisible)       |
-
-### Layout & Spacing
-
-| Rule                     | Do                                  | Don't                                  |
-| ------------------------ | ----------------------------------- | -------------------------------------- |
-| **Floating navbar**      | Add `top-4 left-4 right-4` spacing  | Stick navbar to `top-0 left-0 right-0` |
-| **Content padding**      | Account for fixed navbar height     | Let content hide behind fixed elements |
-| **Consistent max-width** | Use same `max-w-6xl` or `max-w-7xl` | Mix different container widths         |
+- `/create` — scaffolding that respects the generated design system
+- `/enhance` — add UI features while following MASTER.md
+- `/preview` — visual QA before delivery
 
 ---
 
-## Pre-Delivery Checklist
+## Examples
 
-Before delivering UI code, verify these items:
-
-### Visual Quality
-
-- [ ] No emojis used as icons (use SVG instead)
-- [ ] All icons from consistent icon set (Heroicons/Lucide)
-- [ ] Brand logos are correct (verified from Simple Icons)
-- [ ] Hover states don't cause layout shift
-- [ ] Use theme colors directly (bg-primary) not var() wrapper
-
-### Interaction
-
-- [ ] All clickable elements have `cursor-pointer`
-- [ ] Hover states provide clear visual feedback
-- [ ] Transitions are smooth (150-300ms)
-- [ ] Focus states visible for keyboard navigation
-
-### Light/Dark Mode
-
-- [ ] Light mode text has sufficient contrast (4.5:1 minimum)
-- [ ] Glass/transparent elements visible in light mode
-- [ ] Borders visible in both modes
-- [ ] Test both modes before delivery
-
-### Layout
-
-- [ ] Floating elements have proper spacing from edges
-- [ ] No content hidden behind fixed navbars
-- [ ] Responsive at 375px, 768px, 1024px, 1440px
-- [ ] No horizontal scroll on mobile
-
-### Accessibility
-
-- [ ] All images have alt text
-- [ ] Form inputs have labels
-- [ ] Color is not the only indicator
-- [ ] `prefers-reduced-motion` respected
+```
+/ui-ux-pro-max SaaS fitness tracker, playful, dark mode
+/ui-ux-pro-max luxury beauty spa landing page
+/ui-ux-pro-max fintech crypto dashboard, data-dense
+/ui-ux-pro-max editorial blog, brutalist
+```

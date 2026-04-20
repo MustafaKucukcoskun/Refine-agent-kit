@@ -1,12 +1,23 @@
 ---
 name: architecture
-description: Architectural decision-making framework. Requirements analysis, trade-off evaluation, ADR documentation. Use when making architecture decisions or analyzing system design.
+description: Architectural decision-making with decision artifacts — constraint envelope, option matrix, trade-off scoring, ADR-Lite, and risk register. Use when choosing tech stack, picking between REST/GraphQL/gRPC, designing a migration, making a tooling decision, or writing an ADR. Do NOT use for code style (that's clean-code) or line-level refactoring (that's refactoring-patterns). Keywords: architecture, ADR, decision, trade-off, design, migration, pick, choose, evaluate, stack.
 allowed-tools: Read, Glob, Grep
 ---
 
 # Architecture Decision Framework
 
 > "Requirements drive architecture. Trade-offs inform decisions. ADRs capture rationale."
+
+## When to Use vs. Related Skills
+
+| You want to… | Use |
+|---|---|
+| Choose between 2+ tech options | **architecture** (this) |
+| Write an ADR | **architecture** (this) |
+| Refactor messy code | `refactoring-patterns` |
+| Improve code quality | `clean-code` |
+| Design DB schema | `database-design` |
+| Design API shape | `api-patterns` |
 
 ## 🎯 Selective Reading Rule
 
