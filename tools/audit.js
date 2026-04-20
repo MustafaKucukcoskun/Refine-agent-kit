@@ -279,7 +279,101 @@ if (trackedFiles.length > 0) {
   }
 }
 
-// ── 6. Summary ──
+// ── 6. Anthropic Agent Skills spec validation ──
+// Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+console.log("\n=== ANTHROPIC SKILL SPEC VALIDATION ===\n");
+
+const NAME_RE = /^[a-z0-9][a-z0-9-]{0,63}$/;
+const RESERVED_WORDS = ["anthropic", "claude"];
+const BAD_VOICE_RE = /\b(I can|I will|I'll|you can|you should|we'll|we will|let me|let's)\b/i;
+const DESCRIPTION_MAX = 1024;
+const BODY_SOFT_LIMIT = 500;
+
+function parseFrontmatter(content) {
+  const m = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!m) return null;
+  const fm = {};
+  for (const line of m[1].split(/\r?\n/)) {
+    const idx = line.indexOf(":");
+    if (idx === -1) continue;
+    fm[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
+  }
+  return { fm, bodyStart: m[0].length };
+}
+
+let specIssues = 0;
+function specWarn(file, msg) {
+  specIssues++;
+  issues++;
+  console.log(`  SPEC: ${file}: ${msg}`);
+}
+
+const skillDirs = fs
+  .readdirSync(SKILLS_DIR)
+  .filter((d) => {
+    try {
+      return fs.statSync(path.join(SKILLS_DIR, d)).isDirectory();
+    } catch {
+      return false;
+    }
+  });
+
+for (const dir of skillDirs) {
+  const skillPath = path.join(SKILLS_DIR, dir, "SKILL.md");
+  if (!fs.existsSync(skillPath)) continue;
+
+  const content = fs.readFileSync(skillPath, "utf-8");
+  const parsed = parseFrontmatter(content);
+  const rel = `skills/${dir}/SKILL.md`;
+
+  if (!parsed) {
+    specWarn(rel, "missing YAML frontmatter");
+    continue;
+  }
+
+  const { fm, bodyStart } = parsed;
+
+  if (!fm.name) {
+    specWarn(rel, "frontmatter missing `name`");
+  } else if (!NAME_RE.test(fm.name)) {
+    specWarn(rel, `name "${fm.name}" must match /^[a-z0-9][a-z0-9-]{0,63}$/`);
+  } else if (RESERVED_WORDS.some((w) => fm.name.toLowerCase().includes(w))) {
+    specWarn(rel, `name "${fm.name}" contains reserved word (anthropic/claude)`);
+  }
+
+  if (!fm.description) {
+    specWarn(rel, "frontmatter missing `description`");
+  } else {
+    if (fm.description.length > DESCRIPTION_MAX) {
+      specWarn(rel, `description ${fm.description.length} > ${DESCRIPTION_MAX} chars`);
+    }
+    if (BAD_VOICE_RE.test(fm.description)) {
+      specWarn(rel, `description uses first/second person — prefer third person ("${fm.description.match(BAD_VOICE_RE)[0]}")`);
+    }
+  }
+
+  if (!fm["allowed-tools"]) {
+    specWarn(rel, "frontmatter missing `allowed-tools`");
+  }
+
+  const body = content.slice(bodyStart);
+  const bodyLines = body.split(/\r?\n/).length;
+  if (bodyLines > BODY_SOFT_LIMIT) {
+    specWarn(rel, `body ${bodyLines} lines > soft limit ${BODY_SOFT_LIMIT} — consider splitting into references/`);
+  }
+
+  // Only flag backslash paths in markdown links, not code blocks
+  const bodyWithoutCode = body.replace(/```[\s\S]*?```/g, "").replace(/`[^`]*`/g, "");
+  if (/\]\([^)]*\\[^)]*\)/.test(bodyWithoutCode)) {
+    specWarn(rel, "backslash in markdown link path — use forward slashes");
+  }
+}
+
+if (specIssues === 0) {
+  console.log("  OK: all skills pass Anthropic spec validation");
+}
+
+// ── 7. Summary ──
 console.log("\n=== SUMMARY ===\n");
 console.log(`  Domains: ${domainFiles.length}`);
 console.log(
