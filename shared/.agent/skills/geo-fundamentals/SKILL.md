@@ -1,12 +1,32 @@
 ---
 name: geo-fundamentals
-description: Generative Engine Optimization for AI search engines (ChatGPT, Claude, Perplexity). Use when optimizing content for AI search engines like ChatGPT, Claude, or Perplexity.
+description: Generative Engine Optimization — structure content to be CITED by AI search engines (ChatGPT, Claude, Perplexity, Gemini). NOT geographic/location data. Use when publishing blog posts, documentation, or knowledge base content that should be quoted by AI models. Covers entity definitions, structured data, citation-friendly formatting, AI engine landscape. Keywords: GEO, AI SEO, AI citations, ChatGPT visibility, Perplexity ranking, llms.txt, AI-friendly content.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
-# GEO Fundamentals
+# GEO Fundamentals — Generative Engine Optimization
 
-> Optimization for AI-powered search engines.
+> ⚠️ **Not about geography.** GEO = Generative Engine Optimization (being cited by AI search engines).
+
+## When to Use vs. Skip
+
+| ✅ Use when | ❌ Skip when |
+|---|---|
+| Publishing blog, docs, or research content | Internal-only content (no public exposure) |
+| You want AI models (ChatGPT, Claude, Perplexity) to cite you | Traditional SEO rankings are the primary KPI |
+| Launching a developer-facing knowledge base | Content is paywalled / behind auth |
+| Building a "llms.txt" for LLM consumption | Team has no metrics infrastructure to measure AI citations |
+
+## Relationship to SEO
+
+| Aspect | SEO | GEO |
+|---|---|---|
+| Goal | #1 Google ranking | AI model citations |
+| Optimize for | Keywords, backlinks | Entities, structured data, authority |
+| Measure | Rankings, CTR, impressions | Citation rate, AI-referral traffic |
+| Overlap | Schema markup, page speed, HTTPS | Both benefit from these |
+
+**GEO and SEO are complementary, not competing.** If you do SEO well, you're 60% of the way to GEO.
 
 ---
 
