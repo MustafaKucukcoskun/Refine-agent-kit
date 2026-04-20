@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run sync:*)",
+      "Bash(node tools/audit.js*)",
+      "Bash(node bin/cli.js*)",
+      "Bash(npx refine-agent-kit*)",
+      "Bash(npx refine-kit*)",
+      "Bash(npm test*)",
+      "Bash(npm run test*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git add*)",
+      "Bash(git commit*)"
+    ],
+    "deny": []
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node tools/audit.js --quiet 2>/dev/null; exit 0",
+            "timeout": 15000
+          }
+        ]
+      }
+    ]
+  }
+}

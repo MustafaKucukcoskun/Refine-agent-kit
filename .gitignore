@@ -19,6 +19,9 @@ desktop.ini
 *.swo
 *~
 
+# Claude Code local settings (secrets, env overrides)
+.claude/settings.local.json
+
 # Python
 __pycache__/
 *.pyc
@@ -45,3 +48,15 @@ research-report.md
 
 # Internal docs
 DEVELOPMENT-ROADMAP.md
+
+# Root-level scratch images (screenshots, diagrams)
+/image.png
+/image.jpg
+/image.jpeg
+/screenshot.png
+/*.screenshot.png
+
+# Ephemeral
+*.log
+.eslintcache
+.stylelintcache
