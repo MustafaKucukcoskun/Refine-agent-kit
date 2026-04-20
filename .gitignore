@@ -22,6 +22,9 @@ desktop.ini
 # Claude Code local settings (secrets, env overrides)
 .claude/settings.local.json
 
+# Claude Code maintainer instructions — not for public/shared distribution
+CLAUDE.md
+
 # Python
 __pycache__/
 *.pyc
