@@ -156,6 +156,40 @@ Each domain config in `shared/.agent/domains/<name>.json`:
 
 The `prepack` script runs `sync:all` automatically before `npm pack` / `npm publish`, ensuring inventory counts and the dev mirror are up to date. The published binary names are both `refine-agent-kit` and `refine-kit`.
 
+## Development Workflows
+
+### Adding a new skill pack
+1. Create directory: `shared/.agent/skills/<pack-name>/`
+2. Write `SKILL.md` with required frontmatter (`name`, `description` with "Use when..." triggers, `allowed-tools`)
+3. Reference it in one of: domain JSON `skills.p0/p1/p2`, agent frontmatter `skills:`, or `universalAgentSkills` in `bin/cli.js:482`
+4. Run `npm run sync:all` then `node tools/audit.js`
+
+### Adding a new domain
+1. Create `shared/.agent/domains/<name>.json` with required fields
+2. Create `domains/<name>/rules/GEMINI.md` and `domains/<name>/subdir-markers/GEMINI.md`
+3. Add domain key to `DOMAINS` object in `bin/cli.js`
+4. Optionally add `mcp_config.json` to `domains/<name>/`
+5. Run `npm run sync:all` then `node tools/audit.js`
+
+### Adding a new agent
+1. Create `shared/.agent/agents/<name>.md` with frontmatter (`name`, `description`, `tools`, `model: inherit`, `skills`)
+2. All referenced skills must exist in `shared/.agent/skills/`
+3. Run `npm run sync:all` — agents are NOT filtered, always copied
+
+### Validation checklist (run after any change)
+```bash
+node tools/audit.js        # Domain consistency, orphan skills, missing refs
+npm run sync:all           # Update counts in docs + regenerate mirror
+npm test                   # Smoke test
+```
+
+## Claude Code Configuration
+
+This project has a `.claude/settings.json` that enforces the Source of Truth Rule:
+- **Denied**: Writing to `.agent/` (mirror) directly
+- **Allowed**: `npm run sync:*`, `node tools/audit.js`, `git` commands
+- **Hook**: `PostToolUse` runs audit.js automatically after Write/Edit operations
+
 ## Gotchas
 
 - **Universal skill/workflow sets are hardcoded** — Adding a new skill or workflow that should be available in ALL domains requires editing `universalAgentSkills` (~line 482) or `universalWorkflows` (~line 540) in `bin/cli.js`. Otherwise it only ships to domains that explicitly list it.
