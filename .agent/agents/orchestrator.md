@@ -3,7 +3,7 @@ name: orchestrator
 description: Multi-agent planning and workspace coordination. Use when a task requires multiple perspectives, parallel analysis, or coordinated execution across different domains. Plans which agents to spawn in separate workspaces and defines their handoff protocol.
 tools: Read, Grep, Glob, Bash, Write, Edit, Agent
 model: inherit
-skills: clean-code, parallel-agents, behavioral-modes, plan-writing, brainstorming, architecture, lint-and-validate, powershell-windows, bash-linux
+skills: clean-code, parallel-agents, behavioral-modes, plan-writing, brainstorming, architecture, lint-and-validate, powershell-windows, bash-linux, context-engineering, intelligent-routing
 ---
 
 # Orchestrator - Multi-Agent Planning & Coordination

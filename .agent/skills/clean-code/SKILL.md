@@ -1,14 +1,24 @@
 ---
 name: clean-code
-description: Pragmatic coding standards enforcing concise, readable code. Use on every code modification to prevent over-engineering, unnecessary abstractions, verbose comments, and premature optimization. Global quality gate for all agents.
+description: Pragmatic coding standards — SRP, DRY, KISS, YAGNI — enforcing concise, readable, unsurprising code. Applies on EVERY code modification to prevent over-engineering, unnecessary abstractions, verbose docstrings, defensive nothing-checks, and AI-generated filler. Global quality gate loaded for all coding agents. Keywords: clean code, refactor, code quality, simplicity, DRY, SOLID, conciseness, anti-slop.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 version: 2.0
 priority: CRITICAL
 ---
 
-# Clean Code - Pragmatic AI Coding Standards
+# Clean Code — Pragmatic AI Coding Standards
 
-> **CRITICAL SKILL** - Be **concise, direct, and solution-focused**.
+> **CRITICAL SKILL** — Be **concise, direct, solution-focused**. This is the quality floor for every code change across every domain.
+
+## When to Use vs. Related Skills
+
+| You want to… | Use |
+|---|---|
+| Apply quality gate to any code change | **clean-code** (this — always) |
+| Refactor existing messy code | `refactoring-patterns` + clean-code |
+| Choose between tech/architecture options | `architecture` |
+| Review a PR | `code-review-checklist` + clean-code |
+| Lint/format automatically | `lint-and-validate` |
 
 ---
 
@@ -198,4 +208,56 @@ File to edit: UserService.ts
 > 🔴 **VIOLATION:** Running script and ignoring output = FAILED task.
 > 🔴 **VIOLATION:** Auto-fixing without asking = Not allowed.
 > 🔴 **Rule:** Always READ output → SUMMARIZE → ASK → then fix.
+
+---
+
+## AI-Slop Anti-Patterns (Reject these on sight)
+
+These patterns signal AI-generated filler — remove or reject them when reviewing code:
+
+| Anti-pattern | Example | Fix |
+|---|---|---|
+| **Narrator comments** | `// Loop through the users` above `for (const user of users)` | Delete the comment |
+| **Restating types in JSDoc** | `@param {string} name - the name` | Delete — TypeScript already says it |
+| **Defensive nothing-checks** | `if (!obj) return; const x = obj.x;` when `obj` is guaranteed | Delete the check |
+| **Premature error wrapping** | `try { simpleAssign(); } catch(e) { throw e; }` | Delete the try/catch |
+| **Fake extensibility** | `IUserServiceFactoryBuilderProvider` for a single use | Use a plain function |
+| **Emojis in code** | `// 🎉 Yay! Successfully saved` | Delete |
+| **"In this section..." prose** | `// This section handles X` above section | Delete — structure already shows it |
+| **Leftover print/debug** | `console.log('got here');` | Delete before commit |
+| **Empty try-catch** | `try { ... } catch {}` without intent | Either handle or propagate |
+| **Renaming `_` vars on import** | `import { foo as _foo }` just to silence lint | Remove import OR actually use it |
+
+## Edge Cases & Gotchas
+
+| Situation | Right move |
+|---|---|
+| Deleted code you think might be needed | Actually delete it — git has history |
+| Commented-out code "just in case" | Delete — it rots instantly |
+| Copy-pasted block that's "almost identical" | Extract — but only if ≥3 uses and shape stable |
+| Public API change | Deprecate with clear migration note, don't yank |
+| Test that's flaky | Fix root cause or delete — never `skip` silently |
+| Long function that's clear | Leave it — length alone isn't smell |
+| Abstraction "for future needs" | Don't — wait until 3rd real use |
+
+## Pre-Commit Checklist
+
+- [ ] No narrator comments
+- [ ] No emojis in code/logs
+- [ ] No `console.log` / `print` leftovers
+- [ ] No `// TODO` without issue link
+- [ ] No commented-out code
+- [ ] No abstractions for single use
+- [ ] Tests added for new behavior
+- [ ] Lint passes
+
+## Related Skills
+
+| Skill | When |
+|---|---|
+| `refactoring-patterns` | Systematic refactoring of existing code |
+| `code-review-checklist` | PR / merge-time review |
+| `lint-and-validate` | Automated enforcement |
+| `systematic-debugging` | When "clean" code breaks |
+| `testing-patterns` | Test design alongside code
 

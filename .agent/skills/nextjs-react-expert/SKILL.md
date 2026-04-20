@@ -1,13 +1,24 @@
 ---
 name: nextjs-react-expert
-description: React and Next.js performance optimization from Vercel Engineering. Use when building React components, optimizing performance, eliminating waterfalls, reducing bundle size, reviewing code for performance issues, or implementing server/client-side optimizations.
+description: React and Next.js App Router performance — waterfall elimination, bundle size, server/client split, re-render minimization, streaming, suspense, cache, PPR. 57 Vercel-Engineering rules ranked by impact. Use when building React components, optimizing bundle / Core Web Vitals, eliminating waterfalls, reviewing a slow page, migrating Pages Router → App Router, or debugging hydration errors. Keywords: React, Next.js, performance, bundle, waterfall, Server Components, use client, Core Web Vitals, LCP, TTI, hydration, cache, streaming, suspense.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Next.js & React Performance Expert
 
-> **From Vercel Engineering** - 57 optimization rules prioritized by impact
+> **From Vercel Engineering** — 57 optimization rules prioritized by impact
 > **Philosophy:** Eliminate waterfalls first, optimize bundles second, then micro-optimize.
+
+## When to Use vs. Related Skills
+
+| You want to… | Use |
+|---|---|
+| Performance optimization (React/Next) | **nextjs-react-expert** (this) |
+| Design decisions, colors, layout | `frontend-design` |
+| Tailwind utility patterns | `tailwind-patterns` |
+| App Router-specific patterns | `nextjs-app-router-patterns` + this |
+| Production UI audit checklist | `web-design-guidelines` |
+| SEO / metadata / OG tags | `seo-fundamentals` |
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: parallel-agents
-description: Multi-agent orchestration with parallel workspace spawning and artifact-based handoff. Use when multiple independent tasks can run simultaneously with different domain expertise, or when comprehensive analysis requires multiple perspectives working in isolated workspaces.
+description: Multi-agent orchestration with parallel workspaces and artifact-based handoff via _handoff/ directory. Use when 2+ independent tasks can run simultaneously (different domains, no shared state), when comprehensive review needs security + performance + architecture in parallel, or when feature work splits cleanly into backend / frontend / test streams. Keywords: parallel, orchestration, multi-agent, workspaces, handoff, coordinate, simultaneous.
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -311,3 +311,102 @@ After all agents complete their work, synthesize:
 | Spawning 6+ agents for a simple task | Overhead exceeds benefit | 2-3 agents max for simple tasks |
 | No handoff plan before spawning | Agents don't know what to produce | Write plan.md first |
 | Skipping synthesis | User gets fragmented findings | Always merge into one report |
+
+---
+
+## Handoff Artifact Templates (copy-ready)
+
+### `_handoff/orchestrator/plan.md`
+```markdown
+---
+orchestrator: true
+created: <ISO timestamp>
+model: Parallel | Sequential | Hybrid
+---
+
+## Goal
+<one-paragraph outcome statement>
+
+## Agent Assignments
+
+| Agent | Task | Inputs | Deliverables |
+|---|---|---|---|
+| frontend-specialist | Build auth UI | design-system/MASTER.md | _handoff/frontend-specialist/output.md |
+| backend-specialist | Implement auth API | docs/api-spec.md | _handoff/backend-specialist/output.md |
+| test-engineer | E2E auth tests | both outputs above | _handoff/test-engineer/output.md |
+
+## Dependencies
+- test-engineer waits for frontend-specialist AND backend-specialist
+- others run in parallel
+
+## Success Criteria
+- [ ] Each agent's status.md reads DONE
+- [ ] Synthesis merges all outputs into final report
+```
+
+### `_handoff/<agent-name>/status.md`
+```markdown
+---
+agent: <agent-name>
+status: PENDING | IN_PROGRESS | DONE | BLOCKED
+updated: <ISO timestamp>
+produces_for: [list of dependent agents]
+depends_on: [list of prerequisite agents]
+blockers: [if BLOCKED, what's blocking; otherwise empty]
+---
+
+## Progress
+<brief description of what's been done>
+
+## Next
+<what this agent will do next, or "complete">
+```
+
+### `_handoff/<agent-name>/output.md`
+```markdown
+---
+agent: <agent-name>
+complete: true
+files_changed: [list]
+tests_added: [list]
+---
+
+## Summary
+<one-paragraph description of deliverable>
+
+## Key Decisions
+- Chose X over Y because Z
+
+## Findings for Other Agents
+- For test-engineer: endpoints at `/api/auth/*`, happy-path + 3 error cases
+- For frontend-specialist: use `/api/auth/me` for session check
+
+## Open Questions
+- <anything the synthesizer needs to resolve>
+```
+
+### Synthesis Report Template (orchestrator produces)
+```markdown
+# Synthesis Report — <task name>
+
+## Execution
+- Model: Parallel / Sequential / Hybrid
+- Agents: [list]
+- Duration: <estimate>
+
+## Agent Contributions
+| Agent | Status | Key Finding |
+|---|---|---|
+| ... | DONE | ... |
+
+## Consolidated Findings
+1. 🔴 Critical: <if any>
+2. 🟡 Important: <if any>
+3. 🟢 Enhancement: <if any>
+
+## Action Items
+- [ ] Critical item (owner: agent)
+- [ ] Important item (owner: agent)
+
+## Overall: PASS | PASS_WITH_WARNINGS | FAIL
+```

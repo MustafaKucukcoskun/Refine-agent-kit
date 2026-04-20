@@ -1,16 +1,26 @@
 ---
 name: context-engineering
-description: Context window management, progressive skill loading, token budget optimization, and multi-agent context sharing patterns. Foundational skill for efficient AI agent operation. Use when planning context strategy, optimizing token usage, or building multi-agent workflows.
+description: Context window management, progressive skill loading, token budget optimization, compaction, structured note-taking, and multi-agent handoff. Foundational skill for any long-running or multi-turn agent session. Use when planning context strategy, approaching token limits, designing multi-agent handoffs, or optimizing skill loading. Keywords: context, token budget, context window, compaction, progressive disclosure, JIT loading, memory, notes, handoff.
 version: 1.0.0
 domain: global
-triggers: context, token, budget, overflow, loading, progressive, JIT
+triggers: context, token, budget, overflow, loading, progressive, JIT, compaction, memory
 allowed-tools: Read, Glob, Grep
 ---
 
 # Context Engineering
 
 > Production-grade patterns for managing AI agent context windows effectively.
-> Inspired by Agent Skills for Context Engineering (7.7K★).
+> Aligned with Anthropic's "Effective Context Engineering" (2025-2026) — context engineering > prompt engineering.
+
+## When to Use vs. Related Skills
+
+| You want to… | Use |
+|---|---|
+| Plan overall context strategy | **context-engineering** (this) |
+| Route agent tasks based on intent | `intelligent-routing` |
+| Coordinate parallel agents | `parallel-agents` |
+| Pick behavioral mode | `behavioral-modes` |
+| Debug agent confusion | `systematic-debugging` |
 
 ---
 
@@ -229,3 +239,76 @@ Before starting any complex task:
 
 > **Remember:** A lean context window produces better results than a bloated one.
 > When in doubt, summarize and discard — you can always re-read.
+
+---
+
+## Structured Note-Taking Pattern (`_memory/NOTES.md`)
+
+For long-horizon tasks, maintain a persistent scratchpad the agent reads on every turn:
+
+```markdown
+# NOTES.md — <task name>
+
+## Goal
+<one-sentence outcome>
+
+## Current State
+- Phase: 3 of 5 (Implementation)
+- Branch: feat/auth-rewrite
+- Last verified: 2026-04-20 14:30
+
+## Decisions Made
+- DB: PostgreSQL 16 (not MySQL) — reason: JSONB support
+- Auth: JWT + refresh token rotation — reason: mobile client planned
+- Stack: FastAPI 0.115 + SQLAlchemy 2.0 async
+
+## Open Questions
+- [ ] How should we handle token revocation? (blocking: need answer before phase 4)
+- [ ] Rate limiting per user or per IP? (soft, can decide later)
+
+## Done
+- [x] Schema designed (`docs/schema.md`)
+- [x] OAuth flow implemented
+- [x] Tests for happy path
+
+## Next
+- [ ] Error path tests
+- [ ] Rate limit middleware
+- [ ] Docs update
+```
+
+**Rules:**
+- Append-only for Decisions Made (never rewrite history)
+- Move items between Open Questions / Done / Next as state changes
+- At each long-run checkpoint, the agent re-reads this file
+- Keep it < 500 lines — summarize older sections if it grows
+
+## Compaction Protocol (when approaching limit)
+
+When context fills to ~70%:
+1. Stop current reasoning chain
+2. Write summary to `_memory/NOTES.md` — decisions, next steps, blockers
+3. Discard verbose tool outputs (keep summaries only)
+4. Resume with compacted context
+
+When context fills to ~85%:
+1. Same as 70% but stricter — drop all tool outputs older than 3 turns
+2. Keep only: system prompt, NOTES.md, last user message, last 2 assistant turns
+
+## Sub-Agent Contract
+
+When delegating to a sub-agent via `_handoff/`:
+- Sub-agent works in isolated context
+- Returns **1000-2000 token summary** in `_handoff/<name>/output.md`
+- Raw data (full files, diffs) goes in `_handoff/<name>/artifacts/`
+- Main agent reads only the summary on return
+
+## Anti-Patterns
+
+| Anti-pattern | Impact | Fix |
+|---|---|---|
+| Dumping full file contents | Context bloat | Reference by path, load JIT |
+| Keeping all tool outputs | Token waste | Discard after synthesis |
+| Re-reading NOTES.md every turn unchanged | No-op tokens | Only re-read after external change |
+| Loading 10+ skills "just in case" | Pollutes reasoning | Progressive disclosure |
+| No summarization plan | Context cliff at limit | Plan compaction checkpoint at start |

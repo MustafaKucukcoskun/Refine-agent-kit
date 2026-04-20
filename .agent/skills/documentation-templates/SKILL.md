@@ -1,12 +1,48 @@
 ---
 name: documentation-templates
-description: Documentation templates for README, API reference, changelogs, and architecture docs. Use when creating project documentation, writing API docs, structuring a knowledge base, or generating AI-friendly documentation with clear examples.
+description: Production-ready templates and quality standards for README, API reference, changelog, ADR, RFC, and AI-friendly docs (llms.txt, MCP-ready). Use when writing new docs, revising stale docs, picking a doc type for a given purpose, or generating docs that LLMs can cite. Keywords: docs, README, changelog, API docs, ADR, RFC, documentation, llms.txt.
 allowed-tools: Read, Glob, Grep
 ---
 
 # Documentation Templates
 
-> Templates and structure guidelines for common documentation types.
+> Templates and quality standards for common documentation types — with explicit anti-patterns and a decision tree for picking the right template.
+
+---
+
+## Quality Standards (per template type)
+
+| Template | Good | Bad | Target length |
+|---|---|---|---|
+| **README** | Under 5 min to quick-start | Tutorial-length saga | 150–400 lines |
+| **API reference** | 1 request+response per endpoint with realistic data | Schema dumps, no examples | 1 page per endpoint |
+| **Changelog** | Semantic versioning, breaking changes flagged | "Fixed stuff", "misc improvements" | 1 line per change |
+| **ADR** | Context + options + decision + rationale + consequences | Decision without options considered | 1–2 pages |
+| **Architecture** | Diagrams + rationale (not diagram-only) | Wall of prose, no visuals | 2–5 pages |
+| **RFC** | Problem, proposal, alternatives, migration | Premature implementation detail | 3–10 pages |
+| **llms.txt** | Structured sections, definitions upfront | Marketing copy | 100–300 lines |
+
+---
+
+## Template Selection Decision Tree
+
+```
+Is this for humans, AI, or both?
+├── Humans only
+│   ├── First-time user? → README
+│   ├── Looking up specifics? → API Reference
+│   └── Decision trail? → ADR / Changelog
+├── AI only
+│   ├── Fast citation? → llms.txt
+│   └── Tool calling? → MCP-Ready spec
+└── Both
+    ├── Tutorial-style → README with examples
+    └── Reference-style → API docs with JSON/YAML samples
+
+Is this a decision that affects future work?
+→ YES → ADR (lightweight) or RFC (heavier)
+→ NO → Changelog entry or inline comment
+```
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Design thinking and decision-making for web UI. Use when designing components, layouts, color schemes, typography, or creating aesthetic interfaces. Teaches principles, not fixed values.
+description: Design thinking and decision-making for web UI — psychology-first, constraint-aware, anti-AI-slop. Use when designing components, choosing color palettes, picking typography, planning layouts, building a design system, or reviewing UI for aesthetic/UX quality. Teaches principles, not fixed values. Complements `/ui-ux-pro-max` workflow (this skill = philosophy; workflow = execution). Keywords: design, UI, UX, aesthetic, visual, color, typography, layout, style, interface, component.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
@@ -8,6 +8,17 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 > **Philosophy:** Every pixel has purpose. Restraint is luxury. User psychology drives decisions.
 > **Core Principle:** THINK, don't memorize. ASK, don't assume.
+
+## When to Use vs. Related
+
+| You want to… | Use |
+|---|---|
+| Design principles & decision process | **frontend-design** (this) |
+| Generate a full design system with personas | `/ui-ux-pro-max` workflow |
+| Pick a design persona (59 curated) | `/ui-ux-pro-max` + `.shared/design-system/personas.csv` |
+| Implement React/Next.js UI | `nextjs-react-expert` + this |
+| Apply Tailwind patterns | `tailwind-patterns` + this |
+| Audit finished UI | `web-design-guidelines` |
 
 ---
 

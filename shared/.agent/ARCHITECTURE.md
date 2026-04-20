@@ -9,7 +9,7 @@
 refine-kit is a modular system consisting of:
 
 - **21 Specialist Agents** - Role-based AI personas
-- **54 Skill Packs** - Domain-specific knowledge modules
+- **58 Skill Packs** - Domain-specific knowledge modules
 - **30 Workflows** - Slash command procedures
 - **13 Domain Packs** - Tech stack integrations
 - **8 MCP Servers** - External tool integrations
@@ -31,7 +31,7 @@ refine-kit is a modular system consisting of:
 .agent/
 ├── ARCHITECTURE.md          # This file
 ├── agents/                  # 21 Specialist Agents
-├── skills/                  # 54 Skill Packs (65 modules)
+├── skills/                  # 58 Skill Packs (69 modules)
 ├── workflows/               # 30 Slash Commands
 ├── domains/                 # 13 Domain Packs
 ├── rules/                   # GEMINI.md (global) + 13 domain rules
@@ -72,9 +72,9 @@ Specialist AI personas for different domains.
 
 ---
 
-## 🧩 Skills (54 packs / 65 modules)
+## 🧩 Skills (58 packs / 69 modules)
 
-Modular knowledge domains that agents can load on-demand based on task context. Current shipped inventory: 54 top-level skill packs and 65 total SKILL.md modules.
+Modular knowledge domains that agents can load on-demand based on task context. Current shipped inventory: 58 top-level skill packs and 69 total SKILL.md modules.
 
 ### Frontend & UI
 
@@ -227,12 +227,12 @@ Slash command procedures. Invoke with `/command`.
 | `/deploy` | Deployment command for production releases. Pre-flight checks and deployment execution. Adapts to project domain. |
 | `/eas-build` | Expo EAS Build and Submit workflow. Configures build profiles, triggers cloud builds, manages credentials, and submits to app stores. Use for React Native/Expo cloud builds, app store submission, or CI/CD mobile pipeline. |
 | `/eda` | Exploratory Data Analysis workflow. Profile dataset, detect quality issues, visualize distributions, analyze correlations, and generate actionable insights. Use for data profiling, dataset investigation, feature analysis, or data quality audit. |
-| `/enhance` | Add or update features in existing application. Used for iterative development. |
+| `/enhance` | Add or update features in existing application with phase-gated approval. Use when user wants to add a new feature, modify an existing feature, integrate a service, or iteratively improve functionality. Runs 5 phases with explicit approval gates between major phases. Keywords: add feature, update, modify, integrate, extend, improve, enhance. |
 | `/export` | Godot 4.x game export to target platforms. Configures export presets, verifies templates, builds release binaries via headless CLI. Use for game distribution, platform builds, CI/CD export, or release packaging. |
 | `/migrate` | Database migration workflow with Alembic/SQLAlchemy or Django ORM. Generates, reviews, and applies schema migrations safely. Use for schema changes, database versioning, migration review, or rollback planning. |
 | `/orchestrate` | Coordinate multiple agents for complex tasks. Use for multi-perspective analysis, comprehensive reviews, or tasks requiring different domain expertise running in parallel workspaces. |
 | `/package` | Electron or Tauri desktop app packaging. Builds platform-specific installers with code signing, notarization, and auto-update configuration. Use for desktop distribution, installer creation, or release builds. |
-| `/plan` | Create project plan using project-planner agent. No code writing - only plan file generation. |
+| `/plan` | Create a rigorous project plan with decision artifacts (constraints, options, trade-off matrix, ADR) before writing any code. Use when starting a new project, a major feature, or a significant refactor. Produces a PLAN-{slug}.md file. Keywords: plan, planning, architect, design, blueprint, roadmap. |
 | `/prefab` | Unity prefab and asset creation. Generates prefab structure with components, materials, physics, and proper asset organization. Use for game entity creation, reusable components, prefab variants, or asset pipeline setup. |
 | `/preview` | Preview server start, stop, and status check. Local development server management. Adapts to project domain. |
 | `/publish` | Chrome Web Store publishing workflow. Validates manifest v3, builds extension zip, uploads to CWS, and tracks review status. Use for extension release, store submission, or publishing updates. |
@@ -242,13 +242,13 @@ Slash command procedures. Invoke with `/command`.
 | `/scaffold` | ASP.NET Core project scaffolding. Generates solution structure with controllers, EF Core, authentication, and Docker configuration. Use for new .NET projects, solution setup, or architecture initialization. |
 | `/scene` | Game scene creation wizard for Godot and Phaser. Generates scene structure with nodes/objects, scripts, physics setup, and signal wiring. Use for level design, UI screens, player/enemy creation, or menu systems. |
 | `/security-review` | Security-focused code review. OWASP Top 10, credentials, auth, input validation, dependency CVEs. |
-| `/status` | Display agent and project status. Progress tracking and status board. |
+| `/status` | Report current project health, agent/workflow activity, and captured learnings. Produces a structured dashboard with tech stack, feature status, health metrics, recent decisions, and actionable recommendations. Use to answer "where are we?" on a multi-session project. Keywords: status, dashboard, health, progress, summary, check-in. |
 | `/store-deploy` | Flutter app store deployment for iOS App Store and Google Play Store. Handles signing, release builds, store submission, and phased rollout. Use for mobile app publishing, store release, or production deployment. |
 | `/tdd` | Test-Driven Development cycle. Write failing test first, then implement. |
 | `/test` | Test generation and test running command. Creates and executes tests for code. Adapts to project domain automatically. |
 | `/train` | ML model training pipeline. Data splitting, preprocessing, model training, evaluation metrics, and artifact export. Use for model development, hyperparameter tuning, experiment tracking, or training pipeline setup. |
-| `/ui-ux-pro-max` | Plan and implement UI with AI-powered design intelligence — 50+ styles, 95+ color palettes, and automated design system generation |
-| `/verify` | Project integrity verification. Checks agent/skill files, workflow references, imports, and config consistency. |
+| `/ui-ux-pro-max` | Plan and implement high-quality UI with AI-powered design intelligence. Uses 59 design personas, 107 reference sites, 33 anti-patterns, plus 50+ styles and 97 color palettes. Produces a complete design system (MASTER.md + per-page overrides) before any code is written. Use when building new UI from scratch, designing a landing page, creating a design system, or planning visual direction. Keywords: design, UI, UX, landing page, style, design system, color palette, typography, layout. |
+| `/verify` | Verify project integrity with severity-tiered findings. Runs agent/skill file checks, workflow reference resolution, domain pack validation, linting, type checking, and test suite execution. Produces a structured report with critical/important/suggestion tiers and actionable fixes. Use before merging, before deploying, or when project consistency is suspected broken. Keywords: verify, validate, check, audit, integrity, pre-merge, pre-deploy. |
 
 ---
 
@@ -335,13 +335,27 @@ For details, see [scripts/README.md](scripts/README.md)
 
 ---
 
+## 🎨 Design System
+
+CSV-based design intelligence in `.shared/design-system/`. Used by `/ui-ux-pro-max` workflow and `frontend-specialist` agent for UI domains.
+
+| Asset | File | Content |
+| ----- | ---- | ------- |
+| **Personas** | `personas.csv` | 59 unique design personas (style family, color palette, typography, layout philosophy, animation, geometry, risk level) |
+| **Reference Sites** | `reference-sites.csv` | 109 award-winning websites (sector, style category, standout features, matching personas) |
+| **Anti-Patterns** | `anti-patterns.csv` | 33 common design anti-patterns with severity and alternatives |
+
+**Non-UI domains** (python-backend, python-ml, python-data, cli-tool, csharp-backend) skip this directory during installation.
+
+---
+
 ## 📊 Statistics
 
 | Metric                  | Value                         |
 | ----------------------- | ----------------------------- |
 | **Total Agents**        | 21                            |
-| **Total Skill Packs**   | 54                            |
-| **Total Skill Modules** | 65                            |
+| **Total Skill Packs**   | 58                            |
+| **Total Skill Modules** | 69                            |
 | **Total Workflows**     | 30                            |
 | **Total Domain Packs**  | 13                            |
 | **Total MCP Servers**   | 8                             |
