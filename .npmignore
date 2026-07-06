@@ -1,13 +1,41 @@
-# Development files
+# Development-only files
 DEVELOPMENT-ROADMAP.md
+CLAUDE.md
 .claude/
 .git/
 .gitignore
+.gitattributes
 .github/
-node_modules/
 
 # Internal research (not for distribution)
 **/research-report.md
+
+# Auto-generated mirror (users get fresh install via CLI)
+.agent/
+.agents/
+
+# Environment variables (NEVER publish — contains API keys)
+.env
+.env.*
+.env.local
+
+# Development tools (not shipped — CLI uses shared/ directly)
+tools/
+
+# Docs site / specs (internal planning)
+docs/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# npm pack artifacts
+*.tgz
+
+# Root-level scratch images
+image.png
+image.jpg
 
 # Auto-generated
 CODEBASE.md

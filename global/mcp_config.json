@@ -1,24 +1,17 @@
 {
+    "_comment": "MCP servers are OPTIONAL. The system works without them. Add only what you need.",
     "mcpServers": {
         "context7": {
+            "_comment": "Recommended: Eliminates API hallucinations via real-time library docs",
             "serverUrl": "https://mcp.context7.com/mcp",
             "headers": {
                 "CONTEXT7_API_KEY": "$CONTEXT7_API_KEY"
             }
         },
-        "github": {
-            "serverUrl": "https://api.githubcopilot.com/mcp/",
-            "headers": {
-                "Authorization": "Bearer $GITHUB_PERSONAL_ACCESS_TOKEN"
-            }
-        },
         "playwright": {
+            "_comment": "Recommended: Browser automation, E2E testing, screenshots",
             "command": "npx",
             "args": ["-y", "@playwright/mcp@latest"]
-        },
-        "chrome-devtools": {
-            "command": "npx",
-            "args": ["-y", "chrome-devtools-mcp@latest"]
         }
     }
 }

@@ -12,7 +12,9 @@
     "sync:inventory": "node tools/sync-inventory.js",
     "sync:mirror": "node tools/sync-dev-mirror.js",
     "sync:all": "node tools/sync-inventory.js && node tools/sync-dev-mirror.js",
-    "prepack": "npm run sync:all"
+    "audit:domains": "node tools/audit.js",
+    "prepack": "npm run sync:all",
+    "prepublishOnly": "node tools/audit.js && node -e \"const fs=require('fs');const {execSync}=require('child_process');const out=execSync('npm pack --dry-run 2>&1',{encoding:'utf8'});if(out.includes('.env')){console.error('ERROR: .env file detected in publish bundle!');process.exit(1)}console.log('✔ No .env in bundle');\""
   },
   "keywords": [
     "ai-agent",

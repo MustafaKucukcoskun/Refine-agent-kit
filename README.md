@@ -132,10 +132,10 @@ my-monorepo/
 | ------------------------------- | ---------------------------------------------------- |
 | `.agent/agents/`                | 21 specialist AI agents                              |
 | `.agent/skills/`         | 69 skill modules across 58 top-level skill packs |
-| `.agent/workflows/`      | 30 slash command workflows                         |
+| `.agent/workflows/`      | 31 slash command workflows                         |
 | `.agent/domains/`        | 13 domain configuration packs                        |
 | `.agent/rules/`                 | Local GEMINI.md + domain routing rules               |
-| `.agent/scripts/`        | 7 utility scripts       |
+| `.agent/scripts/`        | 8 utility scripts       |
 | `.agent/mcp_config.json`        | Domain-specific MCP servers (next-web only)          |
 | `.agent/.shared/design-system/` | 59 personas + 107 reference sites + 32 anti-patterns |
 
