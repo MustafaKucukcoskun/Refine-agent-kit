@@ -10,9 +10,9 @@ refine-kit is a modular system consisting of:
 
 - **21 Specialist Agents** - Role-based AI personas
 - **58 Skill Packs** - Domain-specific knowledge modules
-- **30 Workflows** - Slash command procedures
+- **31 Workflows** - Slash command procedures
 - **13 Domain Packs** - Tech stack integrations
-- **8 MCP Servers** - External tool integrations
+- **9 MCP Servers** - External tool integrations (3 global + domain-specific)
 
 ---
 
@@ -22,6 +22,7 @@ refine-kit is a modular system consisting of:
 - Design system assets (personas, reference sites, anti-patterns) live inside `shared/.agent/.shared/design-system/`.
 - The repo-root `.agent/` directory is a generated development mirror used to dogfood the package in this repository.
 - The development mirror overlays the `next-web` domain on top of `shared/.agent/` so this package repo can run with a concrete local domain.
+- **Install directory:** CLI defaults to `.agents/` (plural, Antigravity 2.0+ standard). Legacy `.agent/` (singular) is auto-detected for backward compatibility.
 
 ---
 
@@ -32,7 +33,7 @@ refine-kit is a modular system consisting of:
 ├── ARCHITECTURE.md          # This file
 ├── agents/                  # 21 Specialist Agents
 ├── skills/                  # 58 Skill Packs (69 modules)
-├── workflows/               # 30 Slash Commands
+├── workflows/               # 31 Slash Commands
 ├── domains/                 # 13 Domain Packs
 ├── rules/                   # GEMINI.md (global) + 13 domain rules
 │   ├── GEMINI.md            # Global rules
@@ -213,7 +214,7 @@ External tool integration via Model Context Protocol. Config: `mcp_config.json`
 
 ---
 
-## 🔄 Workflows (30)
+## 🔄 Workflows (31)
 
 Slash command procedures. Invoke with `/command`.
 
@@ -230,6 +231,7 @@ Slash command procedures. Invoke with `/command`.
 | `/enhance` | Add or update features in existing application with phase-gated approval. Use when user wants to add a new feature, modify an existing feature, integrate a service, or iteratively improve functionality. Runs 5 phases with explicit approval gates between major phases. Keywords: add feature, update, modify, integrate, extend, improve, enhance. |
 | `/export` | Godot 4.x game export to target platforms. Configures export presets, verifies templates, builds release binaries via headless CLI. Use for game distribution, platform builds, CI/CD export, or release packaging. |
 | `/migrate` | Database migration workflow with Alembic/SQLAlchemy or Django ORM. Generates, reviews, and applies schema migrations safely. Use for schema changes, database versioning, migration review, or rollback planning. |
+| `/onboard` | Codebase onboarding workflow. Systematically analyzes a new or unfamiliar repository to understand its architecture, patterns, dependencies, and key files. Produces a structured onboarding report. Use when joining a new project, starting on an unfamiliar codebase, or after a long break from a project. Keywords: onboard, analyze, understand, explore, architecture, codebase, new project, getting started. |
 | `/orchestrate` | Coordinate multiple agents for complex tasks. Use for multi-perspective analysis, comprehensive reviews, or tasks requiring different domain expertise running in parallel workspaces. |
 | `/package` | Electron or Tauri desktop app packaging. Builds platform-specific installers with code signing, notarization, and auto-update configuration. Use for desktop distribution, installer creation, or release builds. |
 | `/plan` | Create a rigorous project plan with decision artifacts (constraints, options, trade-off matrix, ADR) before writing any code. Use when starting a new project, a major feature, or a significant refactor. Produces a PLAN-{slug}.md file. Keywords: plan, planning, architect, design, blueprint, roadmap. |
@@ -356,10 +358,10 @@ CSV-based design intelligence in `.shared/design-system/`. Used by `/ui-ux-pro-m
 | **Total Agents**        | 21                            |
 | **Total Skill Packs**   | 58                            |
 | **Total Skill Modules** | 69                            |
-| **Total Workflows**     | 30                            |
+| **Total Workflows**     | 31                            |
 | **Total Domain Packs**  | 13                            |
 | **Total MCP Servers**   | 8                             |
-| **Total Scripts**       | 7 (master) + 16 (skill-level) |
+| **Total Scripts**       | 8 (master) + 16 (skill-level) |
 | **Coverage**            | ~90% web/mobile development   |
 
 ---

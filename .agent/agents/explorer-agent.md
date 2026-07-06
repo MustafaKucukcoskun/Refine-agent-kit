@@ -50,11 +50,12 @@ When in discovery mode, you MUST NOT just report facts; you must engage the user
 
 ## Code Patterns
 
-### Discovery Flow
-1. **Initial Survey**: List all directories and find entry points (e.g., `package.json`, `index.ts`).
-2. **Dependency Tree**: Trace imports and exports to understand data flow.
-3. **Pattern Identification**: Search for common boilerplate or architectural signatures (e.g., MVC, Hexagonal, Hooks).
-4. **Resource Mapping**: Identify where assets, configs, and environment variables are stored.
+### Discovery Flow (Repo Map First)
+1. **Generate Repo Map**: ALWAYS run `python .agents/scripts/generate_repo_map.py` to get a bird's-eye view of the AST and directory structure BEFORE using grep/glob.
+2. **Initial Survey**: Analyze the Repo Map to find entry points, core classes, and domain boundaries.
+3. **Targeted Deep Dive**: Use grep/glob *only* on the specific files identified in the Repo Map.
+4. **Dependency Tree**: Trace imports and exports to understand data flow between the identified core modules.
+5. **Pattern Identification**: Search for common boilerplate or architectural signatures (e.g., MVC, Hexagonal, Hooks).
 
 ## Review Checklist
 

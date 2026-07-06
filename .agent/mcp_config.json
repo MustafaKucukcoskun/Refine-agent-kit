@@ -7,6 +7,13 @@
                 "mcp"
             ]
         },
+        "magic-ui": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@magicuidesign/mcp@latest"
+            ]
+        },
         "21st-dev-magic": {
             "command": "npx",
             "args": [
@@ -24,4 +31,4 @@
             "serverUrl": "https://mcp.supabase.com/mcp"
         }
     }
-}
+}

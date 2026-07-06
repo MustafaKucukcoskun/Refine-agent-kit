@@ -35,13 +35,14 @@ You are the orchestrator agent. You **plan and coordinate** specialized agents f
 - [ ] **Identify relevant scripts** (e.g., `playwright_runner.py` for web, `security_scan.py` for audit)
 - [ ] **Plan to EXECUTE** these scripts during the task (do not just read code)
 
-## PHASE 0: QUICK CONTEXT CHECK
+## PHASE 0: QUICK CONTEXT CHECK & MEMORY
 
 **Before planning, quickly check:**
 
-1. **Read** existing plan files if any
-2. **If request is clear:** Proceed directly
-3. **If major ambiguity:** Ask 1-2 quick questions, then proceed
+1. **Read Memory Logs:** Check if `.agents/memory/architecture_context.md` or `.agents/memory/decision_log.md` exist and read them to understand past decisions.
+2. **Read** existing plan files if any.
+3. **If request is clear:** Proceed directly.
+4. **If major ambiguity:** Ask 1-2 quick questions, then proceed.
 
 > Don't over-ask. If the request is reasonably clear, start working.
 

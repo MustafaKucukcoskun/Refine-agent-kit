@@ -132,3 +132,103 @@ Inflating a 3-line CRUD endpoint to 50 lines "to be unique" is as bad as slop.
 3. Spec-heavy request: ask trade-off / edge case, but then do everything.
 
 ---
+
+## 🛡️ SAFETY GUARD (Dangerous Command Blocking)
+
+**NEVER execute without explicit user confirmation:**
+
+| Category | Commands | Risk |
+|----------|----------|------|
+| **Destructive Delete** | `rm -rf` with root/home paths, `Remove-Item -Recurse` on system dirs | Data loss |
+| **Git Force** | `git push --force` to main/master, `git reset --hard` | History loss |
+| **Database Drop** | `DROP TABLE`, `DROP DATABASE`, `TRUNCATE` | Data loss |
+| **Permission Nuke** | `chmod 777`, `chmod -R 777` | Security breach |
+| **Irreversible Publish** | `npm publish` (no unpublish after 72h) | Public exposure |
+| **Pipe to Shell** | `curl \| bash`, `wget \| sh`, `iex (iwr ...)` | Remote code execution |
+| **Process Kill** | `kill -9` on unknown PIDs, `Stop-Process -Force` | Service disruption |
+
+**Rule:** If ANY of the above appears in a plan → STOP, explain the risk, ask for explicit confirmation. Never auto-execute.
+
+## 🔧 CONFIG PROTECTION (Quality Config Integrity)
+
+**NEVER weaken project quality configurations to bypass errors — fix the code instead.**
+
+| Anti-Pattern | Why It's Bad | Correct Approach |
+|-------------|-------------|-----------------|
+| Disable ESLint/Prettier rules | Hides real bugs, degrades team standards | Fix the code that triggers the rule |
+| Modify `tsconfig.json` strictness downward | Lets type errors slip through | Add proper types or use safe assertion |
+| Add `// @ts-ignore` without documented reason | Silences compiler, creates tech debt | Fix the type issue, or document why ignore is necessary |
+| Add `eslint-disable` without explanation | Accumulates silent rule bypasses | Fix the code, or add inline comment explaining why |
+| Remove `"strict": true` from tsconfig | Disables entire TypeScript safety system | Never. Keep strict mode on. |
+| Set `any` type broadly | Defeats TypeScript's purpose | Use `unknown` + type narrowing |
+
+**Rule:** If a lint/type error blocks progress → fix the source code. If genuinely unfixable → add a documented exception with WHY.
+
+---
+
+## 🔌 MCP SERVERS (Optional Enhancements — NOT Required)
+
+**The system works at full capacity WITHOUT any MCP servers.** MCP tools are optional enhancements that improve specific workflows.
+
+### Graceful Degradation Rules
+
+| Scenario | Behavior |
+|----------|----------|
+| **No MCP servers at all** | System operates normally using built-in skills, workflows, and local tools |
+| **No Context7** | Use web search or local documentation instead |
+| **No Playwright** | Skip browser tests, rely on unit tests |
+| **No GitHub MCP** | Use local `git` CLI for version control. If `git` is not available, inform user and continue without versioning |
+
+### MCP Installation Guidance (If User Wants Them)
+
+| Principle | Rule |
+|-----------|------|
+| **Optional, Not Mandatory** | Never assume or require MCP servers. System must work without them. |
+| **Quality > Quantity** | Max 3-6 MCP servers per workspace. Each must earn its slot. |
+| **Global vs Domain** | Only universal tools go global. Domain-specific tools stay in domain config. |
+| **No Bulk Install** | Never install "awesome-skills" packs wholesale. Cherry-pick what the project needs. |
+| **Prefer Remote** | Use `serverUrl` (HTTPS) over `command` (stdio) when available — faster startup, no local deps. |
+| **Verify Before Trust** | Only install MCP servers from official vendors or repos with 1000+ stars. |
+
+### Version Control Fallback Chain
+
+```
+1. GitHub MCP → If available, use for PRs, issues, remote operations
+2. Local git CLI → If no MCP, use git commands directly (commit, branch, log, diff)
+3. No git at all → Warn user: "Git not found. Proceeding without version control."
+                    Continue development normally. User's own risk.
+```
+
+**Never block development because a tool is missing. Inform and proceed.**
+
+## 🚀 ANTIGRAVITY 2.0 COMPATIBILITY (May 2026+)
+
+The platform split into two products. Be aware of the differences:
+
+| Feature | Antigravity IDE | Antigravity 2.0 |
+|---------|----------------|-----------------|
+| **Purpose** | VS Code-based coding | Agent-first command center |
+| **Agent Dir** | `.agents/` (default) | Dynamic subagents |
+| **Best For** | Hands-on coding with AI assist | Multi-agent orchestration |
+
+**Key 2.0 features to leverage:**
+- **Dynamic Subagents** — IDE can spawn specialized sub-agents for parallel work
+- **Manager Surface** — Monitor multiple agents from one dashboard
+- **Scheduled Tasks** — Cron-like agent automation
+- **Artifacts** — Structured agent outputs for human review
+
+## 🧠 AGENT MEMORY & CONTINUITY
+
+**Agents must not start from zero in every session.** To maintain context across long-running projects, use the `.agents/memory/` directory.
+
+### Core Memory Files
+
+If these files exist, read them before making architectural changes:
+1. `architecture_context.md`: High-level system design, domain boundaries, and core dependencies.
+2. `decision_log.md`: An append-only log of major technical decisions (ADRs) and *why* they were made.
+
+### The Memory Rule
+**When you make a significant design choice, fix a complex bug, or change the architecture:**
+Do not just write the code. You MUST append an entry to `.agents/memory/decision_log.md` (create it if it doesn't exist). Include the Date, Context, Decision, and Consequences.
+
+---

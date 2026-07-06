@@ -28,13 +28,13 @@ const DOMAINS = {
   "next-web": {
     label: "Next.js Full-Stack Web",
     description: "Next.js + React + Tailwind + shadcn + Supabase",
-    mcpExtra: ["shadcn", "21st-dev-magic", "figma", "supabase"],
+    mcpExtra: ["shadcn", "magic-ui", "21st-dev-magic", "figma", "supabase"],
     envKeys: ["TWENTYFIRST_API_KEY"],
   },
   "python-backend": {
     label: "Python Backend (FastAPI/Django)",
     description: "FastAPI + PostgreSQL + SQLAlchemy + Pytest",
-    mcpExtra: [],
+    mcpExtra: ["postman"],
     envKeys: [],
   },
   "python-ml": {
@@ -177,8 +177,8 @@ function copyRecursive(src, dest, exclude = []) {
   return count;
 }
 
-// Default agent directory name (.agent for backward compat, .agents for newer Antigravity)
-const DEFAULT_AGENT_DIR_NAME = ".agent";
+// Default agent directory name (.agents for Antigravity 2.0+, .agent auto-detected for backward compat)
+const DEFAULT_AGENT_DIR_NAME = ".agents";
 
 /**
  * Resolve the agent directory path.
@@ -419,28 +419,45 @@ function createEnvTemplate(targetDir, domain) {
   let content = `# refine-kit Environment Variables
 # Copy this to .env and add your API keys
 # Antigravity reads these automatically via $VAR_NAME expansion
+#
+# ⚠️ ALL KEYS ARE OPTIONAL — The system works without any MCP servers.
+#    Add keys only for the MCP tools you want to use.
 
-# ── Global (all projects) ──
+# ── Recommended (improves quality but not required) ──
 
-# GitHub Personal Access Token
-# Get from: https://github.com/settings/tokens (select repo, read:org scopes)
-GITHUB_PERSONAL_ACCESS_TOKEN=
-
-# Context7 API Key (library documentation)
+# Context7 API Key — reduces API hallucinations via real-time library docs
 # Get from: https://context7.com
-CONTEXT7_API_KEY=
+# CONTEXT7_API_KEY=
+
+# ── Optional: Add only if you use these MCP servers ──
+
+# GitHub Personal Access Token — remote repo operations via GitHub MCP
+# Not needed if you use local git. System falls back to git CLI automatically.
+# Get from: https://github.com/settings/tokens (select repo, read:org scopes)
+# GITHUB_PERSONAL_ACCESS_TOKEN=
 `;
 
   if (domain === "next-web") {
     content += `
-# ── next-web Domain ──
+# ── next-web Domain (optional) ──
 
-# 21st.dev Magic API Key
+# 21st.dev Magic API Key — AI-powered production-ready component generation
 # Get from: https://21st.dev/settings/api
-TWENTYFIRST_API_KEY=
+# TWENTYFIRST_API_KEY=
 
 # Figma — uses OAuth (no manual token needed, browser login)
 # Supabase — uses OAuth (no manual token needed, browser login)
+# shadcn — no API key needed
+# magic-ui — no API key needed
+`;
+  }
+
+  if (domain === "godot-game") {
+    content += `
+# ── godot-game Domain (optional) ──
+
+# Godot Editor path (for godot-mcp server)
+# GODOT_PATH=C:\\Godot\\Godot_v4.x-stable_win64.exe
 `;
   }
 
@@ -623,6 +640,7 @@ async function cmdInit(args) {
     "test",
     "tdd",
     "enhance",
+    "onboard",
   ]);
   const allowedWorkflows = new Set([
     ...domainWorkflowNames,
@@ -707,6 +725,12 @@ async function cmdInit(args) {
   const scriptsSrc = path.join(sharedAgentSrc, "scripts");
   if (fs.existsSync(scriptsSrc)) {
     totalCount += copyRecursive(scriptsSrc, path.join(agentDir, "scripts"));
+  }
+
+  // ── 4e2: Copy memory/ (Memory System templates) ──
+  const memorySrc = path.join(sharedAgentSrc, "memory");
+  if (fs.existsSync(memorySrc)) {
+    totalCount += copyRecursive(memorySrc, path.join(agentDir, "memory"));
   }
 
   // ── 4f: Copy rules/ (base rules + only selected domain rules) ──
@@ -880,43 +904,32 @@ async function cmdInit(args) {
     console.log(c("yellow", "\n  Next steps:"));
     console.log(
       c("dim", "    1.") +
-        " Copy " +
-        c("bold", ".env.agent.example") +
-        " → " +
-        c("bold", ".env") +
-        " and add your API keys",
+        " " +
+        c("bold", "Open project in Google Antigravity") +
+        " — agents activate automatically!",
     );
     console.log(
       c("dim", "    2.") +
-        " Required keys: " +
-        c("bold", "GITHUB_PERSONAL_ACCESS_TOKEN") +
-        ", " +
-        c("bold", "CONTEXT7_API_KEY"),
+        " Optional: Copy " +
+        c("bold", ".env.agent.example") +
+        " → " +
+        c("bold", ".env") +
+        " and add API keys for MCP tools",
+    );
+    console.log(
+      c("dim", "       ") +
+        c("dim", "All keys are optional. System works without any MCP servers."),
     );
 
-    if (d.mcpExtra.includes("21st-dev-magic")) {
+    if (d.mcpExtra.length > 0) {
       console.log(
         c("dim", "    3.") +
-          " Optional: " +
-          c("bold", "TWENTYFIRST_API_KEY") +
-          " (for 21st.dev components)",
+          " If using MCP tools: " +
+          c("yellow", "Restart Antigravity IDE") +
+          " to activate them",
       );
     }
 
-    const restartStep = d.mcpExtra.includes("21st-dev-magic") ? "4" : "3";
-    const openStep = String(Number(restartStep) + 1);
-    console.log(
-      c("dim", `    ${restartStep}.`) +
-        " " +
-        c("yellow", "Restart Antigravity IDE") +
-        " to activate MCP servers (they are NOT hot-reloaded)",
-    );
-    console.log(
-      c("dim", `    ${openStep}.`) +
-        " Open project in " +
-        c("bold", "Google Antigravity") +
-        " — agents activate automatically!",
-    );
     console.log("");
   }
 }
