@@ -1360,7 +1360,7 @@ async function cmdUpdate(args) {
       console.log(`    Available: v${VERSION}`);
     }
 
-    if (installedVersion === VERSION) {
+    if (installedVersion === VERSION && !args.force) {
       console.log("");
       console.log(c("green", "  ✔ ") + "Already up to date!");
       console.log("");
