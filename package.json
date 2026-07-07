@@ -1,6 +1,6 @@
 {
   "name": "refine-agent-kit",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "AI Agent toolkit for Google Antigravity IDE. 21 agents, 70 skill modules across 59 skill packs, 13 domains, design persona system, anti-AI-slop protection.",
   "main": "bin/cli.js",
   "bin": {
