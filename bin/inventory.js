@@ -129,6 +129,8 @@ function getInventory(packageRoot) {
     ),
     domains: countFiles(domainsDir),
     scripts: countFiles(path.join(packageRoot, "shared", ".agent", "scripts")),
+    memoryTemplates: countFiles(path.join(packageRoot, "shared", ".agent", "memory")),
+    rules: countFiles(path.join(packageRoot, "shared", ".agent", "rules")),
     personas: countCsvRows(path.join(designSystemDir, "personas.csv")),
     referenceSites: countCsvRows(
       path.join(designSystemDir, "reference-sites.csv"),

@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/refine-agent-kit.svg)](https://www.npmjs.com/package/refine-agent-kit)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://opensource.org/license/agpl-v3)
 
-AI Agent toolkit for **Google Antigravity IDE**. 21 specialist agents, 69 skill modules across 58 skill packs, 13 domains, design persona system, and anti-AI-slop protection.
+AI Agent toolkit for **Google Antigravity IDE**. 21 specialist agents, 70 skill modules across 59 skill packs, 13 domains, design persona system, and anti-AI-slop protection.
 
 ## What is this?
 
@@ -103,7 +103,7 @@ npx refine-agent-kit add-domain --domain next-web --subdir apps/dashboard
 
 ```
 my-monorepo/
-├── .agent/                        ← Agent system (21 agents, 69 skill modules / 58 skill packs)
+├── .agent/                        ← Agent system (21 agents, 70 skill modules / 59 skill packs)
 ├── .agent/.shared/design-system/  ← 59 personas, 107 reference sites
 ├── .agent/rules/GEMINI.md         ← Root agent routing (next-web)
 ├── .agent/mcp_config.json         ← Domain MCP servers
@@ -131,7 +131,7 @@ my-monorepo/
 | Directory                       | Contents                                             |
 | ------------------------------- | ---------------------------------------------------- |
 | `.agent/agents/`                | 21 specialist AI agents                              |
-| `.agent/skills/`         | 69 skill modules across 58 top-level skill packs |
+| `.agent/skills/`         | 70 skill modules across 59 top-level skill packs |
 | `.agent/workflows/`      | 31 slash command workflows                         |
 | `.agent/domains/`        | 13 domain configuration packs                        |
 | `.agent/rules/`                 | Local GEMINI.md + domain routing rules               |

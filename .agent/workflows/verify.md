@@ -156,6 +156,16 @@ Nice-to-have improvements.
 
 ---
 
+## Auto-Fix Mode (Self-Healing)
+
+If the user triggers `/verify --auto-fix`, the agent MUST enter a self-healing loop for any issues found in Phase 2 and 3:
+1. Attempt to fix the issue automatically.
+2. Re-run the specific failing check (`npm run lint`, `npm test`, etc.).
+3. If it fails again, read the new error, adjust the code, and retry.
+4. Limit to **3 attempts per issue** to prevent infinite loops. If unresolved, report it as a manual action item.
+
+---
+
 ## Exit Criteria
 
 - **PASS** — zero critical, zero important
