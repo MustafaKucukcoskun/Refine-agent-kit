@@ -143,7 +143,7 @@ function ask(rl, question) {
   return new Promise((resolve) => rl.question(question, resolve));
 }
 
-function copyRecursive(src, dest, exclude = []) {
+function copyRecursive(src, dest, exclude = [], overwrite = true) {
   let count = 0;
   if (!fs.existsSync(src)) return count;
 
@@ -161,6 +161,7 @@ function copyRecursive(src, dest, exclude = []) {
         path.join(src, item),
         path.join(dest, item),
         exclude,
+        overwrite
       );
     }
   } else {
@@ -170,6 +171,9 @@ function copyRecursive(src, dest, exclude = []) {
     const destDir = path.dirname(dest);
     if (!fs.existsSync(destDir)) {
       fs.mkdirSync(destDir, { recursive: true });
+    }
+    if (!overwrite && fs.existsSync(dest)) {
+      return count;
     }
     fs.copyFileSync(src, dest);
     count++;
@@ -474,7 +478,7 @@ async function cmdInit(args) {
   const domainArg = args.domain || null;
   const skipGlobal = args["skip-global"] || false;
 
-  if (!quiet) printBanner();
+  if (!quiet && !args.suppressBanner) printBanner();
 
   // ── Step 1: Global install ──
   if (!skipGlobal) {
@@ -730,7 +734,7 @@ async function cmdInit(args) {
   // ── 4e2: Copy memory/ (Memory System templates) ──
   const memorySrc = path.join(sharedAgentSrc, "memory");
   if (fs.existsSync(memorySrc)) {
-    totalCount += copyRecursive(memorySrc, path.join(agentDir, "memory"));
+    totalCount += copyRecursive(memorySrc, path.join(agentDir, "memory"), [], false);
   }
 
   // ── 4f: Copy rules/ (base rules + only selected domain rules) ──
@@ -1383,6 +1387,7 @@ async function cmdUpdate(args) {
   args.force = true;
   args.domain = domain;
   args.path = targetDir;
+  args.suppressBanner = true;
   await cmdInit(args);
 
   if (!quiet) {
