@@ -33,8 +33,13 @@ When `/debug` is triggered:
    - Check logs, data flow
    - Use elimination method
 
-4. **Fix and prevent**
-   - Apply fix
+4. **Self-Healing Loop (Automated Fix & Verify)**
+   - Apply a fix based on hypothesis.
+   - IMMEDIATELY run tests or build commands to verify.
+   - If it fails again, feed the new error back into the context and retry.
+   - Limit to 3 iterations before asking the user for help.
+
+5. **Root Cause and Prevention**
    - Explain root cause
    - Add prevention measures
 

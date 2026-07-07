@@ -9,7 +9,7 @@
 refine-kit is a modular system consisting of:
 
 - **21 Specialist Agents** - Role-based AI personas
-- **58 Skill Packs** - Domain-specific knowledge modules
+- **59 Skill Packs** - Domain-specific knowledge modules
 - **31 Workflows** - Slash command procedures
 - **13 Domain Packs** - Tech stack integrations
 - **9 MCP Servers** - External tool integrations (3 global + domain-specific)
@@ -32,7 +32,7 @@ refine-kit is a modular system consisting of:
 .agent/
 ├── ARCHITECTURE.md          # This file
 ├── agents/                  # 21 Specialist Agents
-├── skills/                  # 58 Skill Packs (69 modules)
+├── skills/                  # 59 Skill Packs (70 modules)
 ├── workflows/               # 31 Slash Commands
 ├── domains/                 # 13 Domain Packs
 ├── rules/                   # GEMINI.md (global) + 13 domain rules
@@ -73,9 +73,9 @@ Specialist AI personas for different domains.
 
 ---
 
-## 🧩 Skills (58 packs / 69 modules)
+## 🧩 Skills (59 packs / 70 modules)
 
-Modular knowledge domains that agents can load on-demand based on task context. Current shipped inventory: 58 top-level skill packs and 69 total SKILL.md modules.
+Modular knowledge domains that agents can load on-demand based on task context. Current shipped inventory: 59 top-level skill packs and 70 total SKILL.md modules.
 
 ### Frontend & UI
 
@@ -356,8 +356,8 @@ CSV-based design intelligence in `.shared/design-system/`. Used by `/ui-ux-pro-m
 | Metric                  | Value                         |
 | ----------------------- | ----------------------------- |
 | **Total Agents**        | 21                            |
-| **Total Skill Packs**   | 58                            |
-| **Total Skill Modules** | 69                            |
+| **Total Skill Packs**   | 59                            |
+| **Total Skill Modules** | 70                            |
 | **Total Workflows**     | 31                            |
 | **Total Domain Packs**  | 13                            |
 | **Total MCP Servers**   | 8                             |
