@@ -63,3 +63,5 @@ DEVELOPMENT-ROADMAP.md
 *.log
 .eslintcache
 .stylelintcache
+# Local test installs
+tmp-test-*/
